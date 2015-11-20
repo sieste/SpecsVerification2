@@ -3,11 +3,12 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: ensemble-verification.aux
 The style file: jss.bst
 Database file #1: ensemble-verification.bib
+Warning--I didn't find a database entry for "siegert2015ignorance"
 Warning--I didn't find a database entry for "wilks"
 Reallocated wiz_functions (elt_size=8) to 6000 items from 3000.
 You've used 9 entries,
             3140 wiz_defined-function locations,
-            714 strings with 6909 characters,
+            715 strings with 6929 characters,
 and the built_in function-call counts, 7269 in all, are:
 = -- 617
 > -- 151
@@ -46,4 +47,4 @@ warning$ -- 0
 while$ -- 60
 width$ -- 0
 write$ -- 153
-(There was 1 warning)
+(There were 2 warnings)

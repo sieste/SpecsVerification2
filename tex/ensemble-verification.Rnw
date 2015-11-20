@@ -48,12 +48,15 @@
 %% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+% initialise sweave
+\SweaveOpts{prefix.string=fig}
+
 % initialise R session
 <<echo=FALSE>>=
 library("xtable")
 library("SpecsVerification2", lib.loc="~/folders/jss-paper-ensemble-verification/R/libtmp")
 set.seed(31415)
-options(prompt="R >> ")
+options(prompt="$ ")
 @
 
 
@@ -83,6 +86,25 @@ ensembles can be verified by taking the ensemble mean as a deterministic forecas
 {\bf Finite size effect in ensemble verification}
 Everything else being equal, larger ensembles yield better scores than smaller ensembles.
 
+
+
+
+\begin{figure}
+\begin{center}
+%
+<<label=s4-plot, fig=TRUE, width=4, height=2, keep.source=FALSE>>=
+load("~/folders/jss-paper-ensemble-verification/data/s4-aggregate.Rdata")
+yrs <- 1981:2010
+par(las=1, cex=0.7, mgp=c(3, 1, 0), mar=c(2,4,1,1))
+plot(NA, type='n', xlim=range(yrs), ylim=range(c(obs, s4.ens)), xlab="", ylab="temp [C]")
+for (i in 1:ncol(s4.ens)) points(yrs, s4.ens[, i], col="darkgray", cex=.7)
+points(yrs, obs, pch=15, cex=1.5)
+@
+%
+\end{center}
+\caption{Seasonal European temperature forecasts by ECMWF System4, initialised in May, verified in JJA.}
+\label{s4-plot2}
+\end{figure}
 
 
 \section{Ensemble-adjusted verification scores}
@@ -261,10 +283,21 @@ This includes the case $R^*=\infty$, for which the fair CRPS is obtained.
 The ensemble-adjusted CRPS is implemented in the \pkg{SpecsVerification} function \code{EnsCrps}.
 
 
+
+The ensemble adjusted Ignorance score has recently been proposed \citep{siegert2015ignorance}.
+
+MORE HERE
+
+
 \subsection{Deterministic forecasts}
 
 
-The functions \code{Sqerr(fcst, obs)} and \code{Corr(fcst, obs)} are included in \pkg{SpecsVerification}.
+For completeness, functions for verification of deterministic (point) forecasts have been included in \pkg{SpecsVerification}, however, without ensemble adjustement:
+\begin{itemize}
+\item \code{Sqerr(fcst, obs)}
+\item \code{Mae(fcst, obs)}
+\end{itemize}
+
 
 
 \section{Comparative verification and uncertainty quantification}
