@@ -1,0 +1,77 @@
+\begin{thebibliography}{9}
+\newcommand{\enquote}[1]{``#1''}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+\providecommand{\eprint}[2][]{\url{#2}}
+
+\bibitem[{Brier(1950)}]{brier1950verification}
+Brier GW (1950).
+\newblock \enquote{Verification of forecasts expressed in terms of
+  probability.}
+\newblock \emph{Monthly Weather Review}, \textbf{78}(1), 1--3.
+\newblock \doi{10.1175/1520-0493(1950)078<0001:vofeit>2.0.co;2}.
+
+\bibitem[{Diebold and Mariano(1995)}]{diebold1995comparing}
+Diebold FX, Mariano RS (1995).
+\newblock \enquote{Comparing Predictive Accuracy.}
+\newblock \emph{Journal of Business \& Economic Statistics}, \textbf{13}(3),
+  253.
+\newblock \doi{10.2307/1392185}.
+
+\bibitem[{Ferro(2013)}]{ferro2013fair}
+Ferro CAT (2013).
+\newblock \enquote{Fair scores for ensemble forecasts.}
+\newblock \emph{Quarterly Journal of the Royal Meteorological Society},
+  \textbf{140}(683), 1917--1923.
+\newblock \doi{10.1002/qj.2270}.
+
+\bibitem[{Ferro \emph{et~al.}(2008)Ferro, Richardson, and
+  Weigel}]{ferro2008effect}
+Ferro CAT, Richardson DS, Weigel AP (2008).
+\newblock \enquote{On the effect of ensemble size on the discrete and
+  continuous ranked probability scores.}
+\newblock \emph{Meteorological Applications}, \textbf{15}(1), 19--24.
+\newblock \doi{10.1002/met.45}.
+
+\bibitem[{Fricker \emph{et~al.}(2013)Fricker, Ferro, and
+  Stephenson}]{fricker2013three}
+Fricker TE, Ferro CAT, Stephenson DB (2013).
+\newblock \enquote{Three recommendations for evaluating climate predictions.}
+\newblock \emph{Meteorological Applications}, \textbf{20}(2), 246--255.
+\newblock \doi{10.1002/met.1409}.
+
+\bibitem[{Gneiting and Raftery(2007)}]{gneiting2007strictly}
+Gneiting T, Raftery AE (2007).
+\newblock \enquote{Strictly Proper Scoring Rules, Prediction, and Estimation.}
+\newblock \emph{Journal of the American Statistical Association},
+  \textbf{102}(477), 359--378.
+\newblock \doi{10.1198/016214506000001437}.
+
+\bibitem[{Matheson and Winkler(1976)}]{matheson1976scoring}
+Matheson JE, Winkler RL (1976).
+\newblock \enquote{Scoring Rules for Continuous Probability Distributions.}
+\newblock \emph{Management Science}, \textbf{22}(10), 1087--1096.
+\newblock \doi{10.1287/mnsc.22.10.1087}.
+
+\bibitem[{Steiger(1980)}]{steiger1980tests}
+Steiger JH (1980).
+\newblock \enquote{Tests for comparing elements of a correlation matrix.}
+\newblock \emph{Psychological Bulletin}, \textbf{87}(2), 245--251.
+\newblock ISSN 0033-2909.
+\newblock \doi{10.1037/0033-2909.87.2.245}.
+\newblock \urlprefix\url{http://dx.doi.org/10.1037/0033-2909.87.2.245}.
+
+\bibitem[{Zou(2007)}]{zou2007toward}
+Zou GY (2007).
+\newblock \enquote{Toward using confidence intervals to compare correlations.}
+\newblock \emph{Psychological Methods}, \textbf{12}(4), 399--413.
+\newblock ISSN 1082-989X.
+\newblock \doi{10.1037/1082-989x.12.4.399}.
+\newblock \urlprefix\url{http://dx.doi.org/10.1037/1082-989X.12.4.399}.
+
+\end{thebibliography}

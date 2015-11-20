@@ -1,0 +1,8 @@
+EnsBrier                Calculate the ensemble-adjusted Brier Score
+EnsCrps                 Calculate the ensemble-adjusted Continuous
+                        Ranked Probability Score (CRPS)
+EnsQs                   Calculate the ensemble-adjusted Quadratic Score
+                        (QS) for categorical forecasts
+EnsRps                  Calculate the ensemble-adjusted Ranked
+                        Probability Score (RPS) for categorical
+                        forecasts
