@@ -1,3 +1,5 @@
+AbsErr                  Calculate the absolute error between forecast
+                        and observation
 EnsBrier                Calculate the ensemble-adjusted Brier Score
 EnsCrps                 Calculate the ensemble-adjusted Continuous
                         Ranked Probability Score (CRPS)
@@ -6,3 +8,8 @@ EnsQs                   Calculate the ensemble-adjusted Quadratic Score
 EnsRps                  Calculate the ensemble-adjusted Ranked
                         Probability Score (RPS) for categorical
                         forecasts
+ScoreDiff               Diebold-Mariano test for equality of mean
+                        verification scores
+SkillScore              Calculate a skill score and assess uncertainty
+SqErr                   Calculate the squared error between forecast
+                        and observation

@@ -9,7 +9,7 @@
 # retrieve the data from ECOMS database
 #############################################################################
 
-load.ecoms <- FALSE
+load.ecoms <- TRUE
 if (load.ecoms) {
 
   # target variable: 2-meter-temperature
@@ -25,16 +25,32 @@ if (load.ecoms) {
   library(ecomsUDG.Raccess)
   loginECOMS_UDG("sieste", "hackme")
 
-  # system4_seasonal_51, all 51 members, all years, daily averages
-  system4.data <- loadECOMS(dataset= "System4_seasonal_51", var=var, members=1:51, 
-                            lonLim=lons, latLim=lats, season=season, 
-                            leadMonth=lead, time="DD")
-  save(file="~/folders/debias-ignorance/system4.Rdata", list="system4.data")
+  # NCEP CFSv2
+  ens.data <-  loadECOMS(dataset="CFSv2_seasonal", 
+                         var=var,
+                         season=season,
+                         leadMonth=lead, 
+                         members=1:24, 
+                         latLim=lats,
+                         lonLim=lons,
+                         years=1982:2010,
+                         time="DD", 
+                         aggr.d="mean",
+                         aggr.m="mean")
 
-  # WATCH gridded observation, all years, daily averages
-  obs.data <- loadECOMS(dataset="WFDEI", var=var, lonLim=lons, latLim=lats, 
-                        season=season, time="DD")
-  save(file="~/folders/debias-ignorance/obs.Rdata", list="obs.data")
+  # NCEP reanalysis 
+  obs.data <- loadECOMS(dataset="NCEP",
+                        var=var,
+                        season=season,
+                        latLim=lats,
+                        lonLim=lons,
+                        years=1982:2010,
+                        time="DD", 
+                        aggr.d="mean",
+                        aggr.m="mean")
+
+  save(file="/mnt/data1/bigdata/gfsv2_seasonal/data-for-jss.Rdata", 
+       list=c("ens.data", "obs.data"))
 }
 
 
@@ -48,6 +64,7 @@ if (load.data) {
   load("~/folders/debias-ignorance/system4.Rdata")
 }
 
+### MORE HERE:
 
 #############################################################################
 # regrid the observation data to the system4 model grid

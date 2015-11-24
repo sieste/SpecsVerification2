@@ -9,6 +9,6 @@ Depends:
 Description: A collection of new forecast verification routines for the SPECS FP7 project. The emphasis is on comparative verification of ensemble forecasts.
 License: GPL (>= 2)
 NeedsCompilation: no
-Packaged: 2015-11-20 15:40:17 UTC; stefan
+Packaged: 2015-11-24 15:54:42 UTC; stefan
 Author: Stefan Siegert [aut, cre]
-Built: R 3.2.2; ; 2015-11-20 15:40:17 UTC; unix
+Built: R 3.2.2; ; 2015-11-24 15:54:42 UTC; unix

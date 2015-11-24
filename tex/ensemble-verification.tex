@@ -222,8 +222,6 @@ Assume the ensemble forecasting system produces an ensemble of categorical rathe
 That is, each ensemble members and the verifying observation falls into one of $K$ classes.
 Two types of categorical forecasts can be distinguished: Disjoint categories and nested categories.
 
-disjoint categories: Quadratic score, sum of Brier scores?
-
 Assume the observation assumes on of $K$ possible values, or classes, and a probabilistic forecast $\mathbf{p}_t = (p_{t,1}, \cdots, p_{t,K})$, is issued.
 The verifying observation is vector-valued $\mathbf{y}_t$, where the $k$-th element of $\mathbf{y}_t$ is $y_{t,k}=1$ if the $k$-th class is observed, and $y_{t,k}=0$ otherwise.
 The quadratic score for such a probability forecast is given by
@@ -311,27 +309,16 @@ MORE HERE
 \subsection{Deterministic forecasts}
 
 
-The functions \code{Sqerr(fcst, obs)} and \code{Corr(fcst, obs)} are included in \pkg{SpecsVerification}.
+For completeness, functions for verification of deterministic (point) forecasts have been included in \pkg{SpecsVerification}, however, without ensemble adjustement:
+\begin{itemize}
+\item \code{Sqerr(fcst, obs)}
+\item \code{Mae(fcst, obs)}
+\end{itemize}
+
 
 
 \section{Comparative verification and uncertainty quantification}
 
-\subsection{Correlation and correlation difference}
-
-The Pearson correlation coefficient is one of the most popular verification criteria, and can be calculated with the built-in \proglang{R} function \code{cor}.
-It is often of interest to compare the correlation coefficients between two forecasts that were issued for the same observation.
-The actual difference in correlation is of interest, as well as an estimation of the statistical significance of the correlation difference.
-\pkg{SpecsVerification} implements the function \code{CorrDiff} that returns the difference between the correlation of the forecast ensemble \code{ens} and the correlation of a reference forecast ensemble \code{ens.ref}, both of which were issued for the same observation \code{obs}.
-A p-value using the test by Steiger (\citep{steiger1980tests}) and a confidence interval based on Zou (\citet{zou2007toward}) are calculated by default:
-
-\begin{Schunk}
-\begin{Sinput}
-$ # TODO: rename option sign.level to conf.level with default 0.95, and allow for
-$ # ens.ref=NA in which case the correlation of ens is evaluated
-$ 
-$ # CorrDiff(ens=ens, ens.ref=ens.ref, obs=obs, sign.level=0.05)
-\end{Sinput}
-\end{Schunk}
 
 \subsection{Reference forecast}
 
@@ -357,7 +344,7 @@ We recommend also considering statistical reference forecasts such as a linear t
 
 \subsection{Mean scores and mean score differences}
 
-Suppose we have calculated two time series $\{S_{1,1}, S_{1,2}, \dots, S_{1,N}\}$ and $\{S_{1,1}, S_{1,2}, \dots, S_{1,N}\}$ of verification scores for two competing forecast systems for the same observation.
+Suppose we have calculated two time series $\{S_{1,1}, S_{1,2}, \dots, S_{1,N}\}$ and $\{S_{2,1}, S_{2,2}, \dots, S_{2,N}\}$ of verification scores for two competing forecast systems for the same observation.
 \citet{diebold1995comparing} suggest to test the null-hypothesis of equal forecast accuracy using the time series $d_1, \dots, d_N$ of loss differentials $d_t = S_{1,t} - S_{2,t}$. 
 Under the assumption of temporal independence of $d_t$, and zero mean of the loss-differential, the test statistic 
 %
@@ -369,35 +356,36 @@ is asymptotically Normally distributed with mean zero and variance one.
 This test is implemented in \pkg{SpecsVerification} in the function \code{ScoreDiff}.
 The function includes the option to account for autocorrelation of the loss-differential by specifying an effective sample size \code{N.eff}.
 
-\begin{Schunk}
-\begin{Sinput}
-$ # TODO implement Diebold-Mariano
-$ ScoreDiff <- function(score, score.ref, N.eff=NA) {
-+   1
-+ }
-\end{Sinput}
-\end{Schunk}
 
 
 
 \subsection{Skill scores}
 
-It is common practice to compare scores of competing forecasts by a so-called skill score, which is a normalised mean score difference (Wilks \citep{wilks}).
-Denote by $S$ the mean score of the forecast under evaluation and by $S_{ref}$ the mean score of a reference forecast.
-For scoring rules for which the perfect forecast obtains a score of zero, the skill score is given by
+It is common practice to compare scores of competing forecasts by a so-called skill score, which is a normalised mean score difference \citep{wilks2011statistical}.
+Denote by $S$ the mean score of the forecast under evaluation, by $S_{ref}$ the mean score of a reference forecast, and by $S_{perf}$ the mean score that would be achieved by the perfect forecaster.
+The skill score is then given by the score difference between the reference forecast and the evaluated forecast, normalised by the difference between the reference forecast and the perfect forecast:
 %
 \begin{equation}
-Skill\ Score = 1 - \frac{S}{S_{ref}}
+SS = \frac{S_{ref} - S}{S_{ref} - S_{perf}}
 \end{equation}
+%
+The variance of the skill score can be estimated by error propagation as follows
+%
+\begin{equation}
+var(SS) \approx \frac{1}{(S_{ref} - S_{perf})^2} var(S) + \frac{(S - S_{perf})^2}{(S_{ref}-S_{perf})^2} var(S_{ref}) - 2 \frac{S-S_{perf}}{(S_{ref}-S_{perf})^3} cov(S, S_{ref})
+\end{equation}
+%
+where the variances and covariances of the mean scores are approximated by the variances and covariances of the scores, divided by the sample size.
+The skill score is implemented in \pkg{SpecsVerification} in the function \code{SkillScore}, which takes as inputs two vectors of verification scores of the evaluated and the reference forecast, the constant score achieved by a perfect forecaster, as well as a possibly user-defined effective sample size.
 
-\begin{Schunk}
-\begin{Sinput}
-$ # TODO implement skill score function
-$ SkillScore <- function(score, score.ref, N.eff=NA) {
-+   1
-+ }
-\end{Sinput}
-\end{Schunk}
+
+\subsection{Correlation and correlation difference}
+
+The Pearson correlation coefficient is one of the most popular verification criteria, and can be calculated with the built-in \proglang{R} function \code{cor}.
+It is often of interest to compare the correlation coefficients between two forecasts that were issued for the same observation.
+The actual difference in correlation is of interest, as well as an estimation of the statistical significance of the correlation difference.
+\pkg{SpecsVerification} implements the function \code{CorrDiff} that returns the difference between the correlation of the forecast ensemble \code{ens} and the correlation of a reference forecast ensemble \code{ens.ref}, both of which were issued for the same observation \code{obs}.
+A p-value using the test by Steiger (\citep{steiger1980tests}) and a confidence interval based on Zou (\citet{zou2007toward}) are calculated by default:
 
 
 \section{Rank histogram analysis for ensemble forecasts}
