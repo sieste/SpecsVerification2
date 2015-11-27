@@ -26,6 +26,7 @@ R_libtmp = $(R_DIR)/libtmp
 nothing:
 paper: $(PDF_FILE)
 r-package: $(R_PKG_tgz)
+tex-file: $(TEX_FILE)
 
 
 # create pdf file using bibtex and pdflatex

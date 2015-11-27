@@ -81,6 +81,14 @@ ensembles can be verified by taking the ensemble mean as a deterministic forecas
 Everything else being equal, larger ensembles yield better scores than smaller ensembles.
 
 
+\begin{Schunk}
+\begin{Sinput}
+$ data(eurotempforecast)
+$ ens <- ens - mean(ens) + mean(obs)
+$ yrs <- as.numeric(names(obs))
+$ N <- length(obs)
+\end{Sinput}
+\end{Schunk}
 
 
 \begin{figure}
@@ -88,21 +96,19 @@ Everything else being equal, larger ensembles yield better scores than smaller e
 %
 \begin{Schunk}
 \begin{Sinput}
-$ load("~/folders/jss-paper-ensemble-verification/data/s4-aggregate.Rdata")
-$ yrs <- 1981:2010
 $ par(las = 1, cex = 0.7, mgp = c(3, 1, 0), mar = c(2, 4, 1, 1))
-$ plot(NA, type = "n", xlim = range(yrs), ylim = range(c(obs, s4.ens)), 
+$ plot(NA, type = "n", xlim = range(yrs), ylim = range(c(obs, ens)), 
 +     xlab = "", ylab = "temp [C]")
-$ for (i in 1:ncol(s4.ens)) points(yrs, s4.ens[, i], col = "darkgray", 
+$ for (i in 1:ncol(ens)) points(yrs, ens[, i], col = "darkgray", 
 +     cex = 0.7)
 $ points(yrs, obs, pch = 15, cex = 1.5)
 \end{Sinput}
 \end{Schunk}
-\includegraphics{fig-s4-plot}
+\includegraphics{fig-gfs-plot}
 %
 \end{center}
-\caption{Seasonal European temperature forecasts by ECMWF System4, initialised in May, verified in JJA.}
-\label{s4-plot2}
+\caption{Seasonal European temperature forecasts by NCEP CFSv2, initialised in May, verified in JJA.}
+\label{gfs-plot}
 \end{figure}
 
 
@@ -112,41 +118,10 @@ $ points(yrs, obs, pch = 15, cex = 1.5)
 
 An archive of $N$ time instances of ensemble forecasts, each with $R$ members, can be conveniently represented by a $N\times R$ matrix:
 
-\begin{Schunk}
-\begin{Sinput}
-$ N <- 10
-$ R <- 4
-$ (ens <- matrix(rbinom(n=N*R, size=1, prob=0.3), nrow=N, ncol=R))
-\end{Sinput}
-\begin{Soutput}
-      [,1] [,2] [,3] [,4]
- [1,]    1    0    0    0
- [2,]    0    1    1    0
- [3,]    0    1    0    0
- [4,]    0    0    0    0
- [5,]    0    1    1    1
- [6,]    0    0    0    0
- [7,]    0    0    1    0
- [8,]    0    1    0    0
- [9,]    1    1    0    0
-[10,]    1    0    1    0
-\end{Soutput}
-\end{Schunk}
-
-The verifying observations can be represented by a $N$ vector:
-
-\begin{Schunk}
-\begin{Sinput}
-$ (obs <- rbinom(n=N, size=1, prob=0.3))
-\end{Sinput}
-\begin{Soutput}
- [1] 1 0 1 1 0 0 0 0 0 0
-\end{Soutput}
-\end{Schunk}
-
 This data can be interpreted that, for example, on the first time instance 1 out of 4 ensemble members forecast rain, and rain actually occurs.
 
 
+MORE HERE
 
 
 
@@ -215,6 +190,22 @@ The \pkg{SpecsVerification} function \code{EnsBrier} calculates the ensemble-adj
 The argument \code{R.new} allows for estimation of the score of an arbitrary ensemble size, including \code{R.new=Inf}.
 
 
+We transform the continuous ensemble data into binary by addressing the question "Will this year's summer be warmer than last year's"?
+
+\begin{Schunk}
+\begin{Sinput}
+$ obs.bin <- 1 * (obs[2:N] > obs[1:(N-1)])
+$ ens.bin <- 1 * (ens[2:N, ] > obs[1:(N-1)])
+$ print(c(mean(EnsBrier(ens.bin, obs.bin)), 
++         mean(EnsBrier(ens.bin, obs.bin, R.new=Inf))))
+\end{Sinput}
+\begin{Soutput}
+[1] 0.1405582 0.1337793
+\end{Soutput}
+\end{Schunk}
+
+
+
 \subsection{Categorical forecasts}
 
 
@@ -227,17 +218,17 @@ The verifying observation is vector-valued $\mathbf{y}_t$, where the $k$-th elem
 The quadratic score for such a probability forecast is given by
 %
 \begin{equation}
-s(\mathbf{p}_t, \mathbf{y}_t) = \frac{1}{K}\sum_{k=1}^K \left(p_{t,k} - y_{t,k}\right)^2
+s(\mathbf{p}_t, \mathbf{y}_t) = \sum_{k=1}^K \left(p_{t,k} - y_{t,k}\right)^2
 \end{equation}
 %
-The quadratic score is simply the average of Brier scores for the individual categories.
+The quadratic score is simply the sum of Brier scores for the individual categories.
 Or stated differently, the Brier score is one-half the quadratic score of a 2-class categorical forecast.
 
 Now assume an $R$-member categorical ensemble forecast $\mathbf{i}_t$ is issued at time $t$, indicating that $i_{t,k}$ out of $R$ ensemble members have predicted the $k$-th category, for $k=1,\cdots,K$.
 Using results obtained for the ensemble-adjusted Brier score, the ensemble-adjusted quadratic score is seen to be
 %
 \begin{equation}
-s^*(\mathbf{i}_t, R, R^*, \mathbf{y}_t) = \frac{1}{K} \sum_{k=1}^K \left\{ \left(\frac{i_{t,k}}{R} - y_{t,k}\right)^2 - \left(\frac{1}{R} - \frac{1}{R^*}\right) \frac{i_{t,k}(R-i_{t,k})}{R(R-1)}\right\}
+s^*(\mathbf{i}_t, R, R^*, \mathbf{y}_t) = \sum_{k=1}^K \left\{ \left(\frac{i_{t,k}}{R} - y_{t,k}\right)^2 - \left(\frac{1}{R} - \frac{1}{R^*}\right) \frac{i_{t,k}(R-i_{t,k})}{R(R-1)}\right\}
 \end{equation}
 %
 The ensemble adjusted quadratic score is implemented as the function \code{EnsQs} in \pkg{SpecsVerification}.
@@ -255,12 +246,36 @@ The nesting of forecast categories ensures order-sensitivity of the score.
 Using previous results, we get the ensemble-adjusted RPS
 %
 \begin{equation}
-s^*(\mathbf{i}_t, R, R^*, \mathbf{y}_t) = \frac{1}{K} \sum_{k=1}^K \left\{ \left(\frac{\sum_{l=1}^k i_{t,k}}{R} - \sum_{l=1}^k y_{t,k}\right)^2 - \left(\frac{1}{R} - \frac{1}{R^*}\right) \frac{\sum_{l=1}^k i_{t,k}(R-\sum_{l=1}^k i_{t,k})}{R(R-1)}\right\}
+s^*(\mathbf{i}_t, R, R^*, \mathbf{y}_t) = \sum_{k=1}^K \left\{ \left(\frac{\sum_{l=1}^k i_{t,k}}{R} - \sum_{l=1}^k y_{t,k}\right)^2 - \left(\frac{1}{R} - \frac{1}{R^*}\right) \frac{\sum_{l=1}^k i_{t,k}(R-\sum_{l=1}^k i_{t,k})}{R(R-1)}\right\}
 \end{equation}
 %
 The ensemble adjusted RPS is implemented as the function \code{EnsRps} in \pkg{SpecsVerification}.
 
 
+
+We transform the continuous ensemble forecasts into categorical forecasts by addressing the question "Will this year's summer temperature be within one half of a degree of last year's temperature, colder, or warmer?"
+
+\begin{Schunk}
+\begin{Sinput}
+$ categ <- function(x, cat.ctr) {
++   as.numeric(cut(x, breaks=c(-Inf, cat.ctr-.25, cat.ctr+.25, Inf)))
++ }
+$ obs.cat <- sapply(2:N, function(i) categ(obs[i], obs[i-1]))
+$ ens.cat <- sapply(1:ncol(ens), function(j) {
++                   sapply(2:N, function(i) categ(ens[i, j], obs[i-1]))
++            })
+$ print(c(mean(EnsQs(ens.cat, obs.cat)), mean(EnsQs(ens.cat, obs.cat, R.new=Inf))))
+\end{Sinput}
+\begin{Soutput}
+[1] 0.5956197 0.5777592
+\end{Soutput}
+\begin{Sinput}
+$ print(c(mean(EnsRps(ens.cat, obs.cat)), mean(EnsRps(ens.cat, obs.cat, R.new=Inf))))
+\end{Sinput}
+\begin{Soutput}
+[1] 0.3448851 0.3417778
+\end{Soutput}
+\end{Schunk}
 
 
 
@@ -299,21 +314,29 @@ The ensemble-adjusted CRPS is, in expectation, equal to the CRPS that the empiri
 This includes the case $R^*=\infty$, for which the fair CRPS is obtained.
 The ensemble-adjusted CRPS is implemented in the \pkg{SpecsVerification} function \code{EnsCrps}.
 
+\begin{Schunk}
+\begin{Sinput}
+$ print(c(mean(EnsCrps(ens, obs)), mean(EnsCrps(ens, obs, R.new=Inf))))
+\end{Sinput}
+\begin{Soutput}
+[1] 0.1380708 0.1328890
+\end{Soutput}
+\end{Schunk}
 
 
 The ensemble adjusted Ignorance score has recently been proposed \citep{siegert2015ignorance}.
 
-MORE HERE
 
 
 \subsection{Deterministic forecasts}
 
 
-For completeness, functions for verification of deterministic (point) forecasts have been included in \pkg{SpecsVerification}, however, without ensemble adjustement:
+For completeness, functions for verification of deterministic (point) forecasts have been included in \pkg{SpecsVerification}, however, without any adjustement for ensemble size:
 \begin{itemize}
 \item \code{Sqerr(fcst, obs)}
 \item \code{Mae(fcst, obs)}
 \end{itemize}
+
 
 
 
@@ -332,8 +355,9 @@ A popular simple reference forecast is the climatological forecast, which is onl
 
 \begin{Schunk}
 \begin{Sinput}
-$ obs <- c(0, 8, 15)
-$ # ClimEns(obs, leave.one.out=TRUE)
+$ ens.ref <- ClimEns(obs, leave.one.out=TRUE)
+$ ens.cat.ref <- ClimEns(obs.cat, leave.one.out=TRUE)
+$ ens.bin.ref <- ClimEns(obs.bin, leave.one.out=TRUE)
 \end{Sinput}
 \end{Schunk}
 
@@ -356,6 +380,22 @@ is asymptotically Normally distributed with mean zero and variance one.
 This test is implemented in \pkg{SpecsVerification} in the function \code{ScoreDiff}.
 The function includes the option to account for autocorrelation of the loss-differential by specifying an effective sample size \code{N.eff}.
 
+\begin{Schunk}
+\begin{Sinput}
+$ rbind(
++ brier = ScoreDiff(EnsBrier(ens.bin, obs.bin), EnsBrier(ens.bin.ref, obs.bin)),
++ qs    = ScoreDiff(EnsQs(ens.cat, obs.cat), EnsQs(ens.cat.ref, obs.cat)),
++ rps   = ScoreDiff(EnsRps(ens.cat, obs.cat), EnsRps(ens.cat.ref, obs.cat)),
++ crps  = ScoreDiff(EnsCrps(ens, obs), EnsCrps(ens.ref, obs)))
+\end{Sinput}
+\begin{Soutput}
+      score.diff score.diff.sd      p.value        ci.L      ci.U
+brier 0.12344177    0.04243153 1.811778e-03  0.04027751 0.2066060
+qs    0.11158034    0.09380369 1.171197e-01 -0.07227152 0.2954322
+rps   0.09831485    0.06649896 6.964476e-02 -0.03202071 0.2286504
+crps  0.09391427    0.02399588 4.543379e-05  0.04688321 0.1409453
+\end{Soutput}
+\end{Schunk}
 
 
 
@@ -379,13 +419,63 @@ where the variances and covariances of the mean scores are approximated by the v
 The skill score is implemented in \pkg{SpecsVerification} in the function \code{SkillScore}, which takes as inputs two vectors of verification scores of the evaluated and the reference forecast, the constant score achieved by a perfect forecaster, as well as a possibly user-defined effective sample size.
 
 
+\begin{Schunk}
+\begin{Sinput}
+$ rbind(
++ brier = SkillScore(EnsBrier(ens.bin, obs.bin), EnsBrier(ens.bin.ref, obs.bin)),
++ qs    = SkillScore(EnsQs(ens.cat, obs.cat), EnsQs(ens.cat.ref, obs.cat)),
++ rps   = SkillScore(EnsRps(ens.cat, obs.cat), EnsRps(ens.cat.ref, obs.cat)),
++ crps  = SkillScore(EnsCrps(ens, obs), EnsCrps(ens.ref, obs)))
+\end{Sinput}
+\begin{Soutput}
+      skillscore      stdev
+brier  0.4675825 0.15188106
+qs     0.1577776 0.13439394
+rps    0.2218295 0.14786715
+crps   0.4048290 0.07343353
+\end{Soutput}
+\end{Schunk}
+
+
+
 \subsection{Correlation and correlation difference}
 
 The Pearson correlation coefficient is one of the most popular verification criteria, and can be calculated with the built-in \proglang{R} function \code{cor}.
+Since uncertainty quantification is often of interest, \pkg{SpecsVerification} provides the function \code{Corr}, which returns a correlation coefficient, a p-value and a confidence interval.
+The user can provide the confidence level for the confidence interval, an effective sample size to account for possible auto-correlation in the data:
+
+\begin{Schunk}
+\begin{Sinput}
+$ ens.mean <- rowMeans(ens)
+$ Corr(ens.mean, obs)
+\end{Sinput}
+\begin{Soutput}
+        corr      p.value            L            U 
+7.570956e-01 2.426814e-06 5.293911e-01 8.830500e-01 
+\end{Soutput}
+\end{Schunk}
+
+
 It is often of interest to compare the correlation coefficients between two forecasts that were issued for the same observation.
 The actual difference in correlation is of interest, as well as an estimation of the statistical significance of the correlation difference.
 \pkg{SpecsVerification} implements the function \code{CorrDiff} that returns the difference between the correlation of the forecast ensemble \code{ens} and the correlation of a reference forecast ensemble \code{ens.ref}, both of which were issued for the same observation \code{obs}.
-A p-value using the test by Steiger (\citep{steiger1980tests}) and a confidence interval based on Zou (\citet{zou2007toward}) are calculated by default:
+The function calculates a p-value using the test by \citet{steiger1980tests} and a confidence interval based on Zou (\citet{zou2007toward}) are calculated.
+Both methods take into account correlation between the two competing forecasts.
+For illustration, we evaluate the difference in correlation between the ensemble mean forecast and the persistence forecast:
+
+
+\begin{Schunk}
+\begin{Sinput}
+$ persist <- c(NA, obs[1:(N-1)])
+$ CorrDiff(ens.mean, persist, obs, handle.na="only.complete.triplets")
+\end{Sinput}
+\begin{Soutput}
+  corr.diff     p.value           L           U 
+ 0.18861180  0.03235523 -0.01072800  0.46511450 
+\end{Soutput}
+\end{Schunk}
+
+
 
 
 \section{Rank histogram analysis for ensemble forecasts}

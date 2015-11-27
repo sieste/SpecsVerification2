@@ -1,2 +1,8 @@
 .*.swp
+R/libtmp
+R/SpecsVerification*.tar.gz
+tex/*.aux
+tex/*.blg
+tex/*.log
+tex/*.out
 
