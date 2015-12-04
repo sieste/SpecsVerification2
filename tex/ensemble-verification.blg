@@ -5,45 +5,45 @@ The style file: jss.bst
 Database file #1: ensemble-verification.bib
 Warning--I didn't find a database entry for "siegert2015ignorance"
 Reallocated wiz_functions (elt_size=8) to 6000 items from 3000.
-You've used 10 entries,
+You've used 14 entries,
             3140 wiz_defined-function locations,
-            720 strings with 7027 characters,
-and the built_in function-call counts, 7810 in all, are:
-= -- 656
-> -- 161
-< -- 9
-+ -- 61
-- -- 51
-* -- 621
-:= -- 1063
-add.period$ -- 52
-call.type$ -- 10
-change.case$ -- 57
-chr.to.int$ -- 10
-cite$ -- 10
-duplicate$ -- 715
-empty$ -- 739
-format.name$ -- 77
-if$ -- 1585
+            757 strings with 8057 characters,
+and the built_in function-call counts, 10793 in all, are:
+= -- 917
+> -- 210
+< -- 13
++ -- 80
+- -- 66
+* -- 851
+:= -- 1474
+add.period$ -- 80
+call.type$ -- 14
+change.case$ -- 78
+chr.to.int$ -- 14
+cite$ -- 14
+duplicate$ -- 981
+empty$ -- 1023
+format.name$ -- 100
+if$ -- 2195
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 117
-newline$ -- 74
-num.names$ -- 40
-pop$ -- 215
+missing$ -- 162
+newline$ -- 106
+num.names$ -- 56
+pop$ -- 283
 preamble$ -- 1
-purify$ -- 57
+purify$ -- 78
 quote$ -- 0
-skip$ -- 169
+skip$ -- 233
 stack$ -- 0
-substring$ -- 643
-swap$ -- 297
+substring$ -- 887
+swap$ -- 421
 text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 87
+type$ -- 123
 warning$ -- 0
-while$ -- 64
+while$ -- 88
 width$ -- 0
-write$ -- 166
+write$ -- 242
 (There was 1 warning)

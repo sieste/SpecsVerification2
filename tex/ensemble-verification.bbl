@@ -1,4 +1,4 @@
-\begin{thebibliography}{10}
+\begin{thebibliography}{14}
 \newcommand{\enquote}[1]{``#1''}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
@@ -15,6 +15,14 @@ Brier GW (1950).
   probability.}
 \newblock \emph{Monthly Weather Review}, \textbf{78}(1), 1--3.
 \newblock \doi{10.1175/1520-0493(1950)078<0001:vofeit>2.0.co;2}.
+
+\bibitem[{Bröcker(2008)}]{broecker2008reliability}
+Bröcker J (2008).
+\newblock \enquote{On reliability analysis of multi-categorical forecasts.}
+\newblock \emph{Nonlinear Processes in Geophysics}, \textbf{15}(4), 661–673.
+\newblock ISSN 1607-7946.
+\newblock \doi{10.5194/npg-15-661-2008}.
+\newblock \urlprefix\url{http://dx.doi.org/10.5194/npg-15-661-2008}.
 
 \bibitem[{Diebold and Mariano(1995)}]{diebold1995comparing}
 Diebold FX, Mariano RS (1995).
@@ -52,11 +60,40 @@ Gneiting T, Raftery AE (2007).
   \textbf{102}(477), 359--378.
 \newblock \doi{10.1198/016214506000001437}.
 
+\bibitem[{Hamill(2001)}]{hamill2001interpretation}
+Hamill TM (2001).
+\newblock \enquote{Interpretation of Rank Histograms for Verifying Ensemble
+  Forecasts.}
+\newblock \emph{Monthly Weather Review}, \textbf{129}(3), 550--560.
+\newblock ISSN 1520-0493.
+\newblock \doi{10.1175/1520-0493(2001)129<0550:iorhfv>2.0.co;2}.
+\newblock
+  \urlprefix\url{http://dx.doi.org/10.1175/1520-0493(2001)129<0550:IORHFV>2.0.CO;2}.
+
+\bibitem[{Jolliffe and Primo(2008)}]{jolliffe2008evaluating}
+Jolliffe IT, Primo C (2008).
+\newblock \enquote{Evaluating Rank Histograms Using Decompositions of the
+  Chi-Square Test Statistic.}
+\newblock \emph{Monthly Weather Review}, \textbf{136}(6), 2133--2139.
+\newblock ISSN 1520-0493.
+\newblock \doi{10.1175/2007mwr2219.1}.
+\newblock \urlprefix\url{http://dx.doi.org/10.1175/2007MWR2219.1}.
+
 \bibitem[{Matheson and Winkler(1976)}]{matheson1976scoring}
 Matheson JE, Winkler RL (1976).
 \newblock \enquote{Scoring Rules for Continuous Probability Distributions.}
 \newblock \emph{Management Science}, \textbf{22}(10), 1087--1096.
 \newblock \doi{10.1287/mnsc.22.10.1087}.
+
+\bibitem[{Pearson(1900)}]{pearson1900criterion}
+Pearson K (1900).
+\newblock \enquote{X. On the criterion that a given system of deviations from
+  the probable in the case of a correlated system of variables is such that it
+  can be reasonably supposed to have arisen from random sampling.}
+\newblock \emph{Philosophical Magazine Series 5}, \textbf{50}(302), 157--175.
+\newblock ISSN 1941-5990.
+\newblock \doi{10.1080/14786440009463897}.
+\newblock \urlprefix\url{http://dx.doi.org/10.1080/14786440009463897}.
 
 \bibitem[{Steiger(1980)}]{steiger1980tests}
 Steiger JH (1980).
