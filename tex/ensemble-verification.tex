@@ -86,8 +86,9 @@ Everything else being equal, larger ensembles yield better scores than smaller e
 \begin{Schunk}
 \begin{Sinput}
 R > data(eurotempforecast)
-R > ens.full <- ens - mean(ens) + mean(obs)
-R > ens <- ens.full[, 1:8]
+R > ens <- ens[, 1:8]
+R > ens.bin <- ens.bin[, 1:8]
+R > ens.cat <- ens.cat[, 1:8]
 R > yrs <- as.numeric(names(obs))
 R > N   <- length(obs)
 \end{Sinput}
@@ -202,8 +203,6 @@ We transform the continuous ensemble data into binary by addressing the question
 
 \begin{Schunk}
 \begin{Sinput}
-R > obs.bin <- 1 * (obs[2:N] > obs[1:(N-1)])
-R > ens.bin <- 1 * (ens[2:N, ] > obs[1:(N-1)])
 R > rbind(
 +   unadjusted = mean(EnsBrier(ens.bin, obs.bin, R.new=NA)),
 +   fair       = mean(EnsBrier(ens.bin, obs.bin, R.new=Inf))
@@ -211,8 +210,8 @@ R > rbind(
 \end{Sinput}
 \begin{Soutput}
                 [,1]
-unadjusted 0.1724760
-fair       0.1510989
+unadjusted 0.1753472
+fair       0.1534392
 \end{Soutput}
 \end{Schunk}
 
@@ -247,18 +246,25 @@ The ensemble adjusted quadratic score is implemented as the function \code{EnsQs
 
 
 The quadratic score is insensitive to relabelling the $K$ categories.
-This is undesired in categorical forecasting problems where the categories are nested.
-An order sensitive score for categorical forecasts is the ranked probability score (RPS).
+Sometimes this is undesired in categorical forecasting problems. 
+The forecast categories might have a natural ordering, such as low/medium/high intensity of precipitation.
+In that case, an order-sensitive score might be desired that penalises forecasts that assign most probability to the ``high'' category more than it penalises forecasts that assign most probability to the ``medium'' category, if the low category verifies. 
+A lot of probability in the ``medium'' category can be considered closer to the observation than a lot of probability in the ``high'' category, such that the former forecast can be considered ``better''.
+An order-sensitive score is also desired if the forecast categories are nested within one another, e.g., for precipitation amounts categorised into <1mm/<5mm/<20mm/<$\infty$.
+In that case, a high probability assigned to the <5mm category should receive less penalty than a high probability assigned to the <20mm category, if the actual amount is <1mm.
+
+
+The ranked probability score (RPS) is an order-sensitive quadratic score for categorical probability forecasts.
 The forecast vector $\mathbf{i}_t$ is transformed to the $K$-element cumulated forecast vector $\mathbf{j}_t$, with $k$-th element equal to $j_{t,k} = \sum_{l=1}^k i_{t,l}$.
 Likewise, the cumulated observation vector $\mathbf{z}_t$ has its $k$-th element equal to $z_{t,k} = \sum_{l=1}^k y_{t,l}$.
 The RPS is the quadratic score achieved by the cumulative forecast $\mathbf{j}_t$ for the cumulative observation $\mathbf{z}_t$.
 Accumulating the elements of $\mathbf{i}_t$ and $\mathbf{y}_t$ nests the $K$ forecast categories within each other. 
-The forecast is thus transformed from $i_{t,k}$ ensemble members predict category $k$ to the forecast $j_{t,k}$ ensemble members forecast category $k$ \emph{or less}.
+The forecast is transformed from ``$i_{t,k}$ out of $R$ ensemble members predict category $k$'' to the forecast ``$j_{t,k}$ out of $R$ ensemble members forecast category $k$ \emph{or less}''.
 The nesting of forecast categories ensures order-sensitivity of the score.
-Using previous results, we get the ensemble-adjusted RPS
+Using results from the previous section, we get the ensemble-adjusted RPS
 %
 \begin{equation}
-s_{R}^*(\mathbf{i}_t, R, R^*, \mathbf{y}_t) = \sum_{k=1}^K \left\{ \left(\frac{\sum_{l=1}^k i_{t,k}}{R} - \sum_{l=1}^k y_{t,k}\right)^2 - \left(\frac{1}{R} - \frac{1}{R^*}\right) \frac{\sum_{l=1}^k i_{t,k}(R-\sum_{l=1}^k i_{t,k})}{R(R-1)}\right\}
+s_{R}^*(\mathbf{i}_t, R, R^*, \mathbf{y}_t) = \sum_{k=1}^K \left\{ \left(\frac{j_{t,k}}{R} - z_{t,k}\right)^2 - \left(\frac{1}{R} - \frac{1}{R^*}\right) \frac{j_{t,k}(R-j_{t,k})}{R(R-1)}\right\}
 \end{equation}
 %
 The ensemble adjusted RPS is implemented as the function \code{EnsRps} in \pkg{SpecsVerification}.
@@ -269,13 +275,6 @@ We transform the continuous ensemble forecasts into categorical forecasts by add
 
 \begin{Schunk}
 \begin{Sinput}
-R > categ <- function(x, cat.ctr) {
-+   as.numeric(cut(x, breaks=c(-Inf, cat.ctr-.25, cat.ctr+.25, Inf)))
-+ }
-R > obs.cat <- sapply(2:N, function(i) categ(obs[i], obs[i-1]))
-R > ens.cat <- sapply(1:ncol(ens), function(j) {
-+                   sapply(2:N, function(i) categ(ens[i, j], obs[i-1]))
-+            })
 R > cbind(
 + qs = c(
 +   unadjusted = mean(EnsQs(ens.cat, obs.cat, R.new=NA)), 
@@ -288,8 +287,8 @@ R > cbind(
 \end{Sinput}
 \begin{Soutput}
                   qs       rps
-unadjusted 0.6622596 0.3984375
-fair       0.6098901 0.3892514
+unadjusted 0.6388889 0.3842593
+fair       0.5873016 0.3752205
 \end{Soutput}
 \end{Schunk}
 
@@ -349,16 +348,6 @@ The ensemble adjusted Ignorance score has recently been proposed \citep{siegert2
 
 
 
-\subsection{Deterministic forecasts}
-
-
-For completeness, functions for verification of deterministic (point) forecasts have been included in \pkg{SpecsVerification}, however, without any adjustement for ensemble size:
-\begin{itemize}
-\item \code{Sqerr(fcst, obs)}
-\item \code{Mae(fcst, obs)}
-\end{itemize}
-
-
 
 
 \section{Comparative verification and uncertainty quantification}
@@ -412,9 +401,9 @@ R > rbind(
 \end{Sinput}
 \begin{Soutput}
       score.diff score.diff.sd    p.value         ci.L      ci.U
-brier 0.09152404    0.05966359 0.06251464 -0.025414450 0.2084625
-qs    0.04494038    0.10128661 0.32863148 -0.153577726 0.2434585
-rps   0.04476250    0.07757320 0.28195769 -0.107278178 0.1968032
+brier 0.08500781    0.05950433 0.07655982 -0.031618542 0.2016342
+qs    0.05933596    0.09682528 0.26999942 -0.130438107 0.2491100
+rps   0.04769340    0.07476910 0.26177724 -0.098851334 0.1942381
 crps  0.06697894    0.03125735 0.01606370  0.005715656 0.1282422
 \end{Soutput}
 \end{Schunk}
@@ -437,9 +426,9 @@ R > rbind(
 \end{Sinput}
 \begin{Soutput}
       score.diff score.diff.sd     p.value        ci.L      ci.U
-brier 0.10274725    0.06004282 0.043519059 -0.01493451 0.2204290
-qs    0.07010989    0.10120999 0.244243557 -0.12825805 0.2684778
-rps   0.04826658    0.07771307 0.267271198 -0.10404824 0.2005814
+brier 0.09727310    0.05979417 0.051889887 -0.01992132 0.2144675
+qs    0.08506309    0.09664353 0.189382628 -0.10435475 0.2744809
+rps   0.05139946    0.07489848 0.246276159 -0.09539886 0.1981978
 crps  0.07343666    0.03128020 0.009444761  0.01212859 0.1347447
 \end{Soutput}
 \end{Schunk}
@@ -475,11 +464,11 @@ R > rbind(
 + )
 \end{Sinput}
 \begin{Soutput}
-      skillscore     stdev
-brier 0.34668196 0.2149625
-qs    0.06354692 0.1441233
-rps   0.10099842 0.1748962
-crps  0.28872095 0.1182740
+      skillscore skillscore.sd
+brier 0.32650726     0.2152194
+qs    0.08498117     0.1400237
+rps   0.11041350     0.1728616
+crps  0.28872095     0.1182740
 \end{Soutput}
 \end{Schunk}
 
@@ -497,11 +486,11 @@ R > rbind(
 + )
 \end{Sinput}
 \begin{Soutput}
-      skillscore     stdev
-brier  0.4047619 0.2234878
-qs     0.1031028 0.1503869
-rps    0.1103191 0.1775010
-crps   0.3287330 0.1214782
+      skillscore skillscore.sd
+brier  0.3879870     0.2225080
+qs     0.1265133     0.1458629
+rps    0.1204807     0.1753339
+crps   0.3287330     0.1214782
 \end{Soutput}
 \end{Schunk}
 
@@ -527,19 +516,18 @@ R > Corr(ens.mean, obs)
 It is often of interest to compare the correlation coefficients between two forecasts that were issued for the same observation.
 The actual difference in correlation is of interest, as well as an estimation of the statistical significance of the correlation difference.
 \pkg{SpecsVerification} implements the function \code{CorrDiff} that returns the difference between the correlation of the forecast ensemble \code{ens} and the correlation of a reference forecast ensemble \code{ens.ref}, both of which were issued for the same observation \code{obs}.
-The function calculates a p-value using the test by \citet{steiger1980tests} and a confidence interval based on Zou (\citet{zou2007toward}) are calculated.
+The function calculates a p-value using the test by \citet{steiger1980tests} and a confidence interval based on \citet{zou2007toward} are calculated.
 Both methods take into account correlation between the two competing forecasts.
 For illustration, we evaluate the difference in correlation between the ensemble mean forecast and the persistence forecast:
 
 
 \begin{Schunk}
 \begin{Sinput}
-R > persist <- c(NA, obs[1:(N-1)])
-R > CorrDiff(ens.mean, persist, obs, handle.na="only.complete.triplets")
+R > CorrDiff(ens.mean, obs.lag, obs)
 \end{Sinput}
 \begin{Soutput}
  corr.diff    p.value          L          U 
- 0.1057413  0.1747728 -0.1236789  0.3732574 
+ 0.1011145  0.1667036 -0.1118385  0.3532482 
 \end{Soutput}
 \end{Schunk}
 
@@ -656,6 +644,64 @@ p.value           0.7214269 0.2051177 0.2495614
 The rank histogram of the temperature ensemble forecast provides no evidence against the null-hypothesis of a reliable ensemble.
 
 \section{Reliability diagrams for probability forecasts}
+
+The reliability diagram is a classical tool to compare probability forecasts of binary events to the verifying binary observations \citep{jolliffe2012forecast}.
+The reliability diagram compares the forecast probability to the conditional frequency of the observation, given the forecast.
+A forecast is reliable if the forecast probability and conditional event frequency coincide.
+Forecast reliability is a reasonable criterion that probability forecasts should satisfy; over all instances that the forecast issued a probability $p$, the event should happen $p\times 100\%$ of the time.
+
+If the forecast issues probabilities that take any value on the unit interval, most forecast probabilities will be issued only once.
+To estimate the conditional event frequency in this case the forecasts can be grouped into a finite number of non-overlapping bins.
+The average event frequency taken over all instances where the forecast is in a given bin is then taken as an average of the conditional event frequency.
+The reliability diagram is a plot of the conditional event frequency over the in-bin average of the forecast probabilities.
+\pkg{SpecsVerification} provides the function \code{ReliabilityDiagram} that takes as inputs a collection of probability foredcasts and binary verifying observations, and calculates the reliability diagram for a specified number of equidistant bins, or a user-defined non-equidistant binning.
+The consistency resampling method proposed by \citet{broecker2007increasing} is used to estimate the likely spread of the reliability diagrams around the diagonal if the given forecast were, in fact, reliable.
+
+
+If the \code{plot} argument is set to \code{FALSE}, the \code{ReliabilityDiagram} function returns the quantities necessary to plot the reliability diagram.
+
+\begin{Schunk}
+\begin{Sinput}
+R > p.bin <- rowMeans(ens.bin)
+R > ReliabilityDiagram(p.bin, obs.bin, plot=FALSE, bins=3)
+\end{Sinput}
+\begin{Soutput}
+     p.avgs cond.probs   cbar.lo   cbar.hi p.counts bin.lower bin.upper
+1 0.1000000  0.2000000 0.0000000 0.3000000       10 0.0000000 0.3333333
+2 0.5227273  0.7272727 0.2222222 0.8333333       11 0.3333333 0.6666667
+3 0.8541667  1.0000000 0.5000000 1.0000000        6 0.6666667 1.0000000
+\end{Soutput}
+\end{Schunk}
+
+If the argument \code{plot=TRUE} the reliability diagram is plotted, as shown in Figure \ref{reldiag-plot}. 
+The logical argument \code{plot.refin} controls the refinement diagram, i.e. the histogram over the forecast probabilities.
+The logical argument \code{attributes} controls plotting of the polygon defined by the vertical no-resolution line at $\bar{y} = 1/n \sum_t y_t$, where $y_t$ is the binary observation at time $t$, and the no-skill line defined by the linear equation $f(x)=(x+\bar{y})/2$, to produce the attributes diagram \citep{hsu1986attributes}.
+Points that fall into the shaded area of the attributes diagram contribute positively to forecast skill defined by the Brier skill score.
+
+\begin{figure}
+\begin{center}
+%
+\begin{Schunk}
+\begin{Sinput}
+R > rd <- ReliabilityDiagram(p.bin, obs.bin, plot = TRUE, bins = 3, 
++     attributes = TRUE)
+\end{Sinput}
+\end{Schunk}
+\includegraphics{fig-reldiag}
+%
+\end{center}
+\caption{Reliability diagram}
+\label{reldiag-plot}
+\end{figure}
+
+
+\section{Additional functions}
+
+The focus of \pkg{SpecsVerification}, and of the present paper, is on verification functions for ensemble and probability forecasts, uncertainty quantification, and graphical display.
+\pkg{SpecsVerification} includes a number of additional functions for recalibration and verification of forecasts.
+For verification of deterministic forecasts, e.g. the ensemble mean forecast, the sqared error (function \code{SqErr}) and the Absolute Error (function \code{AbsErr}) have been implemented.
+
+
 
 
 

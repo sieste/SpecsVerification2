@@ -7,7 +7,7 @@ if (load.ecoms) {
 
   # target variable: 2-meter-temperature
   var <- "tas" 
-  # latitude and longitude limits for SPECS region (roughly Europe)
+  # latitude and longitude limits for SPECS region (roughly Europe) 
   lats <- c(30,75) 
   lons <- c(-12.5,42.5) 
   # target period: JJA
@@ -77,10 +77,16 @@ coslat.obs <- cos(as.numeric(dimnames(obs)[['lat']]) / 360. * 2. * pi)
 ens <- apply(X=ens, MARGIN=c("member", "t.ver"), weighted.mean, w=coslat.ens)
 obs <- apply(X=obs, MARGIN=c("t.ver"), weighted.mean, w=coslat.obs)
 
-# homogenize times
+# calculate lagged observation
+ens.year1 <- format(as.Date(paste(dimnames(ens)[['t.ver']][1], "-01", sep="")), "%Y")
+nlag1 <- grep(as.numeric(ens.year1)-1, names(obs))
+stopifnot(length(nlag1) > 0)
+obs.prev <- mean(obs[nlag1])
+
+# homogenize times between forecasts and observations
 obs <- obs[ dimnames(ens)[['t.ver']] ]
 
-# ensemble members as columns
+# transpose, have ensemble members as columns and dates as rows
 ens <- t(ens)
 
 # aggregate months
@@ -101,8 +107,36 @@ ens <- ens.tmp
 obs <- obs.tmp
 
 
+# lagged observation for use in data set
+obs.lag <- c(obs.prev, obs[1:(length(obs)-1)])
+
+
+# save
 save(file="~/folders/jss-paper-ensemble-verification/data/ncep-seas-eu-t2m.Rdata",
-     list=c("ens", "obs"))
+     list=c("ens", "obs", "obs.lag"))
+
+
+# debiased ensemble data for use in R data set
+ens <- ens - mean(ens) + mean(obs)
+
+
+# make binary and categorical forecasts
+N <- length(obs)
+obs.bin <- 1 * (obs > obs.lag)
+ens.bin <- 1 * (ens > obs.lag)
+
+categ <- function(x, cat.ctr, half.width) {
+  as.numeric(cut(x, breaks=c(-Inf, cat.ctr-half.width, cat.ctr+half.width, Inf)))
+}
+
+obs.cat <- sapply(1:N, function(i) categ(obs[i], obs.lag[i], 0.25))
+ens.cat <- sapply(1:ncol(ens), function(j) {
+                  sapply(1:N, function(i) categ(ens[i, j], obs.lag[i], 0.25))
+           })
+
+
+
+
 save(file="~/folders/jss-paper-ensemble-verification/R/SpecsVerification2/data/eurotempforecast.rda",
-     list=c("ens", "obs"))
+     list=c("ens", "obs", "obs.lag", "obs.bin", "ens.bin", "obs.cat", "ens.cat"))
 
