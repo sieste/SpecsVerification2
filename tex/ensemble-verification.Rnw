@@ -58,7 +58,7 @@
 library("xtable")
 library("SpecsVerification2", lib.loc="~/folders/jss-paper-ensemble-verification/R/libtmp")
 set.seed(31415)
-options(prompt="R > ")
+options(prompt=" ", continue=" ", digits=4, scipen=10)
 @
 
 
@@ -365,10 +365,14 @@ The function includes the option to account for autocorrelation of the loss-diff
 
 <<>>=
 rbind(
-  brier = ScoreDiff(EnsBrier(ens.bin, obs.bin), EnsBrier(ens.bin.ref, obs.bin)),
-  qs    = ScoreDiff(EnsQs(ens.cat, obs.cat),    EnsQs(ens.cat.ref, obs.cat)),
-  rps   = ScoreDiff(EnsRps(ens.cat, obs.cat),   EnsRps(ens.cat.ref, obs.cat)),
-  crps  = ScoreDiff(EnsCrps(ens, obs),          EnsCrps(ens.ref, obs))
+  brier = ScoreDiff(EnsBrier(ens.bin, obs.bin), 
+                    EnsBrier(ens.bin.ref, obs.bin)),
+  qs    = ScoreDiff(EnsQs(ens.cat, obs.cat),    
+                    EnsQs(ens.cat.ref, obs.cat)),
+  rps   = ScoreDiff(EnsRps(ens.cat, obs.cat),   
+                    EnsRps(ens.cat.ref, obs.cat)),
+  crps  = ScoreDiff(EnsCrps(ens, obs),          
+                    EnsCrps(ens.ref, obs))
 )
 @
 
@@ -411,12 +415,18 @@ The skill score is implemented in \pkg{SpecsVerification} in the function \code{
 
 <<>>=
 rbind(
-  brier = SkillScore(EnsBrier(ens.bin, obs.bin), EnsBrier(ens.bin.ref, obs.bin)),
-  qs    = SkillScore(EnsQs(ens.cat, obs.cat),    EnsQs(ens.cat.ref, obs.cat)),
-  rps   = SkillScore(EnsRps(ens.cat, obs.cat),   EnsRps(ens.cat.ref, obs.cat)),
-  crps  = SkillScore(EnsCrps(ens, obs),          EnsCrps(ens.ref, obs))
+  brier = SkillScore(EnsBrier(ens.bin, obs.bin), 
+                     EnsBrier(ens.bin.ref, obs.bin)),
+  qs    = SkillScore(EnsQs(ens.cat, obs.cat),    
+                     EnsQs(ens.cat.ref, obs.cat)),
+  rps   = SkillScore(EnsRps(ens.cat, obs.cat),   
+                     EnsRps(ens.cat.ref, obs.cat)),
+  crps  = SkillScore(EnsCrps(ens, obs),          
+                     EnsCrps(ens.ref, obs))
 )
 @
+
+The skill scores increase slightly if we adjust the ensemble size to $R^* \to \infty$ for the ensemble forecasts and the climatological reference forecast:
 
 <<>>=
 rbind(
@@ -467,12 +477,12 @@ In a $R$-member ensemble, the rank is between $1$ and $R+1$.
 If the ensemble is a reliable representation of the uncertainty in the observation, the observation should statistically behave like ``just another ensemble member''. 
 Each verification rank should therefore be equally likely on average, and the histogram over verification ranks should be flat. 
 \pkg{SpecsVerification} contains the function \code{Rankhist} to calculate the verification rank counts for an archive of ensembles and observations.
-%
+
 <<>>=
 rh <- Rankhist(ens, obs)
 rh
 @
-%
+
 
 
 The function \code{PlotRankhist} plots the rank histogram.
@@ -543,11 +553,11 @@ c^{(sq)}_i & =  - \frac{\sqrt{5}  J^2 - \sqrt{5}}{\sqrt{4(J - 2)  (J-1) J (J+1) 
 %
 The $\chi^2$ test using the linear contrast is sensitive to sloped rank histgrams, i.e. biased ensembles, while the $\chi^2$ based on the squared contrast is sensitive to convex rank histograms, i.e. over- or under-dispersed ensembles.
 \code{TestRankhist} returns the test-statistics and one-sided p-values of the Pearson $\chi^2$ test, and of the two tests based on the contrasts $\mathbf{c}^{(lin)}$ and $\mathbf{c}^{(sq)}$:
-%
+
 <<>>=
 TestRankhist(rh)
 @
-%
+
 The rank histogram of the temperature ensemble forecast provides no evidence against the null-hypothesis of a reliable ensemble.
 
 \section{Reliability diagrams for probability forecasts}
