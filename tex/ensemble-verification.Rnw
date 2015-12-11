@@ -44,56 +44,81 @@
   URL: \url{http://emps.exeter.ac.uk/mathematics/staff/ss610}
 }
 
-%% for those who use Sweave please include the following line (with % symbols):
-%% need no \usepackage{Sweave.sty}
 
 %% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-% initialise sweave
-\SweaveOpts{prefix.string=fig}
-
-% initialise R session
+% initialise R session and knitr
 <<echo=FALSE>>=
 library("xtable")
 library("SpecsVerification2", lib.loc="~/folders/jss-paper-ensemble-verification/R/libtmp")
 set.seed(31415)
-options(prompt=" ", continue=" ", digits=4, scipen=10)
+options(digits=4, scipen=10)
+knitr::knit_theme$set("acid")
+knitr::opts_knit$set(progress=FALSE)
+knitr::opts_chunk$set(dev="pdf", tidy=FALSE)
 @
 
 
 \begin{document}
 
-
-
 %% Note that you should use the \pkg{}, \proglang{} and \code{} commands.
-
 % \section[About Java]{About \proglang{Java}}
 %% Note: If there is markup in \(sub)section, then it has to be escape as above.
 
 
 \section{Introduction}
 
-{\bf SPECS}
-
 {\bf Ensemble forecasting general}
+An ensemble forecast is a collection of forecasts for the same target.
+The ensemble members usually differ in the initial conditions, boundary conditions, model physics and background information.
+Ensemble forecasting is today operationally used to quantify forecast uncertainty.
+Since ensembles are composed of multiple runs of deterministic models, but are used to provide uncertainty information, they can be regarded as a hybrid of deterministic and probabilistic forecasts.
+To evaluate the quality of ensemble forecasts, the forecasts have to be compared to their verifying observations of the real world.
 
-deterministic, probabilistic, ensemble
 
 
 {\bf Forecast verification general}
-a posteriori comparison of forecasts with their verifying observations;
-ensembles can be verified by taking the ensemble mean as a deterministic forecast; deriving a probability distribution and use a proper score; here: evaluate the raw ensemble
+The comparison of forecasts with their verifying observations is commonly referred to as forecast verification \citep{jolliffe2012forecast}.
+A verification measure is thus a function that depends on the collection $D=\{x_t, y_t\}_{t=1}^N$ of past forecasts $x_t$ and verifying observations $y_t$.
+The collection $D$ is also called a hindcast data set.
+A scoring rule is a function $s(x_t, y_t)$ that assigns a real number to a forecast-observation pair.
+A general convention that the best possible forecast achieves a score of zero, and lower scores indicate ``better'' forecasts.
+The empirical score $1/N \sum_t s(x_t, y_t)$ can be used as a verification measure.
+There verification measures that are not scoring rules; examples include the correlation coefficient, and the area under the ROC curve.
+There are different scoring rules and verification measures for deterministic forecasts and probabilistic forecasts.
+Since ensembles are interpreted as a hybrid, both types of verification measures can be applied to ensembles.
+
 
 {\bf Finite size effect in ensemble verification}
-Everything else being equal, larger ensembles yield better scores than smaller ensembles.
+It is known that verification measures can depend on the ensemble size.
+In general, large ensembles achieve better average verification scores than small ensembles, when both ensembles come from the same ensemble forecasting system \citep{buizza1998impact}.
+In hindcast experiments it is often desirable to estimate the finite-ensemble effect on the verification score. 
+For example, an experimental model configuration might be run at a small ensemble size to save computational resources. 
+The skill calculated for the hindcast experiment is not representative of the skill that an operational ensemble with many members would achieve.
+A number of verification scores have been proposed in the past to estimate the finite ensemble effect, and correct it.
+These will be summarised in the present paper, and are implemented as R functions in the package \pkg{SpecsVerification}.
+
+
+{\bf Comparative verification}
+The value of a verification score is often of little interest by itself.
+If the value of the score is not zero, we know that the forecast was not perfect.
+But a score different from zero is often difficult to interpret without a reference point.
+For this reason, forecasts should be evaluated in a comparative way, by subjecting the forecast of interest to a simple reference forecast, such as the climatological average, or a simple time-series model.
+If the forecast is able to achieve a better score than the reference forecast, there is non-trivial information in the forecast.
+Forecast verification therefore often includes comparative measures of forecast performance.
+The package \pkg{SpecsVerification} includes functions to compare forecast verification scores.
+
+
+{\bf Uncertainty quantification}
+If the score was calculated from a finite number of forecast-observation pairs,  the value of a verification score is of little use without a measure of uncertainty.
+
+
+
 
 
 <<label=load-data>>=
 data(eurotempforecast)
-ens <- ens[, 1:8]
-ens.bin <- ens.bin[, 1:8]
-ens.cat <- ens.cat[, 1:8]
+R   <- ncol(ens)
 yrs <- as.numeric(names(obs))
 N   <- length(obs)
 @
@@ -102,12 +127,9 @@ N   <- length(obs)
 \begin{figure}
 \begin{center}
 %
-<<label=gfs-plot, fig=TRUE, width=4, height=2, keep.source=FALSE>>=
+<<label=gfs-plot, fig.width=4, fig.height=2>>=
 par(las=1, cex=0.7, mgp=c(3, 1, 0), mar=c(2,4,1,1))
-plot(NA, type='n', xlim=range(yrs), ylim=range(c(obs, ens)), 
-     xlab="", ylab="temp [C]")
-for (i in 1:ncol(ens)) 
-  points(yrs, ens[, i], col="darkgray", cex=.7)
+matplot(yrs, ens, ylab="temp [C]", pch=1, col=gray(.5))
 points(yrs, obs, pch=15, cex=1.5)
 @
 %
@@ -164,8 +186,9 @@ E\left[s_{B}\left(\frac{i_t}{R}, y_t\right)\right] = s_{B}(p_t, y_t) +\frac{p_t(
 \end{equation}
 %
 That is, even though the fraction $i_t/R$ is an unbiased estimator of the event probability $p_t$, the Brier score of $i_t/R$ is not an unbiased estimator of the Brier score of $p_t$.
+The Brier score of $i_t/R$ is in general larger than the Brier score of $p_t$.
 The bias, given by the additional positive term on the rhs of Equation~\ref{eq:expec-brier}, depends on the ensemble size and vanishes for $R\rightarrow\infty$.
-The bias can be interpreted as a finite-ensemble penalty: If two ensembles sample their members from the same probability $p_t$, the one with the larger ensemble size obtains the lower (i.e. better) Brier score on average.
+The bias can thus be interpreted as a finite-ensemble penalty: If two ensembles sample their members from the same probability $p_t$, the one with the larger ensemble size obtains the lower (i.e. better) Brier score on average.
 This is reasonable since more ensemble members allow for more robust estimation of the ``true'' probability $p_t$.
 But in the analysis of ensemble hindcasts it is sometimes desirable to correct the finite-ensemble bias.
 For example, if the hindcast ensemble has $R$ members, and future operational forecasts will be made with $R^* > R$ ensemble members, the score calculated for the $R$-member hindcast ensemble will be a too pessimistic estimate of the score of the $R^*$-member forecast ensemble.
@@ -195,15 +218,42 @@ The \pkg{SpecsVerification} function \code{EnsBrier} calculates the ensemble-adj
 The argument \code{R.new} allows for estimation of the score of an arbitrary ensemble size, including \code{R.new=Inf}.
 
 
-We transform the continuous ensemble data into binary by addressing the question "Will this year's summer be warmer than last year's"?
+We have transformed the continuous temperature data into binary forecasts by addressing the question "Will this year's summer be warmer than last year's"?
+To illustrate the finite ensemble effect and highlight the benefit of the finite-ensemble adjustment, we randomly split the 24-member forecast ensemble into a small 5-member ensemble and a larger 19-member ensemble.
+We then calculate their unadjusted Brier scores:
 
 <<>>=
-rbind(
-  unadjusted = mean(EnsBrier(ens.bin, obs.bin, R.new=NA)),
-  fair       = mean(EnsBrier(ens.bin, obs.bin, R.new=Inf))
-)
+i.small <- sample(1:R, 5)
+i.large <- setdiff(1:R, i.small)
+c(small.ens=mean(EnsBrier(ens.bin[, i.small], obs.bin)), 
+  large.ens=mean(EnsBrier(ens.bin[, i.large], obs.bin)))
 @
 
+As expected, the large ensemble obtains a better score than the large ensemble.
+We next adjust the Brier score for the finite ensemble size, by calculating $s_{B}^*$ using $R^*=20$ for both ensembles:
+
+<<>>=
+c(small.ens=mean(EnsBrier(ens.bin[, i.small], obs.bin, R.new=19)), 
+  large.ens=mean(EnsBrier(ens.bin[, i.large], obs.bin, R.new=19)))
+@
+
+The scores are very similar; we are able to estimate the score of the 19-member ensemble, using only a 5-member ensemble.
+How big is the estimated improvement if we could further increase the ensemble size?
+We show this in Figure \ref{fig:ens-brier}, where we plot the ensemble adjusted Brier score over the adjusted ensemble size $R^*$.
+
+
+\begin{figure}
+\begin{center}
+<<ens-brier, fig.width=4, fig.height=3, echo=FALSE>>=
+brier <- sapply(2:60, function(RR) c(
+  mean(EnsBrier(ens.bin[, i.small], obs.bin, R.new=RR)),
+  mean(EnsBrier(ens.bin[, i.large], obs.bin, R.new=RR))))
+matplot(cbind(2:60, 2:60), t(brier), type="l", col="black", lty=c(1,2), xlab="R*", ylab="Brier score", las=1)
+@
+\caption{Ensemble-adjusted Brier score as a function of the ensemble size, calculated for a small 5-member ensemble (solid line) and a larger 19-member ensemble (dashed line) produced by the same forecasting system.}
+\label{fig:ens-brier}
+\end{center}
+\end{figure}
 
 
 \subsection{Categorical forecasts}
@@ -257,23 +307,38 @@ s_{R}^*(\mathbf{i}_t, R, R^*, \mathbf{y}_t) = \sum_{k=1}^K \left\{ \left(\frac{j
 \end{equation}
 %
 The ensemble adjusted RPS is implemented as the function \code{EnsRps} in \pkg{SpecsVerification}.
+Note that the ensemble forecast vector $\mathbf{i}_t$ in the above equations is assumed to be a histogram, indicating the number of ensemble members that forecast each class. 
+The functions \code{EnsQs} and \code{EnsRps} assume as inputs true categorical ensemble forecasts, i.e. vectors of length $R$ (ensemble size), with entries indicating which class label the ensemble predicts.
 
 
 
-We transform the continuous ensemble forecasts into categorical forecasts by addressing the question "Will this year's summer temperature be similar to last year's temperature (within a 0.5K range), colder, or warmer?"
+We have transformed the continuous ensemble forecasts into categorical forecasts by addressing the question "Will this year's summer temperature be similar to last year's temperature (within a 0.5K range), colder, or warmer?"
+For example, the categorical prediction and observation for the year 2000 is
 
 <<>>=
-cbind(
-qs = c(
-  unadjusted = mean(EnsQs(ens.cat, obs.cat, R.new=NA)), 
-  fair       = mean(EnsQs(ens.cat, obs.cat, R.new=Inf))
-),
-rps = c(
-  unadjusted = mean(EnsRps(ens.cat, obs.cat, R.new=NA)), 
-  fair       = mean(EnsRps(ens.cat, obs.cat, R.new=Inf))
-))
+matrix(c(obs.cat["2000"], ens.cat["2000",]), ncol=1)
 @
 
+This transforms the forecast problem into a 3-category problem, which we first evaluate by the ensemble-adjusted quadratic score:
+
+<<>>=
+mean(EnsQs(ens.cat, obs.cat))
+@
+
+<<>>=
+i.small <- sample(1:R, 5)
+i.large <- setdiff(1:R, i.small)
+rbind(
+small.ens=mean(EnsQs(ens.cat[, i.small], obs.cat)),
+large.ens=mean(EnsQs(ens.cat[, i.large], obs.cat)))
+@
+
+
+<<>>=
+rbind(
+small.ens=mean(EnsRps(ens.cat[, i.small], obs.cat)),
+large.ens=mean(EnsRps(ens.cat[, i.large], obs.cat)))
+@
 
 
 
@@ -284,7 +349,7 @@ If the forecast target is a continuous variable, such as temperature or pressure
 If the forecast for the continuous target $y_t$ is given as a cumulative distribution function $F_t(x)$, the CRPS is given by 
 %
 \begin{equation}
-s_{C}(F_t, y_t) = \int_{-\infty}^\infty dz\ \left[F_t(z) - H(z-y_t)\right]^2
+s_{C}(F_t, y_t) = \int_{-\infty}^\infty dz\ \left|F_t(z) - H(z-y_t)\right|^2
 \end{equation}
 %
 where $H(x)$ is the Heaviside step-function, satisfying $H(x)=1$ for all $x\ge 0$ and $H(x)=0$ otherwise.
@@ -301,7 +366,7 @@ Using properties of the Heaviside function, it is straightforward to show that t
 s_{C}(\hat{F}_t, y_t) = \frac{1}{R}|x_{t,r}-y_t| - \frac{1}{2R^2} \sum_{r=1}^R \sum_{r'=1}^R |x_{t,r}-x_{t,r'}|.
 \end{equation}
 %
-\citet{fricker2013three} show that the CRPS is sensitive with respect to the ensemble size, and propose the ensemble-adjusted CRPS
+\citet{fricker2013three} show that the CRPS is sensitive to the ensemble size, and propose the ensemble-adjusted CRPS
 %
 \begin{equation}
 s_{C}^*(x_t, R, R^*, y_t) = \frac{1}{R}\sum_{r=1}^R |x_{t,r} - y_t| - \frac{1}{2R(R-1)}\left(1-\frac{1}{R^*}\right) \sum_{r=1}^R\sum_{r'=1}^R |x_{t,r}-x_{t,r'}|.
@@ -409,7 +474,7 @@ The variance of the skill score can be estimated by error propagation as follows
 var(SS) \approx \frac{1}{(S_{ref} - S_{perf})^2} var(S) + \frac{(S - S_{perf})^2}{(S_{ref}-S_{perf})^2} var(S_{ref}) - 2 \frac{S-S_{perf}}{(S_{ref}-S_{perf})^3} cov(S, S_{ref})
 \end{equation}
 %
-where the variances and covariances of the mean scores are approximated by the variances and covariances of the scores, divided by the sample size.
+where the variances and covariances of the mean scores $S$ and $S_{ref}$ are approximated by the variances and covariances calculated for the individual scores, divided by the sample size.
 The skill score is implemented in \pkg{SpecsVerification} in the function \code{SkillScore}, which takes as inputs two vectors of verification scores of the evaluated and the reference forecast, the constant score achieved by a perfect forecaster, as well as a possibly user-defined effective sample size.
 
 
@@ -499,7 +564,7 @@ The interpretation is, given that the null-hypothesis is true, on average 9 out 
 \begin{figure}
 \begin{center}
 %
-<<label=rank-hist, fig=TRUE, width=5, height=2.5, keep.source=FALSE>>=
+<<label=rank-hist, fig.width=5, fig.height=2.5>>=
 PlotRankhist(rh, mode="raw")
 @
 %
@@ -512,7 +577,7 @@ PlotRankhist(rh, mode="raw")
 \begin{figure}
 \begin{center}
 %
-<<label=rank-hist-pp, fig=TRUE, width=5, height=3.5, keep.source=FALSE>>=
+<<label=rank-hist-pp, fig.width=5, fig.height=3.5>>=
 PlotRankhist(rh, mode="prob.paper")
 @
 %
@@ -590,7 +655,7 @@ Points that fall into the shaded area of the attributes diagram contribute posit
 \begin{figure}
 \begin{center}
 %
-<<label=reldiag, fig=TRUE, width=4, height=4.5, keep.source=FALSE>>=
+<<label=reldiag, fig.width=4, fig.height=4.5>>=
 rd <- ReliabilityDiagram(p.bin, obs.bin, plot=TRUE, bins=3, attributes=TRUE)
 @
 %

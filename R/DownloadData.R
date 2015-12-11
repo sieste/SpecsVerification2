@@ -124,6 +124,9 @@ ens <- ens - mean(ens) + mean(obs)
 N <- length(obs)
 obs.bin <- 1 * (obs > obs.lag)
 ens.bin <- 1 * (ens > obs.lag)
+names(obs.bin) <- names(obs)
+dimnames(ens.bin) <- dimnames(ens)
+
 
 categ <- function(x, cat.ctr, half.width) {
   as.numeric(cut(x, breaks=c(-Inf, cat.ctr-half.width, cat.ctr+half.width, Inf)))
@@ -133,6 +136,8 @@ obs.cat <- sapply(1:N, function(i) categ(obs[i], obs.lag[i], 0.25))
 ens.cat <- sapply(1:ncol(ens), function(j) {
                   sapply(1:N, function(i) categ(ens[i, j], obs.lag[i], 0.25))
            })
+names(obs.cat) <- names(obs)
+dimnames(ens.cat) <- dimnames(ens)
 
 
 

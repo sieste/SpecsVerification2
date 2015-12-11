@@ -42,7 +42,7 @@ $(PDF_FILE): $(BIB_FILE) $(TEX_FILE)
 # create the tex source with sweave
 $(TEX_FILE): $(RNW_FILE) $(R_PKG_tgz)
 	cd $(TEX_DIR);\
-	$(RSCRIPT_CMD) -e 'Sweave("$(RNW_FILE)", driver=highlight::HighlightWeaveLatex(boxes=TRUE))';\
+	$(RSCRIPT_CMD) -e 'knitr::knit("$(RNW_FILE)")';\
 	cd $(ROOT_DIR)
 
 

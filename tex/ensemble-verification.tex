@@ -1,391 +1,58 @@
-\documentclass[article]{jss}
-%% need no \usepackage{Sweave.sty}
+\documentclass[article]{jss}\usepackage{graphicx, color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
 
-\usepackage{color}%
-\definecolor{highlightBg}{rgb}{0.949019607843137,0.949019607843137,0.949019607843137}
-\definecolor{highlightBorder}{rgb}{0,0,0}
-\newenvironment{Hinput}%
-{}%
-{}%
-\newenvironment{Houtput}%
-{}%
-{}%
-\newsavebox{\highlightbox}%
-\newenvironment{Hchunk}%
-{%
-\vspace{0.5em}\noindent\begin{lrbox}{\highlightbox}%
-\begin{minipage}[b]{.9\textwidth}%
-}%
-{%
-\end{minipage}%
-\end{lrbox}%
-\fcolorbox{highlightBorder}{highlightBg}{\usebox{\highlightbox}}%
-\vspace{0.5em}}%
-
-
-\usepackage{color}%
- 
-\newsavebox{\hlnormalsizeboxclosebrace}%
-\newsavebox{\hlnormalsizeboxopenbrace}%
-\newsavebox{\hlnormalsizeboxbackslash}%
-\newsavebox{\hlnormalsizeboxlessthan}%
-\newsavebox{\hlnormalsizeboxgreaterthan}%
-\newsavebox{\hlnormalsizeboxdollar}%
-\newsavebox{\hlnormalsizeboxunderscore}%
-\newsavebox{\hlnormalsizeboxand}%
-\newsavebox{\hlnormalsizeboxhash}%
-\newsavebox{\hlnormalsizeboxat}%
-\newsavebox{\hlnormalsizeboxpercent}% 
-\newsavebox{\hlnormalsizeboxhat}%
-\newsavebox{\hlnormalsizeboxsinglequote}%
-\newsavebox{\hlnormalsizeboxbacktick}%
-
-\setbox\hlnormalsizeboxopenbrace=\hbox{\begin{normalsize}\verb.{.\end{normalsize}}%
-\setbox\hlnormalsizeboxclosebrace=\hbox{\begin{normalsize}\verb.}.\end{normalsize}}%
-\setbox\hlnormalsizeboxlessthan=\hbox{\begin{normalsize}\verb.<.\end{normalsize}}%
-\setbox\hlnormalsizeboxdollar=\hbox{\begin{normalsize}\verb.$.\end{normalsize}}%
-\setbox\hlnormalsizeboxunderscore=\hbox{\begin{normalsize}\verb._.\end{normalsize}}%
-\setbox\hlnormalsizeboxand=\hbox{\begin{normalsize}\verb.&.\end{normalsize}}%
-\setbox\hlnormalsizeboxhash=\hbox{\begin{normalsize}\verb.#.\end{normalsize}}%
-\setbox\hlnormalsizeboxat=\hbox{\begin{normalsize}\verb.@.\end{normalsize}}%
-\setbox\hlnormalsizeboxbackslash=\hbox{\begin{normalsize}\verb.\.\end{normalsize}}%
-\setbox\hlnormalsizeboxgreaterthan=\hbox{\begin{normalsize}\verb.>.\end{normalsize}}%
-\setbox\hlnormalsizeboxpercent=\hbox{\begin{normalsize}\verb.%.\end{normalsize}}%
-\setbox\hlnormalsizeboxhat=\hbox{\begin{normalsize}\verb.^.\end{normalsize}}%
-\setbox\hlnormalsizeboxsinglequote=\hbox{\begin{normalsize}\verb.'.\end{normalsize}}%
-\setbox\hlnormalsizeboxbacktick=\hbox{\begin{normalsize}\verb.`.\end{normalsize}}%
-\setbox\hlnormalsizeboxhat=\hbox{\begin{normalsize}\verb.^.\end{normalsize}}%
-
-
-
-\newsavebox{\hltinyboxclosebrace}%
-\newsavebox{\hltinyboxopenbrace}%
-\newsavebox{\hltinyboxbackslash}%
-\newsavebox{\hltinyboxlessthan}%
-\newsavebox{\hltinyboxgreaterthan}%
-\newsavebox{\hltinyboxdollar}%
-\newsavebox{\hltinyboxunderscore}%
-\newsavebox{\hltinyboxand}%
-\newsavebox{\hltinyboxhash}%
-\newsavebox{\hltinyboxat}%
-\newsavebox{\hltinyboxpercent}% 
-\newsavebox{\hltinyboxhat}%
-\newsavebox{\hltinyboxsinglequote}%
-\newsavebox{\hltinyboxbacktick}%
-
-\setbox\hltinyboxopenbrace=\hbox{\begin{tiny}\verb.{.\end{tiny}}%
-\setbox\hltinyboxclosebrace=\hbox{\begin{tiny}\verb.}.\end{tiny}}%
-\setbox\hltinyboxlessthan=\hbox{\begin{tiny}\verb.<.\end{tiny}}%
-\setbox\hltinyboxdollar=\hbox{\begin{tiny}\verb.$.\end{tiny}}%
-\setbox\hltinyboxunderscore=\hbox{\begin{tiny}\verb._.\end{tiny}}%
-\setbox\hltinyboxand=\hbox{\begin{tiny}\verb.&.\end{tiny}}%
-\setbox\hltinyboxhash=\hbox{\begin{tiny}\verb.#.\end{tiny}}%
-\setbox\hltinyboxat=\hbox{\begin{tiny}\verb.@.\end{tiny}}%
-\setbox\hltinyboxbackslash=\hbox{\begin{tiny}\verb.\.\end{tiny}}%
-\setbox\hltinyboxgreaterthan=\hbox{\begin{tiny}\verb.>.\end{tiny}}%
-\setbox\hltinyboxpercent=\hbox{\begin{tiny}\verb.%.\end{tiny}}%
-\setbox\hltinyboxhat=\hbox{\begin{tiny}\verb.^.\end{tiny}}%
-\setbox\hltinyboxsinglequote=\hbox{\begin{tiny}\verb.'.\end{tiny}}%
-\setbox\hltinyboxbacktick=\hbox{\begin{tiny}\verb.`.\end{tiny}}%
-\setbox\hltinyboxhat=\hbox{\begin{tiny}\verb.^.\end{tiny}}%
-
-
-
-\newsavebox{\hlscriptsizeboxclosebrace}%
-\newsavebox{\hlscriptsizeboxopenbrace}%
-\newsavebox{\hlscriptsizeboxbackslash}%
-\newsavebox{\hlscriptsizeboxlessthan}%
-\newsavebox{\hlscriptsizeboxgreaterthan}%
-\newsavebox{\hlscriptsizeboxdollar}%
-\newsavebox{\hlscriptsizeboxunderscore}%
-\newsavebox{\hlscriptsizeboxand}%
-\newsavebox{\hlscriptsizeboxhash}%
-\newsavebox{\hlscriptsizeboxat}%
-\newsavebox{\hlscriptsizeboxpercent}% 
-\newsavebox{\hlscriptsizeboxhat}%
-\newsavebox{\hlscriptsizeboxsinglequote}%
-\newsavebox{\hlscriptsizeboxbacktick}%
-
-\setbox\hlscriptsizeboxopenbrace=\hbox{\begin{scriptsize}\verb.{.\end{scriptsize}}%
-\setbox\hlscriptsizeboxclosebrace=\hbox{\begin{scriptsize}\verb.}.\end{scriptsize}}%
-\setbox\hlscriptsizeboxlessthan=\hbox{\begin{scriptsize}\verb.<.\end{scriptsize}}%
-\setbox\hlscriptsizeboxdollar=\hbox{\begin{scriptsize}\verb.$.\end{scriptsize}}%
-\setbox\hlscriptsizeboxunderscore=\hbox{\begin{scriptsize}\verb._.\end{scriptsize}}%
-\setbox\hlscriptsizeboxand=\hbox{\begin{scriptsize}\verb.&.\end{scriptsize}}%
-\setbox\hlscriptsizeboxhash=\hbox{\begin{scriptsize}\verb.#.\end{scriptsize}}%
-\setbox\hlscriptsizeboxat=\hbox{\begin{scriptsize}\verb.@.\end{scriptsize}}%
-\setbox\hlscriptsizeboxbackslash=\hbox{\begin{scriptsize}\verb.\.\end{scriptsize}}%
-\setbox\hlscriptsizeboxgreaterthan=\hbox{\begin{scriptsize}\verb.>.\end{scriptsize}}%
-\setbox\hlscriptsizeboxpercent=\hbox{\begin{scriptsize}\verb.%.\end{scriptsize}}%
-\setbox\hlscriptsizeboxhat=\hbox{\begin{scriptsize}\verb.^.\end{scriptsize}}%
-\setbox\hlscriptsizeboxsinglequote=\hbox{\begin{scriptsize}\verb.'.\end{scriptsize}}%
-\setbox\hlscriptsizeboxbacktick=\hbox{\begin{scriptsize}\verb.`.\end{scriptsize}}%
-\setbox\hlscriptsizeboxhat=\hbox{\begin{scriptsize}\verb.^.\end{scriptsize}}%
-
-
-
-\newsavebox{\hlfootnotesizeboxclosebrace}%
-\newsavebox{\hlfootnotesizeboxopenbrace}%
-\newsavebox{\hlfootnotesizeboxbackslash}%
-\newsavebox{\hlfootnotesizeboxlessthan}%
-\newsavebox{\hlfootnotesizeboxgreaterthan}%
-\newsavebox{\hlfootnotesizeboxdollar}%
-\newsavebox{\hlfootnotesizeboxunderscore}%
-\newsavebox{\hlfootnotesizeboxand}%
-\newsavebox{\hlfootnotesizeboxhash}%
-\newsavebox{\hlfootnotesizeboxat}%
-\newsavebox{\hlfootnotesizeboxpercent}% 
-\newsavebox{\hlfootnotesizeboxhat}%
-\newsavebox{\hlfootnotesizeboxsinglequote}%
-\newsavebox{\hlfootnotesizeboxbacktick}%
-
-\setbox\hlfootnotesizeboxopenbrace=\hbox{\begin{footnotesize}\verb.{.\end{footnotesize}}%
-\setbox\hlfootnotesizeboxclosebrace=\hbox{\begin{footnotesize}\verb.}.\end{footnotesize}}%
-\setbox\hlfootnotesizeboxlessthan=\hbox{\begin{footnotesize}\verb.<.\end{footnotesize}}%
-\setbox\hlfootnotesizeboxdollar=\hbox{\begin{footnotesize}\verb.$.\end{footnotesize}}%
-\setbox\hlfootnotesizeboxunderscore=\hbox{\begin{footnotesize}\verb._.\end{footnotesize}}%
-\setbox\hlfootnotesizeboxand=\hbox{\begin{footnotesize}\verb.&.\end{footnotesize}}%
-\setbox\hlfootnotesizeboxhash=\hbox{\begin{footnotesize}\verb.#.\end{footnotesize}}%
-\setbox\hlfootnotesizeboxat=\hbox{\begin{footnotesize}\verb.@.\end{footnotesize}}%
-\setbox\hlfootnotesizeboxbackslash=\hbox{\begin{footnotesize}\verb.\.\end{footnotesize}}%
-\setbox\hlfootnotesizeboxgreaterthan=\hbox{\begin{footnotesize}\verb.>.\end{footnotesize}}%
-\setbox\hlfootnotesizeboxpercent=\hbox{\begin{footnotesize}\verb.%.\end{footnotesize}}%
-\setbox\hlfootnotesizeboxhat=\hbox{\begin{footnotesize}\verb.^.\end{footnotesize}}%
-\setbox\hlfootnotesizeboxsinglequote=\hbox{\begin{footnotesize}\verb.'.\end{footnotesize}}%
-\setbox\hlfootnotesizeboxbacktick=\hbox{\begin{footnotesize}\verb.`.\end{footnotesize}}%
-\setbox\hlfootnotesizeboxhat=\hbox{\begin{footnotesize}\verb.^.\end{footnotesize}}%
-
-
-
-\newsavebox{\hlsmallboxclosebrace}%
-\newsavebox{\hlsmallboxopenbrace}%
-\newsavebox{\hlsmallboxbackslash}%
-\newsavebox{\hlsmallboxlessthan}%
-\newsavebox{\hlsmallboxgreaterthan}%
-\newsavebox{\hlsmallboxdollar}%
-\newsavebox{\hlsmallboxunderscore}%
-\newsavebox{\hlsmallboxand}%
-\newsavebox{\hlsmallboxhash}%
-\newsavebox{\hlsmallboxat}%
-\newsavebox{\hlsmallboxpercent}% 
-\newsavebox{\hlsmallboxhat}%
-\newsavebox{\hlsmallboxsinglequote}%
-\newsavebox{\hlsmallboxbacktick}%
-
-\setbox\hlsmallboxopenbrace=\hbox{\begin{small}\verb.{.\end{small}}%
-\setbox\hlsmallboxclosebrace=\hbox{\begin{small}\verb.}.\end{small}}%
-\setbox\hlsmallboxlessthan=\hbox{\begin{small}\verb.<.\end{small}}%
-\setbox\hlsmallboxdollar=\hbox{\begin{small}\verb.$.\end{small}}%
-\setbox\hlsmallboxunderscore=\hbox{\begin{small}\verb._.\end{small}}%
-\setbox\hlsmallboxand=\hbox{\begin{small}\verb.&.\end{small}}%
-\setbox\hlsmallboxhash=\hbox{\begin{small}\verb.#.\end{small}}%
-\setbox\hlsmallboxat=\hbox{\begin{small}\verb.@.\end{small}}%
-\setbox\hlsmallboxbackslash=\hbox{\begin{small}\verb.\.\end{small}}%
-\setbox\hlsmallboxgreaterthan=\hbox{\begin{small}\verb.>.\end{small}}%
-\setbox\hlsmallboxpercent=\hbox{\begin{small}\verb.%.\end{small}}%
-\setbox\hlsmallboxhat=\hbox{\begin{small}\verb.^.\end{small}}%
-\setbox\hlsmallboxsinglequote=\hbox{\begin{small}\verb.'.\end{small}}%
-\setbox\hlsmallboxbacktick=\hbox{\begin{small}\verb.`.\end{small}}%
-\setbox\hlsmallboxhat=\hbox{\begin{small}\verb.^.\end{small}}%
-
-
-
-\newsavebox{\hllargeboxclosebrace}%
-\newsavebox{\hllargeboxopenbrace}%
-\newsavebox{\hllargeboxbackslash}%
-\newsavebox{\hllargeboxlessthan}%
-\newsavebox{\hllargeboxgreaterthan}%
-\newsavebox{\hllargeboxdollar}%
-\newsavebox{\hllargeboxunderscore}%
-\newsavebox{\hllargeboxand}%
-\newsavebox{\hllargeboxhash}%
-\newsavebox{\hllargeboxat}%
-\newsavebox{\hllargeboxpercent}% 
-\newsavebox{\hllargeboxhat}%
-\newsavebox{\hllargeboxsinglequote}%
-\newsavebox{\hllargeboxbacktick}%
-
-\setbox\hllargeboxopenbrace=\hbox{\begin{large}\verb.{.\end{large}}%
-\setbox\hllargeboxclosebrace=\hbox{\begin{large}\verb.}.\end{large}}%
-\setbox\hllargeboxlessthan=\hbox{\begin{large}\verb.<.\end{large}}%
-\setbox\hllargeboxdollar=\hbox{\begin{large}\verb.$.\end{large}}%
-\setbox\hllargeboxunderscore=\hbox{\begin{large}\verb._.\end{large}}%
-\setbox\hllargeboxand=\hbox{\begin{large}\verb.&.\end{large}}%
-\setbox\hllargeboxhash=\hbox{\begin{large}\verb.#.\end{large}}%
-\setbox\hllargeboxat=\hbox{\begin{large}\verb.@.\end{large}}%
-\setbox\hllargeboxbackslash=\hbox{\begin{large}\verb.\.\end{large}}%
-\setbox\hllargeboxgreaterthan=\hbox{\begin{large}\verb.>.\end{large}}%
-\setbox\hllargeboxpercent=\hbox{\begin{large}\verb.%.\end{large}}%
-\setbox\hllargeboxhat=\hbox{\begin{large}\verb.^.\end{large}}%
-\setbox\hllargeboxsinglequote=\hbox{\begin{large}\verb.'.\end{large}}%
-\setbox\hllargeboxbacktick=\hbox{\begin{large}\verb.`.\end{large}}%
-\setbox\hllargeboxhat=\hbox{\begin{large}\verb.^.\end{large}}%
-
-
-
-\newsavebox{\hlLargeboxclosebrace}%
-\newsavebox{\hlLargeboxopenbrace}%
-\newsavebox{\hlLargeboxbackslash}%
-\newsavebox{\hlLargeboxlessthan}%
-\newsavebox{\hlLargeboxgreaterthan}%
-\newsavebox{\hlLargeboxdollar}%
-\newsavebox{\hlLargeboxunderscore}%
-\newsavebox{\hlLargeboxand}%
-\newsavebox{\hlLargeboxhash}%
-\newsavebox{\hlLargeboxat}%
-\newsavebox{\hlLargeboxpercent}% 
-\newsavebox{\hlLargeboxhat}%
-\newsavebox{\hlLargeboxsinglequote}%
-\newsavebox{\hlLargeboxbacktick}%
-
-\setbox\hlLargeboxopenbrace=\hbox{\begin{Large}\verb.{.\end{Large}}%
-\setbox\hlLargeboxclosebrace=\hbox{\begin{Large}\verb.}.\end{Large}}%
-\setbox\hlLargeboxlessthan=\hbox{\begin{Large}\verb.<.\end{Large}}%
-\setbox\hlLargeboxdollar=\hbox{\begin{Large}\verb.$.\end{Large}}%
-\setbox\hlLargeboxunderscore=\hbox{\begin{Large}\verb._.\end{Large}}%
-\setbox\hlLargeboxand=\hbox{\begin{Large}\verb.&.\end{Large}}%
-\setbox\hlLargeboxhash=\hbox{\begin{Large}\verb.#.\end{Large}}%
-\setbox\hlLargeboxat=\hbox{\begin{Large}\verb.@.\end{Large}}%
-\setbox\hlLargeboxbackslash=\hbox{\begin{Large}\verb.\.\end{Large}}%
-\setbox\hlLargeboxgreaterthan=\hbox{\begin{Large}\verb.>.\end{Large}}%
-\setbox\hlLargeboxpercent=\hbox{\begin{Large}\verb.%.\end{Large}}%
-\setbox\hlLargeboxhat=\hbox{\begin{Large}\verb.^.\end{Large}}%
-\setbox\hlLargeboxsinglequote=\hbox{\begin{Large}\verb.'.\end{Large}}%
-\setbox\hlLargeboxbacktick=\hbox{\begin{Large}\verb.`.\end{Large}}%
-\setbox\hlLargeboxhat=\hbox{\begin{Large}\verb.^.\end{Large}}%
-
-
-
-\newsavebox{\hlLARGEboxclosebrace}%
-\newsavebox{\hlLARGEboxopenbrace}%
-\newsavebox{\hlLARGEboxbackslash}%
-\newsavebox{\hlLARGEboxlessthan}%
-\newsavebox{\hlLARGEboxgreaterthan}%
-\newsavebox{\hlLARGEboxdollar}%
-\newsavebox{\hlLARGEboxunderscore}%
-\newsavebox{\hlLARGEboxand}%
-\newsavebox{\hlLARGEboxhash}%
-\newsavebox{\hlLARGEboxat}%
-\newsavebox{\hlLARGEboxpercent}% 
-\newsavebox{\hlLARGEboxhat}%
-\newsavebox{\hlLARGEboxsinglequote}%
-\newsavebox{\hlLARGEboxbacktick}%
-
-\setbox\hlLARGEboxopenbrace=\hbox{\begin{LARGE}\verb.{.\end{LARGE}}%
-\setbox\hlLARGEboxclosebrace=\hbox{\begin{LARGE}\verb.}.\end{LARGE}}%
-\setbox\hlLARGEboxlessthan=\hbox{\begin{LARGE}\verb.<.\end{LARGE}}%
-\setbox\hlLARGEboxdollar=\hbox{\begin{LARGE}\verb.$.\end{LARGE}}%
-\setbox\hlLARGEboxunderscore=\hbox{\begin{LARGE}\verb._.\end{LARGE}}%
-\setbox\hlLARGEboxand=\hbox{\begin{LARGE}\verb.&.\end{LARGE}}%
-\setbox\hlLARGEboxhash=\hbox{\begin{LARGE}\verb.#.\end{LARGE}}%
-\setbox\hlLARGEboxat=\hbox{\begin{LARGE}\verb.@.\end{LARGE}}%
-\setbox\hlLARGEboxbackslash=\hbox{\begin{LARGE}\verb.\.\end{LARGE}}%
-\setbox\hlLARGEboxgreaterthan=\hbox{\begin{LARGE}\verb.>.\end{LARGE}}%
-\setbox\hlLARGEboxpercent=\hbox{\begin{LARGE}\verb.%.\end{LARGE}}%
-\setbox\hlLARGEboxhat=\hbox{\begin{LARGE}\verb.^.\end{LARGE}}%
-\setbox\hlLARGEboxsinglequote=\hbox{\begin{LARGE}\verb.'.\end{LARGE}}%
-\setbox\hlLARGEboxbacktick=\hbox{\begin{LARGE}\verb.`.\end{LARGE}}%
-\setbox\hlLARGEboxhat=\hbox{\begin{LARGE}\verb.^.\end{LARGE}}%
-
-
-
-\newsavebox{\hlhugeboxclosebrace}%
-\newsavebox{\hlhugeboxopenbrace}%
-\newsavebox{\hlhugeboxbackslash}%
-\newsavebox{\hlhugeboxlessthan}%
-\newsavebox{\hlhugeboxgreaterthan}%
-\newsavebox{\hlhugeboxdollar}%
-\newsavebox{\hlhugeboxunderscore}%
-\newsavebox{\hlhugeboxand}%
-\newsavebox{\hlhugeboxhash}%
-\newsavebox{\hlhugeboxat}%
-\newsavebox{\hlhugeboxpercent}% 
-\newsavebox{\hlhugeboxhat}%
-\newsavebox{\hlhugeboxsinglequote}%
-\newsavebox{\hlhugeboxbacktick}%
-
-\setbox\hlhugeboxopenbrace=\hbox{\begin{huge}\verb.{.\end{huge}}%
-\setbox\hlhugeboxclosebrace=\hbox{\begin{huge}\verb.}.\end{huge}}%
-\setbox\hlhugeboxlessthan=\hbox{\begin{huge}\verb.<.\end{huge}}%
-\setbox\hlhugeboxdollar=\hbox{\begin{huge}\verb.$.\end{huge}}%
-\setbox\hlhugeboxunderscore=\hbox{\begin{huge}\verb._.\end{huge}}%
-\setbox\hlhugeboxand=\hbox{\begin{huge}\verb.&.\end{huge}}%
-\setbox\hlhugeboxhash=\hbox{\begin{huge}\verb.#.\end{huge}}%
-\setbox\hlhugeboxat=\hbox{\begin{huge}\verb.@.\end{huge}}%
-\setbox\hlhugeboxbackslash=\hbox{\begin{huge}\verb.\.\end{huge}}%
-\setbox\hlhugeboxgreaterthan=\hbox{\begin{huge}\verb.>.\end{huge}}%
-\setbox\hlhugeboxpercent=\hbox{\begin{huge}\verb.%.\end{huge}}%
-\setbox\hlhugeboxhat=\hbox{\begin{huge}\verb.^.\end{huge}}%
-\setbox\hlhugeboxsinglequote=\hbox{\begin{huge}\verb.'.\end{huge}}%
-\setbox\hlhugeboxbacktick=\hbox{\begin{huge}\verb.`.\end{huge}}%
-\setbox\hlhugeboxhat=\hbox{\begin{huge}\verb.^.\end{huge}}%
-
-
-
-\newsavebox{\hlHugeboxclosebrace}%
-\newsavebox{\hlHugeboxopenbrace}%
-\newsavebox{\hlHugeboxbackslash}%
-\newsavebox{\hlHugeboxlessthan}%
-\newsavebox{\hlHugeboxgreaterthan}%
-\newsavebox{\hlHugeboxdollar}%
-\newsavebox{\hlHugeboxunderscore}%
-\newsavebox{\hlHugeboxand}%
-\newsavebox{\hlHugeboxhash}%
-\newsavebox{\hlHugeboxat}%
-\newsavebox{\hlHugeboxpercent}% 
-\newsavebox{\hlHugeboxhat}%
-\newsavebox{\hlHugeboxsinglequote}%
-\newsavebox{\hlHugeboxbacktick}%
-
-\setbox\hlHugeboxopenbrace=\hbox{\begin{Huge}\verb.{.\end{Huge}}%
-\setbox\hlHugeboxclosebrace=\hbox{\begin{Huge}\verb.}.\end{Huge}}%
-\setbox\hlHugeboxlessthan=\hbox{\begin{Huge}\verb.<.\end{Huge}}%
-\setbox\hlHugeboxdollar=\hbox{\begin{Huge}\verb.$.\end{Huge}}%
-\setbox\hlHugeboxunderscore=\hbox{\begin{Huge}\verb._.\end{Huge}}%
-\setbox\hlHugeboxand=\hbox{\begin{Huge}\verb.&.\end{Huge}}%
-\setbox\hlHugeboxhash=\hbox{\begin{Huge}\verb.#.\end{Huge}}%
-\setbox\hlHugeboxat=\hbox{\begin{Huge}\verb.@.\end{Huge}}%
-\setbox\hlHugeboxbackslash=\hbox{\begin{Huge}\verb.\.\end{Huge}}%
-\setbox\hlHugeboxgreaterthan=\hbox{\begin{Huge}\verb.>.\end{Huge}}%
-\setbox\hlHugeboxpercent=\hbox{\begin{Huge}\verb.%.\end{Huge}}%
-\setbox\hlHugeboxhat=\hbox{\begin{Huge}\verb.^.\end{Huge}}%
-\setbox\hlHugeboxsinglequote=\hbox{\begin{Huge}\verb.'.\end{Huge}}%
-\setbox\hlHugeboxbacktick=\hbox{\begin{Huge}\verb.`.\end{Huge}}%
-\setbox\hlHugeboxhat=\hbox{\begin{Huge}\verb.^.\end{Huge}}%
- 
-
-\def\urltilda{\kern -.15em\lower .7ex\hbox{\~{}}\kern .04em}%
-
-\newcommand{\hlstd}[1]{\textcolor[rgb]{0,0,0}{#1}}%
-\newcommand{\hlnum}[1]{\textcolor[rgb]{0.16,0.16,1}{#1}}
-\newcommand{\hlesc}[1]{\textcolor[rgb]{1,0,1}{#1}}
-\newcommand{\hlstr}[1]{\textcolor[rgb]{1,0,0}{#1}}
-\newcommand{\hldstr}[1]{\textcolor[rgb]{0.51,0.51,0}{#1}}
-\newcommand{\hlslc}[1]{\textcolor[rgb]{0.51,0.51,0.51}{\it{#1}}}
-\newcommand{\hlcom}[1]{\textcolor[rgb]{0.51,0.51,0.51}{\it{#1}}}
-\newcommand{\hldir}[1]{\textcolor[rgb]{0,0.51,0}{#1}}
-\newcommand{\hlsym}[1]{\textcolor[rgb]{0,0,0}{#1}}
-% \newcommand{\hlline}[1]{\textcolor[rgb]{0.33,0.33,0.33}{#1}}
-\newcommand{\hlkwa}[1]{\textcolor[rgb]{0,0,0}{\bf{#1}}}
-\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.51,0,0}{#1}}
-\newcommand{\hlkwc}[1]{\textcolor[rgb]{0,0,0}{\bf{#1}}}
-\newcommand{\hlkwd}[1]{\textcolor[rgb]{0,0,0.51}{#1}}
-
-\newcommand{\hlnumber}[1]{\textcolor[rgb]{0.0823529411764706,0.0784313725490196,0.709803921568627}{#1}}%
-\newcommand{\hlfunctioncall}[1]{\textcolor[rgb]{1,0,0}{#1}}%
-\newcommand{\hlstring}[1]{\textcolor[rgb]{0.6,0.6,1}{#1}}%
-\newcommand{\hlkeyword}[1]{\textcolor[rgb]{0,0,0}{#1}}%
-\newcommand{\hlargument}[1]{\textcolor[rgb]{0.694117647058824,0.247058823529412,0.0196078431372549}{#1}}%
-\newcommand{\hlcomment}[1]{\textcolor[rgb]{0.8,0.8,0.8}{#1}}%
-\newcommand{\hlroxygencomment}[1]{\textcolor[rgb]{0,0.592156862745098,1}{#1}}%
-\newcommand{\hlformalargs}[1]{\textcolor[rgb]{0.0705882352941176,0.713725490196078,0.0705882352941176}{#1}}%
-\newcommand{\hleqformalargs}[1]{\textcolor[rgb]{0.0705882352941176,0.713725490196078,0.0705882352941176}{#1}}%
-\newcommand{\hlassignement}[1]{\textcolor[rgb]{0.215686274509804,0.215686274509804,0.384313725490196}{#1}}%
-\newcommand{\hlpackage}[1]{\textcolor[rgb]{0.588235294117647,0.713725490196078,0.145098039215686}{#1}}%
-\newcommand{\hlslot}[1]{\textit{#1}}%
-\newcommand{\hlsymbol}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\definecolor{fgcolor}{rgb}{0, 0, 0}
+\newcommand{\hlnumber}[1]{\textcolor[rgb]{0.501960784313725,0,0.501960784313725}{#1}}%
+\newcommand{\hlfunctioncall}[1]{\textcolor[rgb]{0,0.501960784313725,0.752941176470588}{\textbf{#1}}}%
+\newcommand{\hlstring}[1]{\textcolor[rgb]{0.650980392156863,0.52156862745098,0}{#1}}%
+\newcommand{\hlkeyword}[1]{\textcolor[rgb]{0.733333333333333,0.474509803921569,0.466666666666667}{\textbf{#1}}}%
+\newcommand{\hlargument}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlcomment}[1]{\textcolor[rgb]{1,0.501960784313725,0}{#1}}%
+\newcommand{\hlroxygencomment}[1]{\textcolor[rgb]{1,0.501960784313725,0}{#1}}%
+\newcommand{\hlformalargs}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hleqformalargs}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlassignement}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlpackage}[1]{\textcolor[rgb]{0.501960784313725,0.501960784313725,0.752941176470588}{\textbf{#1}}}%
+\newcommand{\hlslot}[1]{\textcolor[rgb]{0,0,0}{\textit{#1}}}%
+\newcommand{\hlsymbol}[1]{\textcolor[rgb]{1,0,0.501960784313725}{#1}}%
 \newcommand{\hlprompt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
-\newcommand{\hlline}[1]{\textcolor[rgb]{0.501960784313725,0.501960784313725,0.501960784313725}{#1}}%
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 
@@ -431,153 +98,100 @@
   URL: \url{http://emps.exeter.ac.uk/mathematics/staff/ss610}
 }
 
-%% for those who use Sweave please include the following line (with % symbols):
-
 
 %% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% initialise R session and knitr
 
-% initialise sweave
 
-
-% initialise R session
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 
 
 \begin{document}
 
-
-
 %% Note that you should use the \pkg{}, \proglang{} and \code{} commands.
-
 % \section[About Java]{About \proglang{Java}}
 %% Note: If there is markup in \(sub)section, then it has to be escape as above.
 
 
 \section{Introduction}
 
-{\bf SPECS}
-
 {\bf Ensemble forecasting general}
+An ensemble forecast is a collection of forecasts for the same target.
+The ensemble members usually differ in the initial conditions, boundary conditions, model physics and background information.
+Ensemble forecasting is today operationally used to quantify forecast uncertainty.
+Since ensembles are composed of multiple runs of deterministic models, but are used to provide uncertainty information, they can be regarded as a hybrid of deterministic and probabilistic forecasts.
+To evaluate the quality of ensemble forecasts, the forecasts have to be compared to their verifying observations of the real world.
 
-deterministic, probabilistic, ensemble
 
 
 {\bf Forecast verification general}
-a posteriori comparison of forecasts with their verifying observations;
-ensembles can be verified by taking the ensemble mean as a deterministic forecast; deriving a probability distribution and use a proper score; here: evaluate the raw ensemble
+The comparison of forecasts with their verifying observations is commonly referred to as forecast verification \citep{jolliffe2012forecast}.
+A verification measure is thus a function that depends on the collection $D=\{x_t, y_t\}_{t=1}^N$ of past forecasts $x_t$ and verifying observations $y_t$.
+The collection $D$ is also called a hindcast data set.
+A scoring rule is a function $s(x_t, y_t)$ that assigns a real number to a forecast-observation pair.
+A general convention that the best possible forecast achieves a score of zero, and lower scores indicate ``better'' forecasts.
+The empirical score $1/N \sum_t s(x_t, y_t)$ can be used as a verification measure.
+There verification measures that are not scoring rules; examples include the correlation coefficient, and the area under the ROC curve.
+There are different scoring rules and verification measures for deterministic forecasts and probabilistic forecasts.
+Since ensembles are interpreted as a hybrid, both types of verification measures can be applied to ensembles.
+
 
 {\bf Finite size effect in ensemble verification}
-Everything else being equal, larger ensembles yield better scores than smaller ensembles.
+It is known that verification measures can depend on the ensemble size.
+In general, large ensembles achieve better average verification scores than small ensembles, when both ensembles come from the same ensemble forecasting system \citep{buizza1998impact}.
+In hindcast experiments it is often desirable to estimate the finite-ensemble effect on the verification score. 
+For example, an experimental model configuration might be run at a small ensemble size to save computational resources. 
+The skill calculated for the hindcast experiment is not representative of the skill that an operational ensemble with many members would achieve.
+A number of verification scores have been proposed in the past to estimate the finite ensemble effect, and correct it.
+These will be summarised in the present paper, and are implemented as R functions in the package \pkg{SpecsVerification}.
 
 
-\begin{Hchunk}
-\begin{normalsize}
-\begin{Hinput}
-
-\ttfamily\noindent
-\hlprompt{{\ }}\hlfunctioncall{data}\hlkeyword{(}\hlsymbol{eurotempforecast}\hlkeyword{)}\mbox{}
-\normalfont
-
-\end{Hinput}
-
-
-\begin{Hinput}
-
-\ttfamily\noindent
-\hlprompt{{\ }}\hlsymbol{ens}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlsymbol{ens}\hlkeyword{[}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{:}\hlnumber{8}\hlkeyword{]}\mbox{}
-\normalfont
-
-\end{Hinput}
+{\bf Comparative verification}
+The value of a verification score is often of little interest by itself.
+If the value of the score is not zero, we know that the forecast was not perfect.
+But a score different from zero is often difficult to interpret without a reference point.
+For this reason, forecasts should be evaluated in a comparative way, by subjecting the forecast of interest to a simple reference forecast, such as the climatological average, or a simple time-series model.
+If the forecast is able to achieve a better score than the reference forecast, there is non-trivial information in the forecast.
+Forecast verification therefore often includes comparative measures of forecast performance.
+The package \pkg{SpecsVerification} includes functions to compare forecast verification scores.
 
 
-\begin{Hinput}
-
-\ttfamily\noindent
-\hlprompt{{\ }}\hlsymbol{ens.bin}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlsymbol{ens.bin}\hlkeyword{[}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{:}\hlnumber{8}\hlkeyword{]}\mbox{}
-\normalfont
-
-\end{Hinput}
+{\bf Uncertainty quantification}
+If the score was calculated from a finite number of forecast-observation pairs,  the value of a verification score is of little use without a measure of uncertainty.
 
 
-\begin{Hinput}
-
-\ttfamily\noindent
-\hlprompt{{\ }}\hlsymbol{ens.cat}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlsymbol{ens.cat}\hlkeyword{[}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{:}\hlnumber{8}\hlkeyword{]}\mbox{}
-\normalfont
-
-\end{Hinput}
 
 
-\begin{Hinput}
 
-\ttfamily\noindent
-\hlprompt{{\ }}\hlsymbol{yrs}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{as.numeric}\hlkeyword{(}\hlfunctioncall{names}\hlkeyword{(}\hlsymbol{obs}\hlkeyword{)}\hlkeyword{)}\mbox{}
-\normalfont
-
-\end{Hinput}
-
-
-\begin{Hinput}
-
-\ttfamily\noindent
-\hlprompt{{\ }}\hlsymbol{N}{\ }{\ }{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{length}\hlkeyword{(}\hlsymbol{obs}\hlkeyword{)}\mbox{}
-\normalfont
-
-\end{Hinput}
-
-
-\end{normalsize}
-\end{Hchunk}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{data}(eurotempforecast)
+R   <- \hlfunctioncall{ncol}(ens)
+yrs <- \hlfunctioncall{as.numeric}(\hlfunctioncall{names}(obs))
+N   <- \hlfunctioncall{length}(obs)
+\end{alltt}
+\end{kframe}
+\end{knitrout}
 
 
 
 \begin{figure}
 \begin{center}
 %
-\begin{Hchunk}
-\begin{normalsize}
-\begin{Hinput}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{par}(las=1, cex=0.7, mgp=\hlfunctioncall{c}(3, 1, 0), mar=\hlfunctioncall{c}(2,4,1,1))
+\hlfunctioncall{matplot}(yrs, ens, ylab=\hlstring{"temp [C]"}, pch=1, col=\hlfunctioncall{gray}(.5))
+\hlfunctioncall{points}(yrs, obs, pch=15, cex=1.5)
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/gfs-plot} 
 
-\ttfamily\noindent
-\hlprompt{{\ }}\hlfunctioncall{par}\hlkeyword{(}\hlargument{las}\hlargument{=}\hlnumber{1}\hlkeyword{,}{\ }\hlargument{cex}\hlargument{=}\hlnumber{0.7}\hlkeyword{,}{\ }\hlargument{mgp}\hlargument{=}\hlfunctioncall{c}\hlkeyword{(}\hlnumber{3}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{0}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{mar}\hlargument{=}\hlfunctioncall{c}\hlkeyword{(}\hlnumber{2}\hlkeyword{,}\hlnumber{4}\hlkeyword{,}\hlnumber{1}\hlkeyword{,}\hlnumber{1}\hlkeyword{)}\hlkeyword{)}\mbox{}
-\normalfont
+\end{knitrout}
 
-\end{Hinput}
-
-
-\begin{Hinput}
-
-\ttfamily\noindent
-\hlprompt{{\ }}\hlfunctioncall{plot}\hlkeyword{(}\hlnumber{NA}\hlkeyword{,}{\ }\hlargument{type}\hlargument{=}\hlstring{\usebox{\hlnormalsizeboxsinglequote}n\usebox{\hlnormalsizeboxsinglequote}}\hlkeyword{,}{\ }\hlargument{xlim}\hlargument{=}\hlfunctioncall{range}\hlkeyword{(}\hlsymbol{yrs}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{ylim}\hlargument{=}\hlfunctioncall{range}\hlkeyword{(}\hlfunctioncall{c}\hlkeyword{(}\hlsymbol{obs}\hlkeyword{,}{\ }\hlsymbol{ens}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }\hlargument{xlab}\hlargument{=}\hlstring{"{}"{}}\hlkeyword{,}{\ }\hlargument{ylab}\hlargument{=}\hlstring{"{}temp{\ }[C]"{}}\hlkeyword{)}\mbox{}
-\normalfont
-
-\end{Hinput}
-
-
-\begin{Hinput}
-
-\ttfamily\noindent
-\hlprompt{{\ }}\hlkeyword{for}{\ }\hlkeyword{(}\hlsymbol{i}{\ }\hlkeyword{in}{\ }\hlnumber{1}\hlkeyword{:}\hlfunctioncall{ncol}\hlkeyword{(}\hlsymbol{ens}\hlkeyword{)}\hlkeyword{)}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }\hlfunctioncall{points}\hlkeyword{(}\hlsymbol{yrs}\hlkeyword{,}{\ }\hlsymbol{ens}\hlkeyword{[}\hlkeyword{,}{\ }\hlsymbol{i}\hlkeyword{]}\hlkeyword{,}{\ }\hlargument{col}\hlargument{=}\hlstring{"{}darkgray"{}}\hlkeyword{,}{\ }\hlargument{cex}\hlargument{=}\hlnumber{.7}\hlkeyword{)}\mbox{}
-\normalfont
-
-\end{Hinput}
-
-
-\begin{Hinput}
-
-\ttfamily\noindent
-\hlprompt{{\ }}\hlfunctioncall{points}\hlkeyword{(}\hlsymbol{yrs}\hlkeyword{,}{\ }\hlsymbol{obs}\hlkeyword{,}{\ }\hlargument{pch}\hlargument{=}\hlnumber{15}\hlkeyword{,}{\ }\hlargument{cex}\hlargument{=}\hlnumber{1.5}\hlkeyword{)}\mbox{}
-\normalfont
-
-\end{Hinput}
-
-
-\end{normalsize}
-\end{Hchunk}
-
-\includegraphics{fig-gfs-plot}
 %
 \end{center}
 \caption{Seasonal European temperature forecasts by NCEP CFSv2, initialised in May, verified in JJA.}
@@ -592,26 +206,16 @@ Everything else being equal, larger ensembles yield better scores than smaller e
 In \pkg{SpecsVerification}, archives of $N$ instances of ensemble forecasts, each with $R$ members, are represented by $N\times R$ matrices.
 The data shown in Figure \ref{gfs-plot} is a matrix with dimensions
 
-\begin{Hchunk}
-\begin{normalsize}
-\begin{Hinput}
-
-\ttfamily\noindent
-\hlprompt{{\ }}\hlfunctioncall{dim}\hlkeyword{(}\hlsymbol{ens}\hlkeyword{)}\mbox{}
-\normalfont
-
-\end{Hinput}
-
-\begin{Houtput}
-
-\ttfamily\noindent
-[1]{\ }27{\ }{\ }8\hspace*{\fill}\hlstd{}\mbox{}
-\normalfont
-
-\end{Houtput}
-
-\end{normalsize}
-\end{Hchunk}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{dim}(ens)
+\end{alltt}
+\begin{verbatim}
+## [1] 27 24
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 
 
 
@@ -650,8 +254,9 @@ E\left[s_{B}\left(\frac{i_t}{R}, y_t\right)\right] = s_{B}(p_t, y_t) +\frac{p_t(
 \end{equation}
 %
 That is, even though the fraction $i_t/R$ is an unbiased estimator of the event probability $p_t$, the Brier score of $i_t/R$ is not an unbiased estimator of the Brier score of $p_t$.
+The Brier score of $i_t/R$ is in general larger than the Brier score of $p_t$.
 The bias, given by the additional positive term on the rhs of Equation~\ref{eq:expec-brier}, depends on the ensemble size and vanishes for $R\rightarrow\infty$.
-The bias can be interpreted as a finite-ensemble penalty: If two ensembles sample their members from the same probability $p_t$, the one with the larger ensemble size obtains the lower (i.e. better) Brier score on average.
+The bias can thus be interpreted as a finite-ensemble penalty: If two ensembles sample their members from the same probability $p_t$, the one with the larger ensemble size obtains the lower (i.e. better) Brier score on average.
 This is reasonable since more ensemble members allow for more robust estimation of the ``true'' probability $p_t$.
 But in the analysis of ensemble hindcasts it is sometimes desirable to correct the finite-ensemble bias.
 For example, if the hindcast ensemble has $R$ members, and future operational forecasts will be made with $R^* > R$ ensemble members, the score calculated for the $R$-member hindcast ensemble will be a too pessimistic estimate of the score of the $R^*$-member forecast ensemble.
@@ -681,35 +286,60 @@ The \pkg{SpecsVerification} function \code{EnsBrier} calculates the ensemble-adj
 The argument \code{R.new} allows for estimation of the score of an arbitrary ensemble size, including \code{R.new=Inf}.
 
 
-We transform the continuous ensemble data into binary by addressing the question "Will this year's summer be warmer than last year's"?
+We have transformed the continuous temperature data into binary forecasts by addressing the question "Will this year's summer be warmer than last year's"?
+To illustrate the finite ensemble effect and highlight the benefit of the finite-ensemble adjustment, we randomly split the 24-member forecast ensemble into a small 5-member ensemble and a larger 19-member ensemble.
+We then calculate their unadjusted Brier scores:
 
-\begin{Hchunk}
-\begin{normalsize}
-\begin{Hinput}
-
-\ttfamily\noindent
-\hlprompt{{\ }}\hlfunctioncall{rbind}\hlkeyword{(}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }\hlargument{unadjusted}{\ }\hlargument{=}{\ }\hlfunctioncall{mean}\hlkeyword{(}\hlfunctioncall{EnsBrier}\hlkeyword{(}\hlsymbol{ens.bin}\hlkeyword{,}{\ }\hlsymbol{obs.bin}\hlkeyword{,}{\ }\hlargument{R.new}\hlargument{=}\hlnumber{NA}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }\hlargument{fair}{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{=}{\ }\hlfunctioncall{mean}\hlkeyword{(}\hlfunctioncall{EnsBrier}\hlkeyword{(}\hlsymbol{ens.bin}\hlkeyword{,}{\ }\hlsymbol{obs.bin}\hlkeyword{,}{\ }\hlargument{R.new}\hlargument{=}\hlnumber{Inf}\hlkeyword{)}\hlkeyword{)}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}\hlkeyword{)}\mbox{}
-\normalfont
-
-\end{Hinput}
-
-\begin{Houtput}
-
-\ttfamily\noindent
-{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }[,1]\hspace*{\fill}\\
-\hlstd{}unadjusted{\ }0.1753\hspace*{\fill}\\
-\hlstd{}fair{\ }{\ }{\ }{\ }{\ }{\ }{\ }0.1534\hspace*{\fill}\hlstd{}\mbox{}
-\normalfont
-
-\end{Houtput}
-
-\end{normalsize}
-\end{Hchunk}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+i.small <- \hlfunctioncall{sample}(1:R, 5)
+i.large <- \hlfunctioncall{setdiff}(1:R, i.small)
+\hlfunctioncall{c}(small.ens=\hlfunctioncall{mean}(\hlfunctioncall{EnsBrier}(ens.bin[, i.small], obs.bin)), 
+  large.ens=\hlfunctioncall{mean}(\hlfunctioncall{EnsBrier}(ens.bin[, i.large], obs.bin)))
+\end{alltt}
+\begin{verbatim}
+## small.ens large.ens 
+##    0.1689    0.1465
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 
 
+As expected, the large ensemble obtains a better score than the large ensemble.
+We next adjust the Brier score for the finite ensemble size, by calculating $s_{B}^*$ using $R^*=20$ for both ensembles:
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{c}(small.ens=\hlfunctioncall{mean}(\hlfunctioncall{EnsBrier}(ens.bin[, i.small], obs.bin, R.new=19)), 
+  large.ens=\hlfunctioncall{mean}(\hlfunctioncall{EnsBrier}(ens.bin[, i.large], obs.bin, R.new=19)))
+\end{alltt}
+\begin{verbatim}
+## small.ens large.ens 
+##    0.1454    0.1465
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+The scores are very similar; we are able to estimate the score of the 19-member ensemble, using only a 5-member ensemble.
+How big is the estimated improvement if we could further increase the ensemble size?
+We show this in Figure \ref{fig:ens-brier}, where we plot the ensemble adjusted Brier score over the adjusted ensemble size $R^*$.
+
+
+\begin{figure}
+\begin{center}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}
+\includegraphics[width=\maxwidth]{figure/ens-brier} 
+
+\end{knitrout}
+
+\caption{Ensemble-adjusted Brier score as a function of the ensemble size, calculated for a small 5-member ensemble (solid line) and a larger 19-member ensemble (dashed line) produced by the same forecasting system.}
+\label{fig:ens-brier}
+\end{center}
+\end{figure}
 
 
 \subsection{Categorical forecasts}
@@ -763,42 +393,98 @@ s_{R}^*(\mathbf{i}_t, R, R^*, \mathbf{y}_t) = \sum_{k=1}^K \left\{ \left(\frac{j
 \end{equation}
 %
 The ensemble adjusted RPS is implemented as the function \code{EnsRps} in \pkg{SpecsVerification}.
+Note that the ensemble forecast vector $\mathbf{i}_t$ in the above equations is assumed to be a histogram, indicating the number of ensemble members that forecast each class. 
+The functions \code{EnsQs} and \code{EnsRps} assume as inputs true categorical ensemble forecasts, i.e. vectors of length $R$ (ensemble size), with entries indicating which class label the ensemble predicts.
 
 
 
-We transform the continuous ensemble forecasts into categorical forecasts by addressing the question "Will this year's summer temperature be similar to last year's temperature (within a 0.5K range), colder, or warmer?"
+We have transformed the continuous ensemble forecasts into categorical forecasts by addressing the question "Will this year's summer temperature be similar to last year's temperature (within a 0.5K range), colder, or warmer?"
+For example, the categorical prediction and observation for the year 2000 is
 
-\begin{Hchunk}
-\begin{normalsize}
-\begin{Hinput}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{matrix}(\hlfunctioncall{c}(obs.cat[\hlstring{"2000"}], ens.cat[\hlstring{"2000"},]), ncol=1)
+\end{alltt}
+\begin{verbatim}
+##       [,1]
+##  [1,]    1
+##  [2,]    2
+##  [3,]    2
+##  [4,]    2
+##  [5,]    3
+##  [6,]    2
+##  [7,]    2
+##  [8,]    2
+##  [9,]    2
+## [10,]    2
+## [11,]    1
+## [12,]    1
+## [13,]    2
+## [14,]    2
+## [15,]    2
+## [16,]    1
+## [17,]    2
+## [18,]    1
+## [19,]    2
+## [20,]    1
+## [21,]    2
+## [22,]    2
+## [23,]    2
+## [24,]    1
+## [25,]    2
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 
-\ttfamily\noindent
-\hlprompt{{\ }}\hlfunctioncall{cbind}\hlkeyword{(}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}\hlargument{qs}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }\hlargument{unadjusted}{\ }\hlargument{=}{\ }\hlfunctioncall{mean}\hlkeyword{(}\hlfunctioncall{EnsQs}\hlkeyword{(}\hlsymbol{ens.cat}\hlkeyword{,}{\ }\hlsymbol{obs.cat}\hlkeyword{,}{\ }\hlargument{R.new}\hlargument{=}\hlnumber{NA}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }\hlargument{fair}{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{=}{\ }\hlfunctioncall{mean}\hlkeyword{(}\hlfunctioncall{EnsQs}\hlkeyword{(}\hlsymbol{ens.cat}\hlkeyword{,}{\ }\hlsymbol{obs.cat}\hlkeyword{,}{\ }\hlargument{R.new}\hlargument{=}\hlnumber{Inf}\hlkeyword{)}\hlkeyword{)}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}\hlargument{rps}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }\hlargument{unadjusted}{\ }\hlargument{=}{\ }\hlfunctioncall{mean}\hlkeyword{(}\hlfunctioncall{EnsRps}\hlkeyword{(}\hlsymbol{ens.cat}\hlkeyword{,}{\ }\hlsymbol{obs.cat}\hlkeyword{,}{\ }\hlargument{R.new}\hlargument{=}\hlnumber{NA}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }\hlargument{fair}{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{=}{\ }\hlfunctioncall{mean}\hlkeyword{(}\hlfunctioncall{EnsRps}\hlkeyword{(}\hlsymbol{ens.cat}\hlkeyword{,}{\ }\hlsymbol{obs.cat}\hlkeyword{,}{\ }\hlargument{R.new}\hlargument{=}\hlnumber{Inf}\hlkeyword{)}\hlkeyword{)}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}\hlkeyword{)}\hlkeyword{)}\mbox{}
-\normalfont
 
-\end{Hinput}
+This transforms the forecast problem into a 3-category problem, which we first evaluate by the ensemble-adjusted quadratic score:
 
-\begin{Houtput}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{mean}(\hlfunctioncall{EnsQs}(ens.cat, obs.cat))
+\end{alltt}
+\begin{verbatim}
+## [1] 0.5782
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 
-\ttfamily\noindent
-{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }qs{\ }{\ }{\ }{\ }rps\hspace*{\fill}\\
-\hlstd{}unadjusted{\ }0.6389{\ }0.3843\hspace*{\fill}\\
-\hlstd{}fair{\ }{\ }{\ }{\ }{\ }{\ }{\ }0.5873{\ }0.3752\hspace*{\fill}\hlstd{}\mbox{}
-\normalfont
 
-\end{Houtput}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+i.small <- \hlfunctioncall{sample}(1:R, 5)
+i.large <- \hlfunctioncall{setdiff}(1:R, i.small)
+\hlfunctioncall{rbind}(
+small.ens=\hlfunctioncall{mean}(\hlfunctioncall{EnsQs}(ens.cat[, i.small], obs.cat)),
+large.ens=\hlfunctioncall{mean}(\hlfunctioncall{EnsQs}(ens.cat[, i.large], obs.cat)))
+\end{alltt}
+\begin{verbatim}
+##             [,1]
+## small.ens 0.6519
+## large.ens 0.5856
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 
-\end{normalsize}
-\end{Hchunk}
 
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{rbind}(
+small.ens=\hlfunctioncall{mean}(\hlfunctioncall{EnsRps}(ens.cat[, i.small], obs.cat)),
+large.ens=\hlfunctioncall{mean}(\hlfunctioncall{EnsRps}(ens.cat[, i.large], obs.cat)))
+\end{alltt}
+\begin{verbatim}
+##             [,1]
+## small.ens 0.3719
+## large.ens 0.3386
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 
 
 
@@ -810,7 +496,7 @@ If the forecast target is a continuous variable, such as temperature or pressure
 If the forecast for the continuous target $y_t$ is given as a cumulative distribution function $F_t(x)$, the CRPS is given by 
 %
 \begin{equation}
-s_{C}(F_t, y_t) = \int_{-\infty}^\infty dz\ \left[F_t(z) - H(z-y_t)\right]^2
+s_{C}(F_t, y_t) = \int_{-\infty}^\infty dz\ \left|F_t(z) - H(z-y_t)\right|^2
 \end{equation}
 %
 where $H(x)$ is the Heaviside step-function, satisfying $H(x)=1$ for all $x\ge 0$ and $H(x)=0$ otherwise.
@@ -827,7 +513,7 @@ Using properties of the Heaviside function, it is straightforward to show that t
 s_{C}(\hat{F}_t, y_t) = \frac{1}{R}|x_{t,r}-y_t| - \frac{1}{2R^2} \sum_{r=1}^R \sum_{r'=1}^R |x_{t,r}-x_{t,r'}|.
 \end{equation}
 %
-\citet{fricker2013three} show that the CRPS is sensitive with respect to the ensemble size, and propose the ensemble-adjusted CRPS
+\citet{fricker2013three} show that the CRPS is sensitive to the ensemble size, and propose the ensemble-adjusted CRPS
 %
 \begin{equation}
 s_{C}^*(x_t, R, R^*, y_t) = \frac{1}{R}\sum_{r=1}^R |x_{t,r} - y_t| - \frac{1}{2R(R-1)}\left(1-\frac{1}{R^*}\right) \sum_{r=1}^R\sum_{r'=1}^R |x_{t,r}-x_{t,r'}|.
@@ -837,31 +523,21 @@ The ensemble-adjusted CRPS is, in expectation, equal to the CRPS that the empiri
 This includes the case $R^*=\infty$, for which the fair CRPS is obtained.
 The ensemble-adjusted CRPS is implemented in the \pkg{SpecsVerification} function \code{EnsCrps}.
 
-\begin{Hchunk}
-\begin{normalsize}
-\begin{Hinput}
-
-\ttfamily\noindent
-\hlprompt{{\ }}\hlfunctioncall{rbind}\hlkeyword{(}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }\hlargument{unadjusted}{\ }\hlargument{=}{\ }\hlfunctioncall{mean}\hlkeyword{(}\hlfunctioncall{EnsCrps}\hlkeyword{(}\hlsymbol{ens}\hlkeyword{,}{\ }\hlsymbol{obs}\hlkeyword{,}{\ }\hlargument{R.new}\hlargument{=}\hlnumber{NA}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }\hlargument{fair}{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{=}{\ }\hlfunctioncall{mean}\hlkeyword{(}\hlfunctioncall{EnsCrps}\hlkeyword{(}\hlsymbol{ens}\hlkeyword{,}{\ }\hlsymbol{obs}\hlkeyword{,}{\ }\hlargument{R.new}\hlargument{=}\hlnumber{Inf}\hlkeyword{)}\hlkeyword{)}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}\hlkeyword{)}\mbox{}
-\normalfont
-
-\end{Hinput}
-
-\begin{Houtput}
-
-\ttfamily\noindent
-{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }[,1]\hspace*{\fill}\\
-\hlstd{}unadjusted{\ }0.165\hspace*{\fill}\\
-\hlstd{}fair{\ }{\ }{\ }{\ }{\ }{\ }{\ }0.150\hspace*{\fill}\hlstd{}\mbox{}
-\normalfont
-
-\end{Houtput}
-
-\end{normalsize}
-\end{Hchunk}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{rbind}(
+  unadjusted = \hlfunctioncall{mean}(\hlfunctioncall{EnsCrps}(ens, obs, R.new=NA)), 
+  fair       = \hlfunctioncall{mean}(\hlfunctioncall{EnsCrps}(ens, obs, R.new=Inf))
+)
+\end{alltt}
+\begin{verbatim}
+##              [,1]
+## unadjusted 0.1381
+## fair       0.1329
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 
 
 
@@ -884,37 +560,15 @@ In the absence of a dynamical climate model to which the score can be compared, 
 A popular simple reference forecast is the climatological forecast, which is only based on the known record of observations, without reference to any numerical forecast model.
 \pkg{SpecsVerification} includes the function \code{ClimEns} which transforms a vector of observations into a matrix of climatological ensemble forecasts, including the possibility to leave out the $t$-th observation in the $t$-th climatological ensemble:
 
-\begin{Hchunk}
-\begin{normalsize}
-\begin{Hinput}
-
-\ttfamily\noindent
-\hlprompt{{\ }}\hlsymbol{ens.ref}{\ }{\ }{\ }{\ }{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{ClimEns}\hlkeyword{(}\hlsymbol{obs}\hlkeyword{,}{\ }{\ }{\ }{\ }{\ }\hlargument{leave.one.out}\hlargument{=}\hlnumber{TRUE}\hlkeyword{)}\mbox{}
-\normalfont
-
-\end{Hinput}
-
-
-\begin{Hinput}
-
-\ttfamily\noindent
-\hlprompt{{\ }}\hlsymbol{ens.cat.ref}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{ClimEns}\hlkeyword{(}\hlsymbol{obs.cat}\hlkeyword{,}{\ }\hlargument{leave.one.out}\hlargument{=}\hlnumber{TRUE}\hlkeyword{)}\mbox{}
-\normalfont
-
-\end{Hinput}
-
-
-\begin{Hinput}
-
-\ttfamily\noindent
-\hlprompt{{\ }}\hlsymbol{ens.bin.ref}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{ClimEns}\hlkeyword{(}\hlsymbol{obs.bin}\hlkeyword{,}{\ }\hlargument{leave.one.out}\hlargument{=}\hlnumber{TRUE}\hlkeyword{)}\mbox{}
-\normalfont
-
-\end{Hinput}
-
-
-\end{normalsize}
-\end{Hchunk}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+ens.ref     <- \hlfunctioncall{ClimEns}(obs,     leave.one.out=TRUE)
+ens.cat.ref <- \hlfunctioncall{ClimEns}(obs.cat, leave.one.out=TRUE)
+ens.bin.ref <- \hlfunctioncall{ClimEns}(obs.bin, leave.one.out=TRUE)
+\end{alltt}
+\end{kframe}
+\end{knitrout}
 
 
 The new data set of climatological ensembles can be used as a reference ensemble to which the numerical forecast ensemble can be compared.
@@ -936,77 +590,57 @@ is asymptotically Normally distributed with mean zero and variance one.
 This test is implemented in \pkg{SpecsVerification} in the function \code{ScoreDiff}.
 The function includes the option to account for autocorrelation of the loss-differential by specifying an effective sample size \code{N.eff}.
 
-\begin{Hchunk}
-\begin{normalsize}
-\begin{Hinput}
-
-\ttfamily\noindent
-\hlprompt{{\ }}\hlfunctioncall{rbind}\hlkeyword{(}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }\hlargument{brier}{\ }\hlargument{=}{\ }\hlfunctioncall{ScoreDiff}\hlkeyword{(}\hlfunctioncall{EnsBrier}\hlkeyword{(}\hlsymbol{ens.bin}\hlkeyword{,}{\ }\hlsymbol{obs.bin}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlfunctioncall{EnsBrier}\hlkeyword{(}\hlsymbol{ens.bin.ref}\hlkeyword{,}{\ }\hlsymbol{obs.bin}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }\hlargument{qs}{\ }{\ }{\ }{\ }\hlargument{=}{\ }\hlfunctioncall{ScoreDiff}\hlkeyword{(}\hlfunctioncall{EnsQs}\hlkeyword{(}\hlsymbol{ens.cat}\hlkeyword{,}{\ }\hlsymbol{obs.cat}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlfunctioncall{EnsQs}\hlkeyword{(}\hlsymbol{ens.cat.ref}\hlkeyword{,}{\ }\hlsymbol{obs.cat}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }\hlargument{rps}{\ }{\ }{\ }\hlargument{=}{\ }\hlfunctioncall{ScoreDiff}\hlkeyword{(}\hlfunctioncall{EnsRps}\hlkeyword{(}\hlsymbol{ens.cat}\hlkeyword{,}{\ }\hlsymbol{obs.cat}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlfunctioncall{EnsRps}\hlkeyword{(}\hlsymbol{ens.cat.ref}\hlkeyword{,}{\ }\hlsymbol{obs.cat}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }\hlargument{crps}{\ }{\ }\hlargument{=}{\ }\hlfunctioncall{ScoreDiff}\hlkeyword{(}\hlfunctioncall{EnsCrps}\hlkeyword{(}\hlsymbol{ens}\hlkeyword{,}{\ }\hlsymbol{obs}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlfunctioncall{EnsCrps}\hlkeyword{(}\hlsymbol{ens.ref}\hlkeyword{,}{\ }\hlsymbol{obs}\hlkeyword{)}\hlkeyword{)}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}\hlkeyword{)}\mbox{}
-\normalfont
-
-\end{Hinput}
-
-\begin{Houtput}
-
-\ttfamily\noindent
-{\ }{\ }{\ }{\ }{\ }{\ }score.diff{\ }score.diff.sd{\ }p.value{\ }{\ }{\ }{\ }{\ }{\ }ci.L{\ }{\ }{\ }ci.U\hspace*{\fill}\\
-\hlstd{}brier{\ }{\ }{\ }{\ }0.08501{\ }{\ }{\ }{\ }{\ }{\ }{\ }0.05950{\ }0.07656{\ }-0.031619{\ }0.2016\hspace*{\fill}\\
-\hlstd{}qs{\ }{\ }{\ }{\ }{\ }{\ }{\ }0.05934{\ }{\ }{\ }{\ }{\ }{\ }{\ }0.09683{\ }0.27000{\ }-0.130438{\ }0.2491\hspace*{\fill}\\
-\hlstd{}rps{\ }{\ }{\ }{\ }{\ }{\ }0.04769{\ }{\ }{\ }{\ }{\ }{\ }{\ }0.07477{\ }0.26178{\ }-0.098851{\ }0.1942\hspace*{\fill}\\
-\hlstd{}crps{\ }{\ }{\ }{\ }{\ }0.06698{\ }{\ }{\ }{\ }{\ }{\ }{\ }0.03126{\ }0.01606{\ }{\ }0.005716{\ }0.1282\hspace*{\fill}\hlstd{}\mbox{}
-\normalfont
-
-\end{Houtput}
-
-\end{normalsize}
-\end{Hchunk}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{rbind}(
+  brier = \hlfunctioncall{ScoreDiff}(\hlfunctioncall{EnsBrier}(ens.bin, obs.bin), 
+                    \hlfunctioncall{EnsBrier}(ens.bin.ref, obs.bin)),
+  qs    = \hlfunctioncall{ScoreDiff}(\hlfunctioncall{EnsQs}(ens.cat, obs.cat),    
+                    \hlfunctioncall{EnsQs}(ens.cat.ref, obs.cat)),
+  rps   = \hlfunctioncall{ScoreDiff}(\hlfunctioncall{EnsRps}(ens.cat, obs.cat),   
+                    \hlfunctioncall{EnsRps}(ens.cat.ref, obs.cat)),
+  crps  = \hlfunctioncall{ScoreDiff}(\hlfunctioncall{EnsCrps}(ens, obs),          
+                    \hlfunctioncall{EnsCrps}(ens.ref, obs))
+)
+\end{alltt}
+\begin{verbatim}
+##       score.diff score.diff.sd    p.value     ci.L   ci.U
+## brier    0.12185       0.04217 0.00192772  0.03921 0.2045
+## qs       0.12004       0.08972 0.09046758 -0.05581 0.2959
+## rps      0.09753       0.06438 0.06491317 -0.02866 0.2237
+## crps     0.09391       0.02400 0.00004543  0.04688 0.1409
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 
 
 
 How do the score differences change if adjust the ensemble size to infinity?
 
-\begin{Hchunk}
-\begin{normalsize}
-\begin{Hinput}
-
-\ttfamily\noindent
-\hlprompt{{\ }}\hlfunctioncall{rbind}\hlkeyword{(}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }\hlargument{brier}{\ }\hlargument{=}{\ }\hlfunctioncall{ScoreDiff}\hlkeyword{(}\hlfunctioncall{EnsBrier}\hlkeyword{(}\hlsymbol{ens.bin}\hlkeyword{,}{\ }{\ }{\ }{\ }{\ }\hlsymbol{obs.bin}\hlkeyword{,}{\ }\hlargument{R.new}\hlargument{=}\hlnumber{Inf}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlfunctioncall{EnsBrier}\hlkeyword{(}\hlsymbol{ens.bin.ref}\hlkeyword{,}{\ }\hlsymbol{obs.bin}\hlkeyword{,}{\ }\hlargument{R.new}\hlargument{=}\hlnumber{Inf}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }\hlargument{qs}{\ }{\ }{\ }{\ }\hlargument{=}{\ }\hlfunctioncall{ScoreDiff}\hlkeyword{(}\hlfunctioncall{EnsQs}\hlkeyword{(}\hlsymbol{ens.cat}\hlkeyword{,}{\ }{\ }{\ }{\ }{\ }\hlsymbol{obs.cat}\hlkeyword{,}{\ }\hlargument{R.new}\hlargument{=}\hlnumber{Inf}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlfunctioncall{EnsQs}\hlkeyword{(}\hlsymbol{ens.cat.ref}\hlkeyword{,}{\ }\hlsymbol{obs.cat}\hlkeyword{,}{\ }\hlargument{R.new}\hlargument{=}\hlnumber{Inf}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }\hlargument{rps}{\ }{\ }{\ }\hlargument{=}{\ }\hlfunctioncall{ScoreDiff}\hlkeyword{(}\hlfunctioncall{EnsRps}\hlkeyword{(}\hlsymbol{ens.cat}\hlkeyword{,}{\ }{\ }{\ }{\ }{\ }\hlsymbol{obs.cat}\hlkeyword{,}{\ }\hlargument{R.new}\hlargument{=}\hlnumber{Inf}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlfunctioncall{EnsRps}\hlkeyword{(}\hlsymbol{ens.cat.ref}\hlkeyword{,}{\ }\hlsymbol{obs.cat}\hlkeyword{,}{\ }\hlargument{R.new}\hlargument{=}\hlnumber{Inf}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }\hlargument{crps}{\ }{\ }\hlargument{=}{\ }\hlfunctioncall{ScoreDiff}\hlkeyword{(}\hlfunctioncall{EnsCrps}\hlkeyword{(}\hlsymbol{ens}\hlkeyword{,}{\ }{\ }{\ }{\ }{\ }\hlsymbol{obs}\hlkeyword{,}{\ }\hlargument{R.new}\hlargument{=}\hlnumber{Inf}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlfunctioncall{EnsCrps}\hlkeyword{(}\hlsymbol{ens.ref}\hlkeyword{,}{\ }\hlsymbol{obs}\hlkeyword{,}{\ }\hlargument{R.new}\hlargument{=}\hlnumber{Inf}\hlkeyword{)}\hlkeyword{)}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}\hlkeyword{)}\mbox{}
-\normalfont
-
-\end{Hinput}
-
-\begin{Houtput}
-
-\ttfamily\noindent
-{\ }{\ }{\ }{\ }{\ }{\ }score.diff{\ }score.diff.sd{\ }{\ }p.value{\ }{\ }{\ }{\ }{\ }ci.L{\ }{\ }{\ }ci.U\hspace*{\fill}\\
-\hlstd{}brier{\ }{\ }{\ }{\ }0.09727{\ }{\ }{\ }{\ }{\ }{\ }{\ }0.05979{\ }0.051890{\ }-0.01992{\ }0.2145\hspace*{\fill}\\
-\hlstd{}qs{\ }{\ }{\ }{\ }{\ }{\ }{\ }0.08506{\ }{\ }{\ }{\ }{\ }{\ }{\ }0.09664{\ }0.189383{\ }-0.10435{\ }0.2745\hspace*{\fill}\\
-\hlstd{}rps{\ }{\ }{\ }{\ }{\ }{\ }0.05140{\ }{\ }{\ }{\ }{\ }{\ }{\ }0.07490{\ }0.246276{\ }-0.09540{\ }0.1982\hspace*{\fill}\\
-\hlstd{}crps{\ }{\ }{\ }{\ }{\ }0.07344{\ }{\ }{\ }{\ }{\ }{\ }{\ }0.03128{\ }0.009445{\ }{\ }0.01213{\ }0.1347\hspace*{\fill}\hlstd{}\mbox{}
-\normalfont
-
-\end{Houtput}
-
-\end{normalsize}
-\end{Hchunk}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{rbind}(
+  brier = \hlfunctioncall{ScoreDiff}(\hlfunctioncall{EnsBrier}(ens.bin,     obs.bin, R.new=Inf), 
+                    \hlfunctioncall{EnsBrier}(ens.bin.ref, obs.bin, R.new=Inf)),
+  qs    = \hlfunctioncall{ScoreDiff}(\hlfunctioncall{EnsQs}(ens.cat,     obs.cat, R.new=Inf), 
+                    \hlfunctioncall{EnsQs}(ens.cat.ref, obs.cat, R.new=Inf)),
+  rps   = \hlfunctioncall{ScoreDiff}(\hlfunctioncall{EnsRps}(ens.cat,     obs.cat, R.new=Inf), 
+                    \hlfunctioncall{EnsRps}(ens.cat.ref, obs.cat, R.new=Inf)),
+  crps  = \hlfunctioncall{ScoreDiff}(\hlfunctioncall{EnsCrps}(ens,     obs, R.new=Inf),  
+                    \hlfunctioncall{EnsCrps}(ens.ref, obs, R.new=Inf))
+)
+\end{alltt}
+\begin{verbatim}
+##       score.diff score.diff.sd    p.value     ci.L   ci.U
+## brier    0.11907       0.04206 0.00232081  0.03663 0.2015
+## qs       0.11198       0.08959 0.10568147 -0.06362 0.2876
+## rps      0.09529       0.06438 0.06942387 -0.03089 0.2215
+## crps     0.09050       0.02399 0.00008094  0.04348 0.1375
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 
 
 
@@ -1026,80 +660,60 @@ The variance of the skill score can be estimated by error propagation as follows
 var(SS) \approx \frac{1}{(S_{ref} - S_{perf})^2} var(S) + \frac{(S - S_{perf})^2}{(S_{ref}-S_{perf})^2} var(S_{ref}) - 2 \frac{S-S_{perf}}{(S_{ref}-S_{perf})^3} cov(S, S_{ref})
 \end{equation}
 %
-where the variances and covariances of the mean scores are approximated by the variances and covariances of the scores, divided by the sample size.
+where the variances and covariances of the mean scores $S$ and $S_{ref}$ are approximated by the variances and covariances calculated for the individual scores, divided by the sample size.
 The skill score is implemented in \pkg{SpecsVerification} in the function \code{SkillScore}, which takes as inputs two vectors of verification scores of the evaluated and the reference forecast, the constant score achieved by a perfect forecaster, as well as a possibly user-defined effective sample size.
 
 
-\begin{Hchunk}
-\begin{normalsize}
-\begin{Hinput}
-
-\ttfamily\noindent
-\hlprompt{{\ }}\hlfunctioncall{rbind}\hlkeyword{(}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }\hlargument{brier}{\ }\hlargument{=}{\ }\hlfunctioncall{SkillScore}\hlkeyword{(}\hlfunctioncall{EnsBrier}\hlkeyword{(}\hlsymbol{ens.bin}\hlkeyword{,}{\ }\hlsymbol{obs.bin}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlfunctioncall{EnsBrier}\hlkeyword{(}\hlsymbol{ens.bin.ref}\hlkeyword{,}{\ }\hlsymbol{obs.bin}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }\hlargument{qs}{\ }{\ }{\ }{\ }\hlargument{=}{\ }\hlfunctioncall{SkillScore}\hlkeyword{(}\hlfunctioncall{EnsQs}\hlkeyword{(}\hlsymbol{ens.cat}\hlkeyword{,}{\ }\hlsymbol{obs.cat}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlfunctioncall{EnsQs}\hlkeyword{(}\hlsymbol{ens.cat.ref}\hlkeyword{,}{\ }\hlsymbol{obs.cat}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }\hlargument{rps}{\ }{\ }{\ }\hlargument{=}{\ }\hlfunctioncall{SkillScore}\hlkeyword{(}\hlfunctioncall{EnsRps}\hlkeyword{(}\hlsymbol{ens.cat}\hlkeyword{,}{\ }\hlsymbol{obs.cat}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlfunctioncall{EnsRps}\hlkeyword{(}\hlsymbol{ens.cat.ref}\hlkeyword{,}{\ }\hlsymbol{obs.cat}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }\hlargument{crps}{\ }{\ }\hlargument{=}{\ }\hlfunctioncall{SkillScore}\hlkeyword{(}\hlfunctioncall{EnsCrps}\hlkeyword{(}\hlsymbol{ens}\hlkeyword{,}{\ }\hlsymbol{obs}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlfunctioncall{EnsCrps}\hlkeyword{(}\hlsymbol{ens.ref}\hlkeyword{,}{\ }\hlsymbol{obs}\hlkeyword{)}\hlkeyword{)}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}\hlkeyword{)}\mbox{}
-\normalfont
-
-\end{Hinput}
-
-\begin{Houtput}
-
-\ttfamily\noindent
-{\ }{\ }{\ }{\ }{\ }{\ }skillscore{\ }skillscore.sd\hspace*{\fill}\\
-\hlstd{}brier{\ }{\ }{\ }{\ }0.32651{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }0.2152\hspace*{\fill}\\
-\hlstd{}qs{\ }{\ }{\ }{\ }{\ }{\ }{\ }0.08498{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }0.1400\hspace*{\fill}\\
-\hlstd{}rps{\ }{\ }{\ }{\ }{\ }{\ }0.11041{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }0.1729\hspace*{\fill}\\
-\hlstd{}crps{\ }{\ }{\ }{\ }{\ }0.28872{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }0.1183\hspace*{\fill}\hlstd{}\mbox{}
-\normalfont
-
-\end{Houtput}
-
-\end{normalsize}
-\end{Hchunk}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{rbind}(
+  brier = \hlfunctioncall{SkillScore}(\hlfunctioncall{EnsBrier}(ens.bin, obs.bin), 
+                     \hlfunctioncall{EnsBrier}(ens.bin.ref, obs.bin)),
+  qs    = \hlfunctioncall{SkillScore}(\hlfunctioncall{EnsQs}(ens.cat, obs.cat),    
+                     \hlfunctioncall{EnsQs}(ens.cat.ref, obs.cat)),
+  rps   = \hlfunctioncall{SkillScore}(\hlfunctioncall{EnsRps}(ens.cat, obs.cat),   
+                     \hlfunctioncall{EnsRps}(ens.cat.ref, obs.cat)),
+  crps  = \hlfunctioncall{SkillScore}(\hlfunctioncall{EnsCrps}(ens, obs),          
+                     \hlfunctioncall{EnsCrps}(ens.ref, obs))
+)
+\end{alltt}
+\begin{verbatim}
+##       skillscore skillscore.sd
+## brier     0.4680       0.14973
+## qs        0.1719       0.13042
+## rps       0.2258       0.14624
+## crps      0.4048       0.07343
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 
 
 The skill scores increase slightly if we adjust the ensemble size to $R^* \to \infty$ for the ensemble forecasts and the climatological reference forecast:
 
-\begin{Hchunk}
-\begin{normalsize}
-\begin{Hinput}
-
-\ttfamily\noindent
-\hlprompt{{\ }}\hlfunctioncall{rbind}\hlkeyword{(}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }\hlargument{brier}{\ }\hlargument{=}{\ }\hlfunctioncall{SkillScore}\hlkeyword{(}\hlfunctioncall{EnsBrier}\hlkeyword{(}\hlsymbol{ens.bin}\hlkeyword{,}{\ }\hlsymbol{obs.bin}\hlkeyword{,}{\ }\hlargument{R.new}\hlargument{=}\hlnumber{Inf}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlfunctioncall{EnsBrier}\hlkeyword{(}\hlsymbol{ens.bin.ref}\hlkeyword{,}{\ }\hlsymbol{obs.bin}\hlkeyword{,}{\ }\hlargument{R.new}\hlargument{=}\hlnumber{Inf}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }\hlargument{qs}{\ }{\ }{\ }{\ }\hlargument{=}{\ }\hlfunctioncall{SkillScore}\hlkeyword{(}\hlfunctioncall{EnsQs}\hlkeyword{(}\hlsymbol{ens.cat}\hlkeyword{,}{\ }\hlsymbol{obs.cat}\hlkeyword{,}{\ }\hlargument{R.new}\hlargument{=}\hlnumber{Inf}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlfunctioncall{EnsQs}\hlkeyword{(}\hlsymbol{ens.cat.ref}\hlkeyword{,}{\ }\hlsymbol{obs.cat}\hlkeyword{,}{\ }\hlargument{R.new}\hlargument{=}\hlnumber{Inf}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }\hlargument{rps}{\ }{\ }{\ }\hlargument{=}{\ }\hlfunctioncall{SkillScore}\hlkeyword{(}\hlfunctioncall{EnsRps}\hlkeyword{(}\hlsymbol{ens.cat}\hlkeyword{,}{\ }\hlsymbol{obs.cat}\hlkeyword{,}{\ }\hlargument{R.new}\hlargument{=}\hlnumber{Inf}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlfunctioncall{EnsRps}\hlkeyword{(}\hlsymbol{ens.cat.ref}\hlkeyword{,}{\ }\hlsymbol{obs.cat}\hlkeyword{,}{\ }\hlargument{R.new}\hlargument{=}\hlnumber{Inf}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }\hlargument{crps}{\ }{\ }\hlargument{=}{\ }\hlfunctioncall{SkillScore}\hlkeyword{(}\hlfunctioncall{EnsCrps}\hlkeyword{(}\hlsymbol{ens}\hlkeyword{,}{\ }\hlsymbol{obs}\hlkeyword{,}{\ }\hlargument{R.new}\hlargument{=}\hlnumber{Inf}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlfunctioncall{EnsCrps}\hlkeyword{(}\hlsymbol{ens.ref}\hlkeyword{,}{\ }\hlsymbol{obs}\hlkeyword{,}{\ }\hlargument{R.new}\hlargument{=}\hlnumber{Inf}\hlkeyword{)}\hlkeyword{)}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}\hlkeyword{)}\mbox{}
-\normalfont
-
-\end{Hinput}
-
-\begin{Houtput}
-
-\ttfamily\noindent
-{\ }{\ }{\ }{\ }{\ }{\ }skillscore{\ }skillscore.sd\hspace*{\fill}\\
-\hlstd{}brier{\ }{\ }{\ }{\ }{\ }0.3880{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }0.2225\hspace*{\fill}\\
-\hlstd{}qs{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }0.1265{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }0.1459\hspace*{\fill}\\
-\hlstd{}rps{\ }{\ }{\ }{\ }{\ }{\ }{\ }0.1205{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }0.1753\hspace*{\fill}\\
-\hlstd{}crps{\ }{\ }{\ }{\ }{\ }{\ }0.3287{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }0.1215\hspace*{\fill}\hlstd{}\mbox{}
-\normalfont
-
-\end{Houtput}
-
-\end{normalsize}
-\end{Hchunk}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{rbind}(
+  brier = \hlfunctioncall{SkillScore}(\hlfunctioncall{EnsBrier}(ens.bin, obs.bin, R.new=Inf), 
+                     \hlfunctioncall{EnsBrier}(ens.bin.ref, obs.bin, R.new=Inf)),
+  qs    = \hlfunctioncall{SkillScore}(\hlfunctioncall{EnsQs}(ens.cat, obs.cat, R.new=Inf), 
+                     \hlfunctioncall{EnsQs}(ens.cat.ref, obs.cat, R.new=Inf)),
+  rps   = \hlfunctioncall{SkillScore}(\hlfunctioncall{EnsRps}(ens.cat, obs.cat, R.new=Inf), 
+                     \hlfunctioncall{EnsRps}(ens.cat.ref, obs.cat, R.new=Inf)),
+  crps  = \hlfunctioncall{SkillScore}(\hlfunctioncall{EnsCrps}(ens, obs, R.new=Inf), 
+                     \hlfunctioncall{EnsCrps}(ens.ref, obs, R.new=Inf))
+)
+\end{alltt}
+\begin{verbatim}
+##       skillscore skillscore.sd
+## brier     0.4749       0.15475
+## qs        0.1665       0.13519
+## rps       0.2234       0.14806
+## crps      0.4051       0.07602
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 
 
 
@@ -1109,36 +723,18 @@ The Pearson correlation coefficient is one of the most popular verification crit
 Since uncertainty quantification is often of interest, \pkg{SpecsVerification} provides the function \code{Corr}, which returns a correlation coefficient, a p-value and a confidence interval.
 The user can provide the confidence level for the confidence interval, an effective sample size to account for possible auto-correlation in the data:
 
-\begin{Hchunk}
-\begin{normalsize}
-\begin{Hinput}
-
-\ttfamily\noindent
-\hlprompt{{\ }}\hlsymbol{ens.mean}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{rowMeans}\hlkeyword{(}\hlsymbol{ens}\hlkeyword{)}\mbox{}
-\normalfont
-
-\end{Hinput}
-
-
-\begin{Hinput}
-
-\ttfamily\noindent
-\hlprompt{{\ }}\hlfunctioncall{Corr}\hlkeyword{(}\hlsymbol{ens.mean}\hlkeyword{,}{\ }\hlsymbol{obs}\hlkeyword{)}\mbox{}
-\normalfont
-
-\end{Hinput}
-
-\begin{Houtput}
-
-\ttfamily\noindent
-{\ }{\ }{\ }{\ }{\ }{\ }corr{\ }{\ }{\ }{\ }p.value{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }L{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }U{\ }\hspace*{\fill}\\
-\hlstd{}0.67918877{\ }0.00004901{\ }0.40325555{\ }0.84190582{\ }\hspace*{\fill}\hlstd{}\mbox{}
-\normalfont
-
-\end{Houtput}
-
-\end{normalsize}
-\end{Hchunk}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+ens.mean <- \hlfunctioncall{rowMeans}(ens)
+\hlfunctioncall{Corr}(ens.mean, obs)
+\end{alltt}
+\begin{verbatim}
+##        corr     p.value           L           U 
+## 0.757095576 0.000002427 0.529391069 0.883049977
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 
 
 
@@ -1150,27 +746,17 @@ Both methods take into account correlation between the two competing forecasts.
 For illustration, we evaluate the difference in correlation between the ensemble mean forecast and the persistence forecast:
 
 
-\begin{Hchunk}
-\begin{normalsize}
-\begin{Hinput}
-
-\ttfamily\noindent
-\hlprompt{{\ }}\hlfunctioncall{CorrDiff}\hlkeyword{(}\hlsymbol{ens.mean}\hlkeyword{,}{\ }\hlsymbol{obs.lag}\hlkeyword{,}{\ }\hlsymbol{obs}\hlkeyword{)}\mbox{}
-\normalfont
-
-\end{Hinput}
-
-\begin{Houtput}
-
-\ttfamily\noindent
-corr.diff{\ }{\ }{\ }p.value{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }L{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }U{\ }\hspace*{\fill}\\
-\hlstd{}{\ }{\ }{\ }0.1011{\ }{\ }{\ }{\ }0.1667{\ }{\ }{\ }-0.1118{\ }{\ }{\ }{\ }0.3532{\ }\hspace*{\fill}\hlstd{}\mbox{}
-\normalfont
-
-\end{Houtput}
-
-\end{normalsize}
-\end{Hchunk}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{CorrDiff}(ens.mean, obs.lag, obs)
+\end{alltt}
+\begin{verbatim}
+## corr.diff   p.value         L         U 
+##  0.179021  0.029082 -0.005417  0.440518
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 
 
 
@@ -1185,35 +771,17 @@ If the ensemble is a reliable representation of the uncertainty in the observati
 Each verification rank should therefore be equally likely on average, and the histogram over verification ranks should be flat. 
 \pkg{SpecsVerification} contains the function \code{Rankhist} to calculate the verification rank counts for an archive of ensembles and observations.
 
-\begin{Hchunk}
-\begin{normalsize}
-\begin{Hinput}
-
-\ttfamily\noindent
-\hlprompt{{\ }}\hlsymbol{rh}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{Rankhist}\hlkeyword{(}\hlsymbol{ens}\hlkeyword{,}{\ }\hlsymbol{obs}\hlkeyword{)}\mbox{}
-\normalfont
-
-\end{Hinput}
-
-
-\begin{Hinput}
-
-\ttfamily\noindent
-\hlprompt{{\ }}\hlsymbol{rh}\mbox{}
-\normalfont
-
-\end{Hinput}
-
-\begin{Houtput}
-
-\ttfamily\noindent
-[1]{\ }2{\ }3{\ }4{\ }1{\ }2{\ }2{\ }3{\ }5{\ }5\hspace*{\fill}\hlstd{}\mbox{}
-\normalfont
-
-\end{Houtput}
-
-\end{normalsize}
-\end{Hchunk}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+rh <- \hlfunctioncall{Rankhist}(ens, obs)
+rh
+\end{alltt}
+\begin{verbatim}
+##  [1] 0 2 1 0 2 4 1 1 0 0 0 0 1 2 2 1 3 1 1 0 1 1 0 2 1
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 
 
 
@@ -1232,21 +800,16 @@ The interpretation is, given that the null-hypothesis is true, on average 9 out 
 \begin{figure}
 \begin{center}
 %
-\begin{Hchunk}
-\begin{normalsize}
-\begin{Hinput}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{PlotRankhist}(rh, mode=\hlstring{"raw"})
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/rank-hist} 
 
-\ttfamily\noindent
-\hlprompt{{\ }}\hlfunctioncall{PlotRankhist}\hlkeyword{(}\hlsymbol{rh}\hlkeyword{,}{\ }\hlargument{mode}\hlargument{=}\hlstring{"{}raw"{}}\hlkeyword{)}\mbox{}
-\normalfont
+\end{knitrout}
 
-\end{Hinput}
-
-
-\end{normalsize}
-\end{Hchunk}
-
-\includegraphics{fig-rank-hist}
 %
 \end{center}
 \caption{Rank histogram}
@@ -1257,21 +820,16 @@ The interpretation is, given that the null-hypothesis is true, on average 9 out 
 \begin{figure}
 \begin{center}
 %
-\begin{Hchunk}
-\begin{normalsize}
-\begin{Hinput}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{PlotRankhist}(rh, mode=\hlstring{"prob.paper"})
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/rank-hist-pp} 
 
-\ttfamily\noindent
-\hlprompt{{\ }}\hlfunctioncall{PlotRankhist}\hlkeyword{(}\hlsymbol{rh}\hlkeyword{,}{\ }\hlargument{mode}\hlargument{=}\hlstring{"{}prob.paper"{}}\hlkeyword{)}\mbox{}
-\normalfont
+\end{knitrout}
 
-\end{Hinput}
-
-
-\end{normalsize}
-\end{Hchunk}
-
-\includegraphics{fig-rank-hist-pp}
 %
 \end{center}
 \caption{Rank histogram on probability paper}
@@ -1311,28 +869,18 @@ c^{(sq)}_i & =  - \frac{\sqrt{5}  J^2 - \sqrt{5}}{\sqrt{4(J - 2)  (J-1) J (J+1) 
 The $\chi^2$ test using the linear contrast is sensitive to sloped rank histgrams, i.e. biased ensembles, while the $\chi^2$ based on the squared contrast is sensitive to convex rank histograms, i.e. over- or under-dispersed ensembles.
 \code{TestRankhist} returns the test-statistics and one-sided p-values of the Pearson $\chi^2$ test, and of the two tests based on the contrasts $\mathbf{c}^{(lin)}$ and $\mathbf{c}^{(sq)}$:
 
-\begin{Hchunk}
-\begin{normalsize}
-\begin{Hinput}
-
-\ttfamily\noindent
-\hlprompt{{\ }}\hlfunctioncall{TestRankhist}\hlkeyword{(}\hlsymbol{rh}\hlkeyword{)}\mbox{}
-\normalfont
-
-\end{Hinput}
-
-\begin{Houtput}
-
-\ttfamily\noindent
-{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }pearson.chi2{\ }jp.slope{\ }jp.convex\hspace*{\fill}\\
-\hlstd{}test.statistic{\ }{\ }{\ }{\ }{\ }{\ }{\ }5.3333{\ }{\ }{\ }1.6056{\ }{\ }{\ }{\ }1.3258\hspace*{\fill}\\
-\hlstd{}p.value{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }0.7214{\ }{\ }{\ }0.2051{\ }{\ }{\ }{\ }0.2496\hspace*{\fill}\hlstd{}\mbox{}
-\normalfont
-
-\end{Houtput}
-
-\end{normalsize}
-\end{Hchunk}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{TestRankhist}(rh)
+\end{alltt}
+\begin{verbatim}
+##                pearson.chi2 jp.slope jp.convex
+## test.statistic      23.9259   0.0114  0.005574
+## p.value              0.4658   0.9150  0.940485
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 
 
 The rank histogram of the temperature ensemble forecast provides no evidence against the null-hypothesis of a reliable ensemble.
@@ -1354,38 +902,20 @@ The consistency resampling method proposed by \citet{broecker2007increasing} is 
 
 If the \code{plot} argument is set to \code{FALSE}, the \code{ReliabilityDiagram} function returns the quantities necessary to plot the reliability diagram.
 
-\begin{Hchunk}
-\begin{normalsize}
-\begin{Hinput}
-
-\ttfamily\noindent
-\hlprompt{{\ }}\hlsymbol{p.bin}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{rowMeans}\hlkeyword{(}\hlsymbol{ens.bin}\hlkeyword{)}\mbox{}
-\normalfont
-
-\end{Hinput}
-
-
-\begin{Hinput}
-
-\ttfamily\noindent
-\hlprompt{{\ }}\hlfunctioncall{ReliabilityDiagram}\hlkeyword{(}\hlsymbol{p.bin}\hlkeyword{,}{\ }\hlsymbol{obs.bin}\hlkeyword{,}{\ }\hlargument{plot}\hlargument{=}\hlnumber{FALSE}\hlkeyword{,}{\ }\hlargument{bins}\hlargument{=}\hlnumber{3}\hlkeyword{)}\mbox{}
-\normalfont
-
-\end{Hinput}
-
-\begin{Houtput}
-
-\ttfamily\noindent
-{\ }{\ }p.avgs{\ }cond.probs{\ }cbar.lo{\ }cbar.hi{\ }p.counts{\ }bin.lower{\ }bin.upper\hspace*{\fill}\\
-\hlstd{}1{\ }0.1000{\ }{\ }{\ }{\ }{\ }0.2000{\ }{\ }0.0000{\ }{\ }0.3000{\ }{\ }{\ }{\ }{\ }{\ }{\ }10{\ }{\ }{\ }{\ }0.0000{\ }{\ }{\ }{\ }0.3333\hspace*{\fill}\\
-\hlstd{}2{\ }0.5227{\ }{\ }{\ }{\ }{\ }0.7273{\ }{\ }0.2222{\ }{\ }0.8333{\ }{\ }{\ }{\ }{\ }{\ }{\ }11{\ }{\ }{\ }{\ }0.3333{\ }{\ }{\ }{\ }0.6667\hspace*{\fill}\\
-\hlstd{}3{\ }0.8542{\ }{\ }{\ }{\ }{\ }1.0000{\ }{\ }0.5000{\ }{\ }1.0000{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }6{\ }{\ }{\ }{\ }0.6667{\ }{\ }{\ }{\ }1.0000\hspace*{\fill}\hlstd{}\mbox{}
-\normalfont
-
-\end{Houtput}
-
-\end{normalsize}
-\end{Hchunk}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+p.bin <- \hlfunctioncall{rowMeans}(ens.bin)
+\hlfunctioncall{ReliabilityDiagram}(p.bin, obs.bin, plot=FALSE, bins=3)
+\end{alltt}
+\begin{verbatim}
+##   p.avgs cond.probs cbar.lo cbar.hi p.counts bin.lower bin.upper
+## 1 0.1713     0.2222  0.0000  0.4784        9    0.0000    0.3333
+## 2 0.5833     0.4286  0.1667  1.0000        7    0.3333    0.6667
+## 3 0.8447     1.0000  0.6000  1.0000       11    0.6667    1.0000
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 
 
 If the argument \code{plot=TRUE} the reliability diagram is plotted, as shown in Figure \ref{reldiag-plot}. 
@@ -1396,21 +926,16 @@ Points that fall into the shaded area of the attributes diagram contribute posit
 \begin{figure}
 \begin{center}
 %
-\begin{Hchunk}
-\begin{normalsize}
-\begin{Hinput}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+rd <- \hlfunctioncall{ReliabilityDiagram}(p.bin, obs.bin, plot=TRUE, bins=3, attributes=TRUE)
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/reldiag} 
 
-\ttfamily\noindent
-\hlprompt{{\ }}\hlsymbol{rd}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{ReliabilityDiagram}\hlkeyword{(}\hlsymbol{p.bin}\hlkeyword{,}{\ }\hlsymbol{obs.bin}\hlkeyword{,}{\ }\hlargument{plot}\hlargument{=}\hlnumber{TRUE}\hlkeyword{,}{\ }\hlargument{bins}\hlargument{=}\hlnumber{3}\hlkeyword{,}{\ }\hlargument{attributes}\hlargument{=}\hlnumber{TRUE}\hlkeyword{)}\mbox{}
-\normalfont
+\end{knitrout}
 
-\end{Hinput}
-
-
-\end{normalsize}
-\end{Hchunk}
-
-\includegraphics{fig-reldiag}
 %
 \end{center}
 \caption{Reliability diagram}
