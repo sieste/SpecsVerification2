@@ -9,7 +9,8 @@
 \BOOKMARK [2][-]{Subsection.3.1.Mean scores and mean score differences.2}{Mean scores and mean score differences}{Section.2.Comparative verification and uncertainty quantification.1}% 9
 \BOOKMARK [2][-]{Subsection.3.2.Skill scores.2}{Skill scores}{Section.2.Comparative verification and uncertainty quantification.1}% 10
 \BOOKMARK [2][-]{Subsection.3.3.Correlation and correlation difference.2}{Correlation and correlation difference}{Section.2.Comparative verification and uncertainty quantification.1}% 11
-\BOOKMARK [1][-]{Section.3.Rank histogram analysis for ensemble forecasts.1}{Rank histogram analysis for ensemble forecasts}{}% 12
-\BOOKMARK [1][-]{Section.4.Reliability diagrams for probability forecasts.1}{Reliability diagrams for probability forecasts}{}% 13
-\BOOKMARK [1][-]{Section.5.Additional functions.1}{Additional functions}{}% 14
-\BOOKMARK [1][-]{Section.6.Conclusion.1}{Conclusion}{}% 15
+\BOOKMARK [2][-]{Subsection.3.4.Area under the ROC curve (AUC) and AUC differences.2}{Area under the ROC curve \(AUC\) and AUC differences}{Section.2.Comparative verification and uncertainty quantification.1}% 12
+\BOOKMARK [1][-]{Section.3.Rank histogram analysis for ensemble forecasts.1}{Rank histogram analysis for ensemble forecasts}{}% 13
+\BOOKMARK [1][-]{Section.4.Reliability diagrams for probability forecasts.1}{Reliability diagrams for probability forecasts}{}% 14
+\BOOKMARK [1][-]{Section.5.Additional functions.1}{Additional functions}{}% 15
+\BOOKMARK [1][-]{Section.6.Conclusion.1}{Conclusion}{}% 16

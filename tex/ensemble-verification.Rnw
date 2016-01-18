@@ -144,7 +144,7 @@ points(yrs, obs, pch=15, cex=1.5)
 \subsection{Representation of ensemble and observation data}
 
 In \pkg{SpecsVerification}, archives of $N$ instances of ensemble forecasts, each with $R$ members, are represented by $N\times R$ matrices.
-The data shown in Figure \ref{gfs-plot} is a matrix with dimensions
+The data shown in Figure \ref{gfs-plot} depicts 27 years or 24-member ensemble forecasts, i.e., a matrix with dimensions
 
 <<>>=
 dim(ens)
@@ -250,7 +250,7 @@ brier <- sapply(2:60, function(RR) c(
   mean(EnsBrier(ens.bin[, i.large], obs.bin, R.new=RR))))
 matplot(cbind(2:60, 2:60), t(brier), type="l", col="black", lty=c(1,2), xlab="R*", ylab="Brier score", las=1)
 @
-\caption{Ensemble-adjusted Brier score as a function of the ensemble size, calculated for a small 5-member ensemble (solid line) and a larger 19-member ensemble (dashed line) produced by the same forecasting system.}
+\caption{Ensemble-adjusted Brier score as a function of the adjusted ensemble size, calculated from a small 5-member ensemble (solid line) and a larger 19-member ensemble (dashed line), produced by the same forecasting system.}
 \label{fig:ens-brier}
 \end{center}
 \end{figure}
@@ -532,6 +532,19 @@ CorrDiff(ens.mean, obs.lag, obs)
 @
 
 
+\subsection{Area under the ROC curve (AUC) and AUC differences}
+
+<<>>=
+AucDiff(rowMeans(ens.bin), 0 * obs.bin, obs.bin)
+@
+
+
+\citet{mason2002areas}
+
+\citet{delong1988comparing}
+
+
+
 
 
 \section{Rank histogram analysis for ensemble forecasts}
@@ -650,7 +663,7 @@ ReliabilityDiagram(p.bin, obs.bin, plot=FALSE, bins=3)
 If the argument \code{plot=TRUE} the reliability diagram is plotted, as shown in Figure \ref{reldiag-plot}. 
 The logical argument \code{plot.refin} controls the refinement diagram, i.e. the histogram over the forecast probabilities.
 The logical argument \code{attributes} controls plotting of the polygon defined by the vertical no-resolution line at $\bar{y} = 1/n \sum_t y_t$, where $y_t$ is the binary observation at time $t$, and the no-skill line defined by the linear equation $f(x)=(x+\bar{y})/2$, to produce the attributes diagram \citep{hsu1986attributes}.
-Points that fall into the shaded area of the attributes diagram contribute positively to forecast skill defined by the Brier skill score.
+Points that fall into the shaded area of the attributes diagram contribute positively to forecast skill (defined by the Brier skill score).
 
 \begin{figure}
 \begin{center}
@@ -669,7 +682,8 @@ rd <- ReliabilityDiagram(p.bin, obs.bin, plot=TRUE, bins=3, attributes=TRUE)
 
 The focus of \pkg{SpecsVerification}, and of the present paper, is on verification functions for ensemble and probability forecasts, uncertainty quantification, and graphical display.
 \pkg{SpecsVerification} includes a number of additional functions for recalibration and verification of forecasts.
-For verification of deterministic forecasts, e.g. the ensemble mean forecast, the sqared error (function \code{SqErr}) and the Absolute Error (function \code{AbsErr}) have been implemented.
+For verification of deterministic forecasts $x_t$ , e.g. the ensemble mean forecast, the squared error score $(x_t - y_t)^2$ (function \code{SqErr}), and the Absolute Error score $|x_t - y_t|$ (function \code{AbsErr}) have been implemented, and can be analysed by the functions \code{ScoreDiff} and \code{SkillScore}.
+
 
 
 

@@ -1,4 +1,4 @@
-\begin{thebibliography}{18}
+\begin{thebibliography}{20}
 \newcommand{\enquote}[1]{``#1''}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
@@ -40,6 +40,16 @@ Buizza R, Palmer TN (1998).
 \newblock \doi{10.1175/1520-0493(1998)126<2503:ioesoe>2.0.co;2}.
 \newblock
   \urlprefix\url{http://dx.doi.org/10.1175/1520-0493(1998)126<2503:IOESOE>2.0.CO;2}.
+
+\bibitem[{DeLong \emph{et~al.}(1988)DeLong, DeLong, and
+  Clarke-Pearson}]{delong1988comparing}
+DeLong ER, DeLong DM, Clarke-Pearson DL (1988).
+\newblock \enquote{Comparing the Areas under Two or More Correlated Receiver
+  Operating Characteristic Curves: A Nonparametric Approach.}
+\newblock \emph{Biometrics}, \textbf{44}(3), 837--845.
+\newblock ISSN 0006-341X.
+\newblock \doi{10.2307/2531595}.
+\newblock \urlprefix\url{http://dx.doi.org/10.2307/2531595}.
 
 \bibitem[{Diebold and Mariano(1995)}]{diebold1995comparing}
 Diebold FX, Mariano RS (1995).
@@ -110,6 +120,16 @@ Jolliffe IT, Stephenson DB (2012).
 \newblock \emph{Forecast verification: a practitioner's guide in atmospheric
   science}.
 \newblock John Wiley \& Sons.
+
+\bibitem[{Mason and Graham(2002)}]{mason2002areas}
+Mason SJ, Graham NE (2002).
+\newblock \enquote{Areas beneath the relative operating characteristics (ROC)
+  and relative operating levels (ROL) curves: Statistical significance and
+  interpretation.}
+\newblock \emph{Q. J. R. Meteorol. Soc.}, \textbf{128}(584), 2145--2166.
+\newblock ISSN 0035-9009.
+\newblock \doi{10.1256/003590002320603584}.
+\newblock \urlprefix\url{http://dx.doi.org/10.1256/003590002320603584}.
 
 \bibitem[{Matheson and Winkler(1976)}]{matheson1976scoring}
 Matheson JE, Winkler RL (1976).
