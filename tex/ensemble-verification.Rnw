@@ -586,20 +586,26 @@ var(\hat\theta^{(2)} - \hat\theta^{(1)}) = \frac{1}{m} (v_{1,1} + v_{2,2} - 2 v_
 Note that the AUC is asymptotically Normally distributed.
 The estimated variance can therefore be used to construct a confidence interval, i.e., $\hat\theta \pm 1.96 \sqrt{var(\hat\theta)}$ is a central 95\% confidence interval.
 
-
-
+\pkg{SpecsVerification} provides the functions \code{Auc} and \code{AucDiff} that implement calculation of AUC and AUC differences and the corresponding variance estimates.
+The following calculates AUCs for the ensemble mean of the binary ensemble, using a large and a small subensemble:
+%
 <<>>=
-Auc(rowMeans(ens.bin), obs.bin)
+rbind(
+  large.ens = Auc(rowMeans(ens.bin[, i.large]), obs.bin),
+  small.ens = Auc(rowMeans(ens.bin[, i.small]), obs.bin)
+)
 @
-
-
+%
+The AUC of both ensembles is significantly larger than 0.5, which is a sign of forecast skill.
+The large subensemble has a slightly higher AUC than the small subensemble.
+The following evaluates the AUC difference between the large and a small ensemble:
+%
 <<>>=
-AucDiff(rowMeans(ens.bin), rowMeans(ens.bin)+rnorm(nrow(ens.bin)), obs.bin)
+AucDiff(rowMeans(ens.bin[, i.large]), rowMeans(ens.bin[, i.small]), obs.bin)
 @
-
-
-
-
+%
+The AUC difference is within sampling variability.
+We expect ensemble size to effect AUC, but we are not aware of published results to adjust the AUC.
 
 
 

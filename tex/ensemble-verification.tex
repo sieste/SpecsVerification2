@@ -814,38 +814,45 @@ var(\hat\theta^{(2)} - \hat\theta^{(1)}) = \frac{1}{m} (v_{1,1} + v_{2,2} - 2 v_
 Note that the AUC is asymptotically Normally distributed.
 The estimated variance can therefore be used to construct a confidence interval, i.e., $\hat\theta \pm 1.96 \sqrt{var(\hat\theta)}$ is a central 95\% confidence interval.
 
-
-
+\pkg{SpecsVerification} provides the functions \code{Auc} and \code{AucDiff} that implement calculation of AUC and AUC differences and the corresponding variance estimates.
+The following calculates AUCs for the ensemble mean of the binary ensemble, using a large and a small subensemble:
+%
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlfunctioncall{Auc}(\hlfunctioncall{rowMeans}(ens.bin), obs.bin)
+\hlfunctioncall{rbind}(
+  large.ens = \hlfunctioncall{Auc}(\hlfunctioncall{rowMeans}(ens.bin[, i.large]), obs.bin),
+  small.ens = \hlfunctioncall{Auc}(\hlfunctioncall{rowMeans}(ens.bin[, i.small]), obs.bin)
+)
 \end{alltt}
 \begin{verbatim}
-##     auc  auc.sd 
-## 0.89489 0.06561
+##              auc  auc.sd
+## large.ens 0.8892 0.06944
+## small.ens 0.8523 0.07179
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 
-
-
+%
+The AUC of both ensembles is significantly larger than 0.5, which is a sign of forecast skill.
+The large subensemble has a slightly higher AUC than the small subensemble.
+The following evaluates the AUC difference between the large and a small ensemble:
+%
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlfunctioncall{AucDiff}(\hlfunctioncall{rowMeans}(ens.bin), \hlfunctioncall{rowMeans}(ens.bin)+\hlfunctioncall{rnorm}(\hlfunctioncall{nrow}(ens.bin)), obs.bin)
+\hlfunctioncall{AucDiff}(\hlfunctioncall{rowMeans}(ens.bin[, i.large]), \hlfunctioncall{rowMeans}(ens.bin[, i.small]), obs.bin)
 \end{alltt}
 \begin{verbatim}
 ##    auc.diff auc.diff.sd 
-##      0.2756      0.1155
+##     0.03693     0.06346
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 
-
-
-
-
+%
+The AUC difference is within sampling variability.
+We expect ensemble size to effect AUC, but we are not aware of published results to adjust the AUC.
 
 
 
@@ -998,7 +1005,7 @@ p.bin <- \hlfunctioncall{rowMeans}(ens.bin)
 \begin{verbatim}
 ##   p.avgs cond.probs cbar.lo cbar.hi p.counts bin.lower bin.upper
 ## 1 0.1713     0.2222  0.0000  0.4784        9    0.0000    0.3333
-## 2 0.5833     0.4286  0.1825  1.0000        7    0.3333    0.6667
+## 2 0.5833     0.4286  0.1667  1.0000        7    0.3333    0.6667
 ## 3 0.8447     1.0000  0.6000  1.0000       11    0.6667    1.0000
 \end{verbatim}
 \end{kframe}
