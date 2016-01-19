@@ -1,6 +1,7 @@
 \documentclass[article]{jss}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
+\usepackage{dsfont}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -532,16 +533,71 @@ CorrDiff(ens.mean, obs.lag, obs)
 @
 
 
-\subsection{Area under the ROC curve (AUC) and AUC differences}
+\subsection{Area under the curve (AUC) and AUC differences}
+
+Relative operating characteristics \citep[ROC, ][and references therein]{mason2002areas} analysis is a method from signal detection theory to evaluate the quality of forecasts for binary events.
+Consider the two competing forecasts $x^{(1)}_t$ and $x^{(2)}_t$ for the same binary observations $y_t \in \{0, 1\}$ for $t=1,\dots,N$.
+(The forecasts are allowed to take values on the real line, and need not be probabilitities.)
+For ROC analysis, the forecasts are grouped into two sets: $C^{(r)}_0$ contains all forecasts $x^{(r)}$ for which an event did not happen ($y_t=0$), and $C^{(r)}_1$ contains all forecasts for which an event did happen ($y_t = 1$).
+The area under the ROC curve (AUC) for the $r$th forecast ($r=1,2$) is equal to the probability that a randomly drawn forecast from $C^{(r)}_1$ is larger than a randomly drawn forecast from $C^{(r)}_0$.
+The AUC is thus a measure of the ability of the forecasts to distinguish events from non-events.
+
+\citet{delong1988comparing} suggest a nonparametric method to estimate the variance of AUC and of differences in AUC.
+Denote by $X^{(r)}_i$, $i=1,\cdots,m$ the elements of $C^{(r)}_1$ and by $Y^{(r)}_i$, $i=1,\cdots,n$ the members of $C^{(r)}_0$.
+Define the function $\Psi$ as
+%
+\begin{equation}
+\Psi(x,y) = \mathds{1}(x>y) + \frac{1}{2} \mathds{1}(x=y)
+\end{equation}
+%
+where $\mathds{1}(\cdot)$ is the indicator function which equals one if its argument is true, and zero otherwise.
+The AUC of the $r$th forecast is estimated by 
+%
+\begin{equation}
+\hat\theta^{(r)} = \frac{1}{mn} \sum_{i=1}^m \sum_{j=1}^n \Psi(X^{(r)}_i, Y^{(r)}_j)
+\end{equation}
+%
+For variance estimation, first define the quantities $V_i^{(r)}$ and $W_i^{(r)}$ by
+%
+\begin{equation}
+V_i^{(r)} = \frac1n \sum_{j=1}^n \Psi(X^{(r)}_i, Y^{(r)}_j)\quad\text{and}\quad W_j^{(r)} = \frac1m \sum_{i=m}^n \Psi(X^{(r)}_i, Y^{(r)}_j).
+\end{equation}
+%
+and $v_{r,s}$ and $w_{r,s}$ by
+%
+\begin{align}
+v_{r,s} & = \frac{1}{m-1} \sum_{i=1}^m [V_i^{(r)} - \hat\theta^{(r)}][V_i^{(s)} - \hat\theta^{(s)}]\\
+w_{r,s} & = \frac{1}{n-1} \sum_{j=1}^n [W_j^{(r)} - \hat\theta^{(r)}][W_j^{(s)} - \hat\theta^{(s)}]
+\end{align}
+%
+where $r=1,2$ and $s=1,2$.
+Finally, the estimated variance of the $r$th AUC estimate $\hat\theta^{(r)}$ is given by
+%
+\begin{equation}
+var(\hat\theta^{(r)}) = \frac{1}{m} v_{r,r} + \frac{1}{n} w_{r,r}
+\end{equation}
+%
+and the variance of the AUC difference $\theta^{(2)} - \theta^{(1)}$ is given by
+%
+\begin{equation}
+var(\hat\theta^{(2)} - \hat\theta^{(1)}) = \frac{1}{m} (v_{1,1} + v_{2,2} - 2 v_{1,2}) + \frac{1}{n} (w_{1,1} + w_{2,2} - 2 w_{1,2}).
+\end{equation}
+%
+Note that the AUC is asymptotically Normally distributed.
+The estimated variance can therefore be used to construct a confidence interval, i.e., $\hat\theta \pm 1.96 \sqrt{var(\hat\theta)}$ is a central 95\% confidence interval.
+
+
 
 <<>>=
-AucDiff(rowMeans(ens.bin), 0 * obs.bin, obs.bin)
+Auc(rowMeans(ens.bin), obs.bin)
 @
 
 
-\citet{mason2002areas}
+<<>>=
+AucDiff(rowMeans(ens.bin), rowMeans(ens.bin)+rnorm(nrow(ens.bin)), obs.bin)
+@
 
-\citet{delong1988comparing}
+
 
 
 
