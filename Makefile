@@ -47,7 +47,7 @@ $(TEX_FILE): $(RNW_FILE) $(R_PKG_tgz)
 
 
 # roxygenize, build, and install r library 
-$(R_PKG_tgz): $(shell find $(R_PKG_DIR) -type f)
+$(R_PKG_tgz): $(shell find $(R_PKG_DIR) -type f ! -name "*.swp")
 	cd $(R_DIR);\
 	$(RSCRIPT_CMD) -e 'roxygen2::roxygenize(package.dir="$(R_PKG_DIR)", clean=TRUE)';\
 	$(R_CMD) CMD build $(R_PKG);\

@@ -9,7 +9,7 @@
 
 %% almost as usual
 \author{Stefan Siegert\\University of Exeter}
-\title{Verification Functions for Ensemble Forecasts Implemented in the \proglang{R} package \pkg{SpecsVerification}}
+\title{Forecast Verification Methods Implemented in the \proglang{R} package \pkg{SpecsVerification}: Ensemble Scores, Comparative Verification, and Uncertainty Quantification}
 
 %% for pretty printing and a nice hypersummary also set:
 \Plainauthor{Stefan Siegert} %% comma-separated
@@ -65,6 +65,12 @@ knitr::opts_chunk$set(dev="pdf", tidy=FALSE)
 %% Note that you should use the \pkg{}, \proglang{} and \code{} commands.
 % \section[About Java]{About \proglang{Java}}
 %% Note: If there is markup in \(sub)section, then it has to be escape as above.
+
+\section*{Note to editor and reviewers}
+
+A package called \pkg{SpecsVerification} is currently available on CRAN.
+The package documented in this paper is an updated, yet unpublished version of \pkg{SpecsVerification}, documenting new and rewritten functions that are not currently available.
+
 
 
 \section{Introduction}
@@ -419,6 +425,7 @@ We recommend also considering statistical reference forecasts such as a linear t
 
 Suppose we have calculated two time series $\{s_{1,1}, s_{1,2}, \dots, s_{1,N}\}$ and $\{s_{2,1}, s_{2,2}, \dots, s_{2,N}\}$ of verification scores for two competing forecast systems for the same observation.
 \citet{diebold1995comparing} suggest to test the null-hypothesis of equal forecast accuracy using the time series $d_1, \dots, d_N$ of loss differentials $d_t = s_{1,t} - s_{2,t}$. 
+Define $\bar{d}$ to be the empirical average over $d_1, d_2, \cdots$.
 Under the assumption of temporal independence of $d_t$, and zero mean of the loss-differential, the test statistic 
 %
 \begin{equation}
@@ -510,26 +517,66 @@ rbind(
 
 \subsection{Correlation and correlation difference}
 
-The Pearson correlation coefficient is one of the most popular verification criteria, and can be calculated with the built-in \proglang{R} function \code{cor}.
-Since uncertainty quantification is often of interest, \pkg{SpecsVerification} provides the function \code{Corr}, which returns a correlation coefficient, a p-value and a confidence interval.
-The user can provide the confidence level for the confidence interval, an effective sample size to account for possible auto-correlation in the data:
-
+The Pearson (moment-product) correlation coefficient is one of the most popular verification criteria, and can be calculated with the built-in \proglang{R} function \code{cor}.
+Since uncertainty quantification is often of interest, \pkg{SpecsVerification} provides the function \code{Corr}, which returns the sample correlation coefficient $r_{xy}$, a one-sided p-value using the test statistic
+%
+\begin{equation}
+T_{cor} = \sqrt{(N-2) \frac{r_{xy}^2}{1 - r_{xy}^2}}
+\end{equation}
+%
+which has a Student's t-distribution with $N-2$ degrees of freedom under the null-hypothesis of zero correlation in the population.
+A confidence interval $[L,U]$ with a user-defined confidence coefficient $1-\alpha$ is calculated by
+%
+\begin{equation}
+[L, U] = \left[ tanh\left(z_{xy} + \frac{Z_{\alpha/2}}{\sqrt{N-3}}\right), tanh\left(z_{xy} + \frac{Z_{1-\alpha/2}}{\sqrt{N-3}}\right)\right]\label{eq:fisherCi}
+\end{equation} 
+%
+where $z_{xy} = atanh(r_{xy})$ is the Fisher transformation of the correlation coefficient, and $Z_p$ is the $p$-quantile of the standard Normal distribution.
+An effective sample size to account for possible auto-correlation can be specified.
+%
 <<>>=
 ens.mean <- rowMeans(ens)
 Corr(ens.mean, obs)
 @
 
 
-It is often of interest to compare the correlation coefficients between two forecasts that were issued for the same observation.
-The actual difference in correlation is of interest, as well as an estimation of the statistical significance of the correlation difference.
-\pkg{SpecsVerification} implements the function \code{CorrDiff} that returns the difference between the correlation of the forecast ensemble \code{ens} and the correlation of a reference forecast ensemble \code{ens.ref}, both of which were issued for the same observation \code{obs}.
-The function calculates a p-value using the test by \citet{steiger1980tests} and a confidence interval based on \citet{zou2007toward} are calculated.
-Both methods take into account correlation between the two competing forecasts.
+It is often of interest to compare the correlation coefficients between two forecasts for the same observation by calculating the correlation difference.
+\pkg{SpecsVerification} implements the function \code{CorrDiff} that returns the difference between the correlation $r_{by}$ of the forecast B and the correlation $r_{by}$ of a reference forecast A, both of which were issued for the same observation Y.
+The function calculates a one-sided p-value using the test by \citet{steiger1980tests}:
+Denote by $r_{ab}$ the correlation between forecast A and forecast B.
+The determinant of the sample correlation matrix of the two forecasts and the observation is calculated:
+%
+\begin{equation}
+R  = (1 - r_{ay}^2 - r_{by}^2 - r_{ab}^2) + (2 r_{ay} r_{by} r_{ab})
+\end{equation}
+%
+The test statistic
+%
+\begin{equation}
+T_{cordiff}  = (r_{by} - r_{ay}) \sqrt{\frac{(N-1)(1+r_{ab})}{2\left(\frac{N-1}{N-3}\right) R+\frac{1}{4}(r_{ay}+r_{by})^2 (1-r_{ab})^3}}\label{eq:T2}
+\end{equation}
+%
+has a Student's $t$-distribution with $N-3$ degrees of freedom under the null-hypothesis that A and B have equal correlations.
+Furthermore, a confidence interval based on \citet{zou2007toward} are calculated.
+First estimate the correlation between the correlation coefficients $r_{ay}$ and $r_{by}$ by
+%
+\begin{equation}
+c_{ab} = \frac{\left(r_{ab} - \frac{1}{2}  r_{ay}  r_{by}\right)  \left(1 - r_{ay}^2 - r_{by}^2 - r_{ab}^2\right) + r_{ab}^3}{(1-r_{ay}^2)(1-r_{by}^2)},
+\end{equation}
+%
+Then calculate $(1-\alpha)\times 100\%$ confidence intervals $(l_a, u_a)$ for $r_{ay}$ and $(l_b, u_b)$ for $r_{by}$, using the Fisher transformation as in eq.~\ref{eq:fisherCi}.
+An approximate $(1-\alpha)\times 100\%$ confidence interval $(L,U)$ for the correlation difference $r_{by} - r_{ay}$ is then given by
+%
+\begin{align}
+L & = (r_{by} - r_{ay}) - \sqrt{(r_{by} - l_b)^2 + (u_a-r_{ay})^2 - 2  c_{ab}  (r_{by} - l_b) 
+(u_a - r_{ay})},\nonumber\\
+U & =  (r_{by} - r_{ay}) + \sqrt{(u_{b} - r_{by})^2 + (r_{ay}-l_a)^2 - 2 c_{ab} (u_b-r_{by})(r_{ay}-l_a)}.\label{eq:zou}
+\end{align}
+
 For illustration, we evaluate the difference in correlation between the ensemble mean forecast and the persistence forecast:
-
-
+%
 <<>>=
-CorrDiff(ens.mean, obs.lag, obs)
+CorrDiff(fcst=ens.mean, fcst.ref=obs.lag, obs=obs)
 @
 
 
