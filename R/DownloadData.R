@@ -109,6 +109,7 @@ obs <- obs.tmp
 
 # lagged observation for use in data set
 obs.lag <- c(obs.prev, obs[1:(length(obs)-1)])
+names(obs.lag) <- names(obs)
 
 
 # save

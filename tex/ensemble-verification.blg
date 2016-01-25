@@ -3,47 +3,45 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: ensemble-verification.aux
 The style file: jss.bst
 Database file #1: ensemble-verification.bib
-Warning--I didn't find a database entry for "siegert2015ignorance"
 Reallocated wiz_functions (elt_size=8) to 6000 items from 3000.
-You've used 20 entries,
+You've used 24 entries,
             3140 wiz_defined-function locations,
-            811 strings with 9515 characters,
-and the built_in function-call counts, 16055 in all, are:
-= -- 1380
-> -- 332
-< -- 18
-+ -- 127
-- -- 105
-* -- 1297
-:= -- 2183
-add.period$ -- 118
-call.type$ -- 20
-change.case$ -- 115
-chr.to.int$ -- 20
-cite$ -- 20
-duplicate$ -- 1445
-empty$ -- 1505
-format.name$ -- 167
-if$ -- 3271
+            847 strings with 10682 characters,
+and the built_in function-call counts, 21926 in all, are:
+= -- 1871
+> -- 559
+< -- 19
++ -- 216
+- -- 186
+* -- 1854
+:= -- 2988
+add.period$ -- 142
+call.type$ -- 24
+change.case$ -- 159
+chr.to.int$ -- 24
+cite$ -- 24
+duplicate$ -- 1940
+empty$ -- 2010
+format.name$ -- 258
+if$ -- 4460
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 233
-newline$ -- 151
-num.names$ -- 80
-pop$ -- 412
+missing$ -- 297
+newline$ -- 180
+num.names$ -- 96
+pop$ -- 532
 preamble$ -- 1
-purify$ -- 115
+purify$ -- 158
 quote$ -- 0
-skip$ -- 331
+skip$ -- 394
 stack$ -- 0
-substring$ -- 1344
-swap$ -- 610
+substring$ -- 1961
+swap$ -- 767
 text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 174
+type$ -- 210
 warning$ -- 0
-while$ -- 129
+while$ -- 174
 width$ -- 0
-write$ -- 349
-(There was 1 warning)
+write$ -- 419

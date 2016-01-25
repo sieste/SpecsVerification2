@@ -1,4 +1,4 @@
-.DEFAULT_GOAL := nothing
+.DEFAULT_GOAL := paper
 ROOT_DIR = $(shell pwd)
 
 
@@ -23,7 +23,6 @@ R_libtmp = $(R_DIR)/libtmp
 
 
 
-nothing:
 paper: $(PDF_FILE)
 r-package: $(R_PKG_tgz)
 tex-file: $(TEX_FILE)

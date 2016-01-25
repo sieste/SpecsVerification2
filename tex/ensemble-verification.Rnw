@@ -2,6 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{dsfont}
+\usepackage{tabularx}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -10,18 +11,16 @@
 %% almost as usual
 \author{Stefan Siegert\\University of Exeter}
 \title{Forecast Verification Methods Implemented in the \proglang{R} package \pkg{SpecsVerification}: Ensemble Scores, Comparative Verification, and Uncertainty Quantification}
-
-%% for pretty printing and a nice hypersummary also set:
-\Plainauthor{Stefan Siegert} %% comma-separated
-\Plaintitle{SpecsVerification: New R Functions for Verification of Ensemble Forecasts}
 \Shorttitle{\pkg{SpecsVerification}: R Functions for Ensemble Verification} %% a short title (if necessary)
+\Plainauthor{Stefan Siegert} %% comma-separated
+\Plaintitle{Forecast Verification Methods Implemented in the R package SpecsVerification: Ensemble Scores, Comparative Verification, and Uncertainty Quantification}
 
 %% an abstract and keywords
 \Abstract{
-
+WRITE ABSTRACT
 }
-\Keywords{keywords, comma-separated, not capitalized, \proglang{Java}}
-\Plainkeywords{keywords, comma-separated, not capitalized, Java} %% without formatting
+\Keywords{keywords, comma-separated, not capitalized, \proglang{R}}
+\Plainkeywords{keywords, comma-separated, not capitalized, R} %% without formatting
 %% at least one keyword must be supplied
 
 %% publication information
@@ -122,6 +121,41 @@ If the score was calculated from a finite number of forecast-observation pairs, 
 
 
 
+\section{Short description and applications of SpecsVerification functions}
+
+\begin{tabular}{lll}
+Function & Long name & Applies to: \\
+\hline\hline
+\code{AbsErr} & Absolute error Score$^*$ & \vtop{\hbox{\strut Deterministic forecasts of continuous}\hbox{\strut observations}}\\
+\code{Auc} & Area under the ROC curve & \vtop{\hbox{\strut Probability forecasts of binary}\hbox{\strut observations}}\\
+\code{AucDiff} & \vtop{\hbox{\strut Difference between two areas}\hbox{\strut under the ROC curve}} & \vtop{\hbox{\strut Two competing probability forecasts}\hbox{\strut for the same binary observations}}\\
+\code{ClimEns} & Climatological ensemble & n/a \\
+\code{Corr} & Correlation coefficient & \vtop{\hbox{\strut Deterministic forecasts of continuous}\hbox{\strut observations}}\\
+\code{CorrDiff} & \vtop{\hbox{\strut Difference between two}\hbox{\strut correlation coefficients}} & \vtop{\hbox{\strut Two competing deterministic forecasts}\hbox{\strut for the same continuous observations }}\\
+\code{EnsBrier} & Ensemble-adjusted Brier score$^*$ & \vtop{\hbox{\strut Ensemble forecast of binary}\hbox{\strut observations }}\\
+\code{EnsCrps} & \vtop{\hbox{\strut Ensemble-adjusted continuous}\hbox{\strut ranked probability score$^*$}} & \vtop{\hbox{\strut Ensemble forecasts of continuous}\hbox{\strut observations}}\\
+\code{EnsRps} & \vtop{\hbox{\strut Ensemble-adjusted ranked}\hbox{\strut probability score$^*$}} & \vtop{\hbox{\strut Ensemble forecasts of categorical}\hbox{\strut observations }}\\
+\code{EnsQs} & \vtop{\hbox{\strut Ensemble-adjusted quadratic}\hbox{\strut score$^*$}} & \vtop{\hbox{\strut Ensemble forecasts of categorical}\hbox{\strut observations}}\\
+\code{GaussCrps} & \vtop{\hbox{\strut Continuous ranked probability}\hbox{\strut score for Normal distributions$^*$}} & \vtop{\hbox{\strut Probability forecasts of continuous}\hbox{\strut observations}}\\
+\code{PlotRankhist} & Plot a rank histogram & n/a \\
+\code{Rankhist} & Calculate a rank histogram & \vtop{\hbox{\strut Ensemble forecasts of continuous}\hbox{\strut observations }}\\
+\code{ReliabilityDiagram} & \vtop{\hbox{\strut Calculate and plot a}\hbox{\strut reliability diagram}} & \vtop{\hbox{\strut Probability forecasts of binary}\hbox{\strut observations }}\\
+\code{ScoreDiff} & \vtop{\hbox{\strut Calculate a score difference}\hbox{\strut and assess uncertainty}} & All scores marked with a $^*$\\
+\code{SkillScore} & \vtop{\hbox{\strut Calculate a skill score}\hbox{\strut and assess uncertainty}} & All scores marked with a $^*$\\
+\code{TestRankhist} & \vtop{\hbox{\strut Statistical tests of}\hbox{\strut a rank histogram}} & n/a \\
+\code{SqErr} & Squared error score$^*$ & \vtop{\hbox{\strut Deterministic forecasts of continuous}\hbox{\strut observations}}\\
+\end{tabular}
+
+
+\section{Forecast and observation data}
+
+
+ 
+Included in \pkg{SpecsVerification} is a data set \code{eurotempforecast} of seasonal temperature ensemble forecasts and verifying observations.
+The forecasts 24-member ensembles of near-surface air temperatures produced by the NCEP climate forecast system version 2 \citep{saha2014ncep}, initialised between 11 April and 6 May each year from 1983--2009 ($N=27$), and averaged over the region limited by latitudes $30^\circ$N -- $75^\circ$N and longitudes $12.5^\circ$W -- $42.5^\circ$E, and over the months June-July-August, i.e., the lead time is about 1--3 months.
+Data from the NCEP climate forecast system reanalysis \citep{saha2010ncep} was taken as verifying observations.
+All data was downloaded through the ECOMS user data gateway R-interface \citep{ecoms2015}.
+Ensemble members and observation data are plotted as time series in Figure \ref{gfs-plot}.
 
 <<label=load-data>>=
 data(eurotempforecast)
@@ -129,6 +163,7 @@ R   <- ncol(ens)
 yrs <- as.numeric(names(obs))
 N   <- length(obs)
 @
+
 
 
 \begin{figure}
@@ -141,24 +176,44 @@ points(yrs, obs, pch=15, cex=1.5)
 @
 %
 \end{center}
-\caption{Seasonal European temperature forecasts by NCEP CFSv2, initialised in May, verified in JJA.}
+\caption{Seasonal European temperature ensemble forecasts (circles) and verifying observations (squares).}
 \label{gfs-plot}
 \end{figure}
 
 
-\section{Ensemble-adjusted verification scores}
+All functions in \pkg{SpecsVerification} that analyse ensemble forecast data, assume that archives of $N$ instances of $R$-member ensemble forecasts, are represented by $N\times R$ matrices.
+The data shown in Figure \ref{gfs-plot} depicts 27 years or 24-member ensemble forecasts, and is thus a \proglang{R} matrix with $27$ rows and $24$ columns.
 
-\subsection{Representation of ensemble and observation data}
+In addition to the real-valued forecasts (matrix \code{ens}) and real-valued observations (vector \code{obs}), binary and categorical forecasts and observations are provided, saved in the variables \code{ens.bin}, \code{obs.bin}, \code{ens.cat}, and \code{obs.cat}.
+The binary forecasts, saved in matrix \code{ens.bin} were generated by considering the question "Will this year's summer be warmer than last year's"?
+The binary observation at index $t$ is equal to one if the temperature in the corresponding year exceeds the temperature of the previous year, and the binary observation is zero otherwise.
+The individual ensemble members were transformed equivalently, by comparing the $r$th ensemble member in year $t$ to the observation in year $t-1$.
+Categorical forecasts and observations were generated by addressing the question "Will this year's temperature be similar to last year's temperature (within a 0.5K range), colder, or warmer?"
+Each ensemble member and the observation thus falls into one of 3-categories: Category 1 indicates a temperature that is less than $0.25K$ colder than the previous year's observed temperature, category 2 indicates a temperature that is within $\pm 0.25K$ of the previous year's temperature, and category 3 indicates more than $0.25K$ warmer.
+In addition, the vector \code{obs.lag} is provided with 1-year lagged observations.
 
-In \pkg{SpecsVerification}, archives of $N$ instances of ensemble forecasts, each with $R$ members, are represented by $N\times R$ matrices.
-The data shown in Figure \ref{gfs-plot} depicts 27 years or 24-member ensemble forecasts, i.e., a matrix with dimensions
+As an example, the observation in the year 2000, i.e., the lagged observation for year 2001, is
 
 <<>>=
-dim(ens)
+obs.lag["2001"]
+@
+
+The continuous observation and forecasts, and the derived binary and categorical observations and forecasts for the year 2001 are thus
+
+<<>>=
+rbind(
+continuous = c(obs=obs["2001"], ens["2001", 1:5]),
+binary     = c(obs=obs.bin["2001"], ens.bin["2001", 1:5]),
+categorical = c(obs=obs.cat["2001"], ens.cat["2001", 1:5]))
 @
 
 
-\subsection{Binary forecasts}
+
+\section{Ensemble-adjusted verification scores}
+
+
+
+\subsection{Binary ensemble forecasts}
 
 This section outlines the theory behind ensemble-adjusted verification scores, using probabilistic forecasts of binary events for illustration.  
 
@@ -225,7 +280,6 @@ The \pkg{SpecsVerification} function \code{EnsBrier} calculates the ensemble-adj
 The argument \code{R.new} allows for estimation of the score of an arbitrary ensemble size, including \code{R.new=Inf}.
 
 
-We have transformed the continuous temperature data into binary forecasts by addressing the question "Will this year's summer be warmer than last year's"?
 To illustrate the finite ensemble effect and highlight the benefit of the finite-ensemble adjustment, we randomly split the 24-member forecast ensemble into a small 5-member ensemble and a larger 19-member ensemble.
 We then calculate their unadjusted Brier scores:
 
@@ -244,9 +298,14 @@ c(small.ens=mean(EnsBrier(ens.bin[, i.small], obs.bin, R.new=19)),
   large.ens=mean(EnsBrier(ens.bin[, i.large], obs.bin, R.new=19)))
 @
 
-The scores are very similar; we are able to estimate the score of the 19-member ensemble, using only a 5-member ensemble.
+The scores are very similar thus confirming that it is possible to estimate the score of the 19-member ensemble, using only a 5-member ensemble.
 How big is the estimated improvement if we could further increase the ensemble size?
 We show this in Figure \ref{fig:ens-brier}, where we plot the ensemble adjusted Brier score over the adjusted ensemble size $R^*$.
+The Brier score estimated for $R^*=\infty$ is
+
+<<>>=
+mean(EnsBrier(ens.bin, obs.bin, R.new=Inf))
+@
 
 
 \begin{figure}
@@ -263,7 +322,7 @@ matplot(cbind(2:60, 2:60), t(brier), type="l", col="black", lty=c(1,2), xlab="R*
 \end{figure}
 
 
-\subsection{Categorical forecasts}
+\subsection{Categorical ensemble forecasts}
 
 
 Assume the ensemble forecasting system produces an ensemble of categorical rather than binary forecasts.
@@ -319,37 +378,39 @@ The functions \code{EnsQs} and \code{EnsRps} assume as inputs true categorical e
 
 
 
-We have transformed the continuous ensemble forecasts into categorical forecasts by addressing the question "Will this year's summer temperature be similar to last year's temperature (within a 0.5K range), colder, or warmer?"
-For example, the categorical prediction and observation for the year 2000 is
-
-<<>>=
-matrix(c(obs.cat["2000"], ens.cat["2000",]), ncol=1)
-@
-
-This transforms the forecast problem into a 3-category problem, which we first evaluate by the ensemble-adjusted quadratic score:
-
-<<>>=
-mean(EnsQs(ens.cat, obs.cat))
-@
+To illustrate the finite-ensemble effect and its adjustment, we randomly split the entire ensemble into a small 5-member ensemble and a larger 19-member ensemble. We then evaluate the unadjusted quadratic score of the full 24-member ensemble, the unadjusted scores of the small and large sub-ensembles, as well as the quadratic scores of the two sub-ensembles adjusted for the size of the full ensemble:
 
 <<>>=
 i.small <- sample(1:R, 5)
 i.large <- setdiff(1:R, i.small)
 rbind(
-small.ens=mean(EnsQs(ens.cat[, i.small], obs.cat)),
-large.ens=mean(EnsQs(ens.cat[, i.large], obs.cat)))
+ens           = mean(EnsQs(ens.cat,            obs.cat)),
+small.ens     = mean(EnsQs(ens.cat[, i.small], obs.cat)),
+large.ens     = mean(EnsQs(ens.cat[, i.large], obs.cat)),
+small.ens.adj = mean(EnsQs(ens.cat[, i.small], obs.cat, R.new=24)),
+large.ens.adj = mean(EnsQs(ens.cat[, i.large], obs.cat, R.new=24)))
 @
 
+The full-ensemble obtains a better score than either of the sub-ensembles.
+The large sub-ensemble performs better than the small sub-ensemble.
+When adjusting scores of the sub-ensembles to $R^*=24$ the scores of the sub-ensembles agree, and are close to the score of the full ensemble.
+
+Repeating the evaluation with the ranked probability score, we obtain
 
 <<>>=
 rbind(
-small.ens=mean(EnsRps(ens.cat[, i.small], obs.cat)),
-large.ens=mean(EnsRps(ens.cat[, i.large], obs.cat)))
+ens           = mean(EnsRps(ens.cat,            obs.cat)),
+small.ens     = mean(EnsRps(ens.cat[, i.small], obs.cat)),
+large.ens     = mean(EnsRps(ens.cat[, i.large], obs.cat)),
+small.ens.adj = mean(EnsRps(ens.cat[, i.small], obs.cat, R.new=24)),
+large.ens.adj = mean(EnsRps(ens.cat[, i.large], obs.cat, R.new=24)))
 @
 
+Again, the full ensemble outperforms both sub-ensembles, and the large sub-ensemble outperforms the small sub-ensemble.
+In this analysis, the scores do not agree that well after adjusting to $R^* = 24$.
+Recall that the equality of ensemble-adjusted scores is only in expectation, and empirical averages over finite hindcast data sets should be expected to differ.
 
-
-\subsection{Continuous forecasts}
+\subsection{Continuous ensemble forecasts}
 
 
 If the forecast target is a continuous variable, such as temperature or pressure, the continuous ranked probability score \citep{matheson1976scoring} can be used for forecast verification.
@@ -357,6 +418,7 @@ If the forecast for the continuous target $y_t$ is given as a cumulative distrib
 %
 \begin{equation}
 s_{C}(F_t, y_t) = \int_{-\infty}^\infty dz\ \left|F_t(z) - H(z-y_t)\right|^2
+\label{eq:crps}
 \end{equation}
 %
 where $H(x)$ is the Heaviside step-function, satisfying $H(x)=1$ for all $x\ge 0$ and $H(x)=0$ otherwise.
@@ -385,14 +447,10 @@ The ensemble-adjusted CRPS is implemented in the \pkg{SpecsVerification} functio
 
 <<>>=
 rbind(
-  unadjusted = mean(EnsCrps(ens, obs, R.new=NA)), 
+  unadjusted = mean(EnsCrps(ens, obs)), 
   fair       = mean(EnsCrps(ens, obs, R.new=Inf))
 )
 @
-
-
-The ensemble adjusted Ignorance score has recently been proposed \citep{siegert2015ignorance}.
-
 
 
 
@@ -421,7 +479,7 @@ We recommend also considering statistical reference forecasts such as a linear t
 
 
 
-\subsection{Mean scores and mean score differences}
+\subsection{Score differences}
 
 Suppose we have calculated two time series $\{s_{1,1}, s_{1,2}, \dots, s_{1,N}\}$ and $\{s_{2,1}, s_{2,2}, \dots, s_{2,N}\}$ of verification scores for two competing forecast systems for the same observation.
 \citet{diebold1995comparing} suggest to test the null-hypothesis of equal forecast accuracy using the time series $d_1, \dots, d_N$ of loss differentials $d_t = s_{1,t} - s_{2,t}$. 
@@ -438,32 +496,17 @@ The function includes the option to account for autocorrelation of the loss-diff
 
 <<>>=
 rbind(
-  brier = ScoreDiff(EnsBrier(ens.bin, obs.bin), 
+  brier = ScoreDiff(EnsBrier(ens.bin,     obs.bin), 
                     EnsBrier(ens.bin.ref, obs.bin)),
-  qs    = ScoreDiff(EnsQs(ens.cat, obs.cat),    
-                    EnsQs(ens.cat.ref, obs.cat)),
-  rps   = ScoreDiff(EnsRps(ens.cat, obs.cat),   
-                    EnsRps(ens.cat.ref, obs.cat)),
-  crps  = ScoreDiff(EnsCrps(ens, obs),          
-                    EnsCrps(ens.ref, obs))
+  qs    = ScoreDiff(EnsQs(   ens.cat,     obs.cat),    
+                    EnsQs(   ens.cat.ref, obs.cat)),
+  rps   = ScoreDiff(EnsRps(  ens.cat,     obs.cat),   
+                    EnsRps(  ens.cat.ref, obs.cat)),
+  crps  = ScoreDiff(EnsCrps( ens,         obs),          
+                    EnsCrps( ens.ref,     obs))
 )
 @
 
-
-How do the score differences change if adjust the ensemble size to infinity?
-
-<<>>=
-rbind(
-  brier = ScoreDiff(EnsBrier(ens.bin,     obs.bin, R.new=Inf), 
-                    EnsBrier(ens.bin.ref, obs.bin, R.new=Inf)),
-  qs    = ScoreDiff(EnsQs(ens.cat,     obs.cat, R.new=Inf), 
-                    EnsQs(ens.cat.ref, obs.cat, R.new=Inf)),
-  rps   = ScoreDiff(EnsRps(ens.cat,     obs.cat, R.new=Inf), 
-                    EnsRps(ens.cat.ref, obs.cat, R.new=Inf)),
-  crps  = ScoreDiff(EnsCrps(ens,     obs, R.new=Inf),  
-                    EnsCrps(ens.ref, obs, R.new=Inf))
-)
-@
 
 
 \subsection{Skill scores}
@@ -499,33 +542,19 @@ rbind(
 )
 @
 
-The skill scores increase slightly if we adjust the ensemble size to $R^* \to \infty$ for the ensemble forecasts and the climatological reference forecast:
-
-<<>>=
-rbind(
-  brier = SkillScore(EnsBrier(ens.bin, obs.bin, R.new=Inf), 
-                     EnsBrier(ens.bin.ref, obs.bin, R.new=Inf)),
-  qs    = SkillScore(EnsQs(ens.cat, obs.cat, R.new=Inf), 
-                     EnsQs(ens.cat.ref, obs.cat, R.new=Inf)),
-  rps   = SkillScore(EnsRps(ens.cat, obs.cat, R.new=Inf), 
-                     EnsRps(ens.cat.ref, obs.cat, R.new=Inf)),
-  crps  = SkillScore(EnsCrps(ens, obs, R.new=Inf), 
-                     EnsCrps(ens.ref, obs, R.new=Inf))
-)
-@
-
 
 \subsection{Correlation and correlation difference}
 
-The Pearson (moment-product) correlation coefficient is one of the most popular verification criteria, and can be calculated with the built-in \proglang{R} function \code{cor}.
-Since uncertainty quantification is often of interest, \pkg{SpecsVerification} provides the function \code{Corr}, which returns the sample correlation coefficient $r_{xy}$, a one-sided p-value using the test statistic
+The Pearson (product-moment) correlation coefficient is one of the most popular verification criteria, and can be calculated with the built-in \proglang{R} function \code{cor}.
+Since uncertainty quantification is often of interest in forecast verification, \pkg{SpecsVerification} provides the function \code{Corr}, which returns the sample correlation coefficient $r_{xy}$, a one-sided p-value and a confidence interval.
+The p-value is calculated based on the test statistic
 %
 \begin{equation}
 T_{cor} = \sqrt{(N-2) \frac{r_{xy}^2}{1 - r_{xy}^2}}
 \end{equation}
 %
-which has a Student's t-distribution with $N-2$ degrees of freedom under the null-hypothesis of zero correlation in the population.
-A confidence interval $[L,U]$ with a user-defined confidence coefficient $1-\alpha$ is calculated by
+which has a Student's t-distribution with $N-2$ degrees of freedom under the null-hypothesis of zero correlation in the population. 
+The confidence interval $[L,U]$ with a user-defined confidence coefficient $1-\alpha$, calculated by
 %
 \begin{equation}
 [L, U] = \left[ tanh\left(z_{xy} + \frac{Z_{\alpha/2}}{\sqrt{N-3}}\right), tanh\left(z_{xy} + \frac{Z_{1-\alpha/2}}{\sqrt{N-3}}\right)\right]\label{eq:fisherCi}
@@ -536,7 +565,7 @@ An effective sample size to account for possible auto-correlation can be specifi
 %
 <<>>=
 ens.mean <- rowMeans(ens)
-Corr(ens.mean, obs)
+Corr(ens.mean, obs, conf.level=0.95)
 @
 
 
@@ -557,7 +586,7 @@ T_{cordiff}  = (r_{by} - r_{ay}) \sqrt{\frac{(N-1)(1+r_{ab})}{2\left(\frac{N-1}{
 \end{equation}
 %
 has a Student's $t$-distribution with $N-3$ degrees of freedom under the null-hypothesis that A and B have equal correlations.
-Furthermore, a confidence interval based on \citet{zou2007toward} are calculated.
+Furthermore, a confidence interval based on \citet{zou2007toward} is calculated.
 First estimate the correlation between the correlation coefficients $r_{ay}$ and $r_{by}$ by
 %
 \begin{equation}
@@ -576,8 +605,10 @@ U & =  (r_{by} - r_{ay}) + \sqrt{(u_{b} - r_{by})^2 + (r_{ay}-l_a)^2 - 2 c_{ab} 
 For illustration, we evaluate the difference in correlation between the ensemble mean forecast and the persistence forecast:
 %
 <<>>=
-CorrDiff(fcst=ens.mean, fcst.ref=obs.lag, obs=obs)
+CorrDiff(fcst=ens.mean, fcst.ref=obs.lag, obs=obs, conf.level=0.95)
 @
+%
+The one-sided p-value is small and the value of zero correlation is close to the boundary of the 95\% confidence interval, which provides ample evidence that the seasonal forecast has higher correlation skill than the persistence forecast.
 
 
 \subsection{Area under the curve (AUC) and AUC differences}
@@ -651,8 +682,8 @@ The following evaluates the AUC difference between the large and a small ensembl
 AucDiff(rowMeans(ens.bin[, i.large]), rowMeans(ens.bin[, i.small]), obs.bin)
 @
 %
-The AUC difference is within sampling variability.
-We expect ensemble size to effect AUC, but we are not aware of published results to adjust the AUC.
+The AUC difference is within sampling variability, and we remain uncertain about whether the larger ensemble improves the AUC.
+In general, we expect ensemble size to effect AUC, but we are not aware of published ensemble-adjustments for the AUC. 
 
 
 
@@ -727,11 +758,12 @@ has a $\chi^2$-distribution with $R$ degrees of freedom.
 
 
 \citet{hamill2001interpretation} showed that certain types of violation of ensemble reliability are visible as different patterns in the rank histogram.
-In particular, a constant bias of the mean produces sloped rank histograms, and ensembles with insufficient (excessive) ensemble spread produce $\cup$-shaped ($\cap$-shaped) rank histogram.
+In particular, a systematic bias of the ensemble mean produces sloped rank histograms, and ensembles with insufficient (excessive) ensemble spread produce $\cup$-shaped ($\cap$-shaped) rank histogram.
 \citet{jolliffe2008evaluating} showed that the $\chi^2$-test statistic can be decomposed to test for sloped and convex rank histograms specifically, thus increasing the power of the test.
 The test requires the definition of suitable contrast vectors $\mathbf{c}$ of length $R+1$, that satisfy $\sum_i c_i = 0$, $\sum_i c_i^2 = 1$, and $\sum_i c_i c_i' = 0$ for every pair of contrasts $\mathbf{c}$ and $\mathbf{c}'$.
 Assuming a number of up to $R$ contrast vectors $\mathbf{c}^{(1)}$, $\mathbf{c}^{(2)}$, $\dots$, the test statistics $(\sum_i c^{(k)}_i x_i)^2$ are independently $\chi^2$ distributed with one d.o.f. 
-The function \code{TestRankhist} uses a linear and a squared contrast. Defining $J=R+1$, the $i$-th element of the contrast vectors $\mathbf{c}^{(lin)}$ and $\mathbf{c}^{(sq)}$, for $i=1,\cdots,J$ are given by
+The function \code{TestRankhist} applies this test, using a linear and a squared contrast. 
+Defining $J=R+1$, the $i$-th element of the contrast vectors $\mathbf{c}^{(lin)}$ and $\mathbf{c}^{(sq)}$, for $i=1,\cdots,J$ are given by
 %
 \begin{align}
 c^{(lin)}_i & = -\sqrt{\frac{3(J+1)}{J (J-1)}} + i \sqrt{\frac{12}{J^3 - J}}\text{, and}\\
@@ -794,8 +826,8 @@ The focus of \pkg{SpecsVerification}, and of the present paper, is on verificati
 For verification of deterministic forecasts $x_t$ , e.g. the ensemble mean forecast, the squared error score $(x_t - y_t)^2$ (function \code{SqErr}), and the Absolute Error score $|x_t - y_t|$ (function \code{AbsErr}) have been implemented, and can be analysed by the functions \code{ScoreDiff} and \code{SkillScore}.
 
 
-
-
+The function \code{GaussCrps} calculates the CRPS (eq.~\ref{eq:crps}) where the forecast cdf $F_t(x)$ is a Normal distribution with mean $\mu_t$ and standard deviation $\sigma^2_t$.
+The CRPS integral can then be solved analytically \citep{gneiting2005calibrated} thus eliminating the need for expensive numerical integration.
 
 
 \section{Conclusion}
