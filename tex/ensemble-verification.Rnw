@@ -830,6 +830,13 @@ The function \code{GaussCrps} calculates the CRPS (eq.~\ref{eq:crps}) where the 
 The CRPS integral can then be solved analytically \citep{gneiting2005calibrated} thus eliminating the need for expensive numerical integration.
 
 
+Ensemble dressing: \code{DressEnsemble}, \code{FitAkdParameters}, \code{EnsCrps}
+
+
+
+
+
+
 \section{Conclusion}
 
 \section*{Acknowledgments}
