@@ -1088,7 +1088,24 @@ The function \code{GaussCrps} calculates the CRPS (eq.~\ref{eq:crps}) where the 
 The CRPS integral can then be solved analytically \citep{gneiting2005calibrated} thus eliminating the need for expensive numerical integration.
 
 
-Ensemble dressing: \code{DressEnsemble}, \code{FitAkdParameters}, \code{EnsCrps}
+Ensemble dressing: \code{DressEnsemble}, \code{FitAkdParameters}, \code{EnsCrps}, \code{GetDensity}, \code{DressIgn}, \code{PlotDressedEns}
+
+Auxiliary: \code{Detrend}, \code{GenerateToyData}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{with}(\hlfunctioncall{GenerateToyData}(N=20, mu.y=0, s.s=\hlfunctioncall{sqrt}(.5), s.eps=\hlfunctioncall{sqrt}(.5), 
+                     mu.x=0, beta=\hlfunctioncall{sqrt}(0.5), s.eta=\hlfunctioncall{sqrt}(0.75), K=10, 
+                     mu.x.ref=0, beta.ref=0, s.eta.ref=1, K.ref=20), 
+     \hlfunctioncall{ScoreDiff}(\hlfunctioncall{EnsCrps}(ens, obs), \hlfunctioncall{EnsCrps}(ens.ref, obs)))
+\end{alltt}
+\begin{verbatim}
+##    score.diff score.diff.sd       p.value             L             U 
+##       0.10006       0.07700       0.09690      -0.05087       0.25098
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 
 
 

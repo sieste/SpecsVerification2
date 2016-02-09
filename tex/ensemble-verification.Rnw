@@ -830,8 +830,16 @@ The function \code{GaussCrps} calculates the CRPS (eq.~\ref{eq:crps}) where the 
 The CRPS integral can then be solved analytically \citep{gneiting2005calibrated} thus eliminating the need for expensive numerical integration.
 
 
-Ensemble dressing: \code{DressEnsemble}, \code{FitAkdParameters}, \code{EnsCrps}
+Ensemble dressing: \code{DressEnsemble}, \code{FitAkdParameters}, \code{EnsCrps}, \code{GetDensity}, \code{DressIgn}, \code{PlotDressedEns}
 
+Auxiliary: \code{Detrend}, \code{GenerateToyData}
+
+<<label=plot-dressed-ens>>=
+with(GenerateToyData(N=20, mu.y=0, s.s=sqrt(.5), s.eps=sqrt(.5), 
+                     mu.x=0, beta=sqrt(0.5), s.eta=sqrt(0.75), K=10, 
+                     mu.x.ref=0, beta.ref=0, s.eta.ref=1, K.ref=20), 
+     ScoreDiff(EnsCrps(ens, obs), EnsCrps(ens.ref, obs)))
+@
 
 
 
