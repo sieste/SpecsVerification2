@@ -1,17 +1,16 @@
 \BOOKMARK [1][-]{Section.0.Introduction.1}{Introduction}{}% 1
-\BOOKMARK [1][-]{Section.1.Short description and applications of SpecsVerification functions.1}{Short description and applications of SpecsVerification functions}{}% 2
-\BOOKMARK [1][-]{Section.2.Forecast and observation data.1}{Forecast and observation data}{}% 3
-\BOOKMARK [1][-]{Section.3.Ensemble-adjusted verification scores.1}{Ensemble-adjusted verification scores}{}% 4
-\BOOKMARK [2][-]{Subsection.4.0.Binary ensemble forecasts.2}{Binary ensemble forecasts}{Section.3.Ensemble-adjusted verification scores.1}% 5
-\BOOKMARK [2][-]{Subsection.4.1.Categorical ensemble forecasts.2}{Categorical ensemble forecasts}{Section.3.Ensemble-adjusted verification scores.1}% 6
-\BOOKMARK [2][-]{Subsection.4.2.Continuous ensemble forecasts.2}{Continuous ensemble forecasts}{Section.3.Ensemble-adjusted verification scores.1}% 7
-\BOOKMARK [1][-]{Section.4.Comparative verification and uncertainty quantification.1}{Comparative verification and uncertainty quantification}{}% 8
-\BOOKMARK [2][-]{Subsection.5.0.Reference forecast.2}{Reference forecast}{Section.4.Comparative verification and uncertainty quantification.1}% 9
-\BOOKMARK [2][-]{Subsection.5.1.Score differences.2}{Score differences}{Section.4.Comparative verification and uncertainty quantification.1}% 10
-\BOOKMARK [2][-]{Subsection.5.2.Skill scores.2}{Skill scores}{Section.4.Comparative verification and uncertainty quantification.1}% 11
-\BOOKMARK [2][-]{Subsection.5.3.Correlation and correlation difference.2}{Correlation and correlation difference}{Section.4.Comparative verification and uncertainty quantification.1}% 12
-\BOOKMARK [2][-]{Subsection.5.4.Area under the curve (AUC) and AUC differences.2}{Area under the curve \(AUC\) and AUC differences}{Section.4.Comparative verification and uncertainty quantification.1}% 13
-\BOOKMARK [1][-]{Section.5.Rank histogram analysis for ensemble forecasts.1}{Rank histogram analysis for ensemble forecasts}{}% 14
-\BOOKMARK [1][-]{Section.6.Reliability diagrams for probability forecasts.1}{Reliability diagrams for probability forecasts}{}% 15
-\BOOKMARK [1][-]{Section.7.Additional functions.1}{Additional functions}{}% 16
-\BOOKMARK [1][-]{Section.8.Conclusion.1}{Conclusion}{}% 17
+\BOOKMARK [1][-]{Section.1.Forecast and observation data.1}{Forecast and observation data}{}% 2
+\BOOKMARK [1][-]{Section.2.Ensemble-adjusted verification scores.1}{Ensemble-adjusted verification scores}{}% 3
+\BOOKMARK [2][-]{Subsection.3.0.Binary ensemble forecasts.2}{Binary ensemble forecasts}{Section.2.Ensemble-adjusted verification scores.1}% 4
+\BOOKMARK [2][-]{Subsection.3.1.Categorical ensemble forecasts.2}{Categorical ensemble forecasts}{Section.2.Ensemble-adjusted verification scores.1}% 5
+\BOOKMARK [2][-]{Subsection.3.2.Continuous ensemble forecasts.2}{Continuous ensemble forecasts}{Section.2.Ensemble-adjusted verification scores.1}% 6
+\BOOKMARK [1][-]{Section.3.Comparative verification and uncertainty quantification.1}{Comparative verification and uncertainty quantification}{}% 7
+\BOOKMARK [2][-]{Subsection.4.0.Reference forecast.2}{Reference forecast}{Section.3.Comparative verification and uncertainty quantification.1}% 8
+\BOOKMARK [2][-]{Subsection.4.1.Score differences.2}{Score differences}{Section.3.Comparative verification and uncertainty quantification.1}% 9
+\BOOKMARK [2][-]{Subsection.4.2.Skill scores.2}{Skill scores}{Section.3.Comparative verification and uncertainty quantification.1}% 10
+\BOOKMARK [2][-]{Subsection.4.3.Correlation and correlation difference.2}{Correlation and correlation difference}{Section.3.Comparative verification and uncertainty quantification.1}% 11
+\BOOKMARK [2][-]{Subsection.4.4.Area under the curve (AUC) and AUC differences.2}{Area under the curve \(AUC\) and AUC differences}{Section.3.Comparative verification and uncertainty quantification.1}% 12
+\BOOKMARK [1][-]{Section.4.Rank histogram analysis for ensemble forecasts.1}{Rank histogram analysis for ensemble forecasts}{}% 13
+\BOOKMARK [1][-]{Section.5.Reliability diagrams for probability forecasts.1}{Reliability diagrams for probability forecasts}{}% 14
+\BOOKMARK [1][-]{Section.6.Additional functions.1}{Additional functions}{}% 15
+\BOOKMARK [1][-]{Section.7.Conclusion.1}{Conclusion}{}% 16

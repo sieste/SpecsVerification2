@@ -122,58 +122,40 @@ The package documented in this paper is an updated, yet unpublished version of \
 
 \section{Introduction}
 
-{\bf Ensemble forecasting general}
+%{\bf Ensemble forecasting general}
 An ensemble forecast is a collection of forecasts for the same target.
-The ensemble members usually differ in the initial conditions, boundary conditions, model physics and background information.
-Ensemble forecasting is today operationally used to quantify forecast uncertainty.
-Since ensembles are composed of multiple runs of deterministic models, but are used to provide uncertainty information, they can be regarded as a hybrid of deterministic and probabilistic forecasts.
-To evaluate the quality of ensemble forecasts, the forecasts have to be compared to their verifying observations of the real world.
-
-
-
-{\bf Forecast verification general}
+The ensemble members usually differ due to differences in initial conditions, boundary conditions, model physics and background information \citep{gneiting2005atmospheric, leutbecher2008ensemble}.
+Ensemble forecasting is today operationally used in weather and climate forecasting to explore the chaotic divergence of nonlinear systems, and to estimate forecast uncertainty.
+To evaluate the reliability and predictive skill of ensemble forecasts, the forecasts have to be compared to their verifying observations of the real world.
+%
+%{\bf Forecast verification general}
 The comparison of forecasts with their verifying observations is commonly referred to as forecast verification \citep{jolliffe2012forecast}.
-A verification measure is thus a function that depends on the collection $D=\{x_t, y_t\}_{t=1}^N$ of past forecasts $x_t$ and verifying observations $y_t$.
-The collection $D$ is also called a hindcast data set.
-A scoring rule is a function $s(x_t, y_t)$ that assigns a real number to a forecast-observation pair.
-A general convention that the best possible forecast achieves a score of zero, and lower scores indicate ``better'' forecasts.
-The empirical score $1/N \sum_t s(x_t, y_t)$ can be used as a verification measure.
-There verification measures that are not scoring rules; examples include the correlation coefficient, and the area under the ROC curve.
-There are different scoring rules and verification measures for deterministic forecasts and probabilistic forecasts.
-Since ensembles are interpreted as a hybrid, both types of verification measures can be applied to ensembles.
+A verification measure is thus a function that depends on an archive $D=\{x_t, y_t\}_{t=1}^N$ of past forecasts $x_t$ and verifying observations $y_t$.
+The archive $D$ is also called a hindcast data set.
+A variety of verification measures exists to assess the quality of different forecast products, such as deterministic forecasts, probabilistic forecasts, ensemble forecasts, univariate or multivariate forecasts, and gridded or unevenly spaced spatial forecasts.
 
 
-{\bf Finite size effect in ensemble verification}
-It is known that verification measures can depend on the ensemble size.
-In general, large ensembles achieve better average verification scores than small ensembles, when both ensembles come from the same ensemble forecasting system \citep{buizza1998impact}.
-In hindcast experiments it is often desirable to estimate the finite-ensemble effect on the verification score. 
-For example, an experimental model configuration might be run at a small ensemble size to save computational resources. 
-The skill calculated for the hindcast experiment is not representative of the skill that an operational ensemble with many members would achieve.
-A number of verification scores have been proposed in the past to estimate the finite ensemble effect, and correct it.
-These will be summarised in the present paper, and are implemented as R functions in the package \pkg{SpecsVerification}.
-
-
-{\bf Comparative verification}
-The value of a verification score is often of little interest by itself.
-If the value of the score is not zero, we know that the forecast was not perfect.
-But a score different from zero is often difficult to interpret without a reference point.
-For this reason, forecasts should be evaluated in a comparative way, by subjecting the forecast of interest to a simple reference forecast, such as the climatological average, or a simple time-series model.
-If the forecast is able to achieve a better score than the reference forecast, there is non-trivial information in the forecast.
-Forecast verification therefore often includes comparative measures of forecast performance.
-The package \pkg{SpecsVerification} includes functions to compare forecast verification scores.
-
-
-{\bf Uncertainty quantification}
-If the score was calculated from a finite number of forecast-observation pairs,  the value of a verification score is of little use without a measure of uncertainty.
+%{\bf Finite size effect in ensemble verification}
+The \proglang{R} package \pkg{SpecsVerification} documented in this paper focuses primarily on verification scores for ensemble forecasts.
+It is known that verification measures can depend systematically on the ensemble size; everything else being equal, large ensembles achieve better average scores than small ensembles \citep{buizza1998impact}.
+Since hindcast experiments with state-of-the-art climate models are computationally expensive, 
+new model configurations are often verified on small ensemble sizes.
+Large ensembles are only generated in forecast mode.
+But if verification measures depend on the ensemble size, the skill calculated for the hindcast experiment is not representative of the skill that an operational forecast ensemble with more members would achieve.
+A number of verification scores have been proposed in the past to estimate the finite ensemble effect.
+The main contribution of this paper is to summarise ensemble verification scores, and document their implementation in the \proglang{R} statistical programming environment.
+The package \pkg{SpecsVerification} contains functions to calculate verification scores, compare verification scores, and quantify uncertainty.
 
 
 
 
-\section{Short description and applications of SpecsVerification functions}
 
+\begin{table}
+\caption{Overview of functions implemented in \pkg{SpecsVerification}, and their application}
 \begin{tabular}{lll}
-Function & Long name & Applies to: \\
-\hline\hline
+&&\\
+\textsc{Function} & \textsc{Long name} & \textsc{Applies to} \\
+\hline
 \code{AbsErr} & Absolute error Score$^*$ & \vtop{\hbox{\strut Deterministic forecasts of continuous}\hbox{\strut observations}}\\
 \code{Auc} & Area under the ROC curve & \vtop{\hbox{\strut Probability forecasts of binary}\hbox{\strut observations}}\\
 \code{AucDiff} & \vtop{\hbox{\strut Difference between two areas}\hbox{\strut under the ROC curve}} & \vtop{\hbox{\strut Two competing probability forecasts}\hbox{\strut for the same binary observations}}\\
@@ -193,13 +175,14 @@ Function & Long name & Applies to: \\
 \code{TestRankhist} & \vtop{\hbox{\strut Statistical tests of}\hbox{\strut a rank histogram}} & n/a \\
 \code{SqErr} & Squared error score$^*$ & \vtop{\hbox{\strut Deterministic forecasts of continuous}\hbox{\strut observations}}\\
 \end{tabular}
+\end{table}
 
 
 \section{Forecast and observation data}
 
 
  
-Included in \pkg{SpecsVerification} is a data set \code{eurotempforecast} of seasonal temperature ensemble forecasts and verifying observations.
+\pkg{SpecsVerification} includes the data set \code{eurotempforecast} of seasonal temperature ensemble forecasts and verifying observations.
 The forecasts 24-member ensembles of near-surface air temperatures produced by the NCEP climate forecast system version 2 \citep{saha2014ncep}, initialised between 11 April and 6 May each year from 1983--2009 ($N=27$), and averaged over the region limited by latitudes $30^\circ$N -- $75^\circ$N and longitudes $12.5^\circ$W -- $42.5^\circ$E, and over the months June-July-August, i.e., the lead time is about 1--3 months.
 Data from the NCEP climate forecast system reanalysis \citep{saha2010ncep} was taken as verifying observations.
 All data was downloaded through the ECOMS user data gateway R-interface \citep{ecoms2015}.
@@ -461,8 +444,8 @@ Sometimes this is undesired in categorical forecasting problems.
 The forecast categories might have a natural ordering, such as low/medium/high intensity of precipitation.
 In that case, an order-sensitive score might be desired that penalises forecasts that assign most probability to the ``high'' category more than it penalises forecasts that assign most probability to the ``medium'' category, if the low category verifies. 
 A lot of probability in the ``medium'' category can be considered closer to the observation than a lot of probability in the ``high'' category, such that the former forecast can be considered ``better''.
-An order-sensitive score is also desired if the forecast categories are nested within one another, e.g., for precipitation amounts categorised into <1mm/<5mm/<20mm/<$\infty$.
-In that case, a high probability assigned to the <5mm category should receive less penalty than a high probability assigned to the <20mm category, if the actual amount is <1mm.
+An order-sensitive score is also desired if the forecast categories are nested within one another, e.g., for precipitation amounts categorised into \{``<1mm'', ``<20mm'', ``<100mm''\}.
+In that case, a high probability assigned to the <1mm category should receive less penalty than a high probability assigned to the <20mm category, if the actual precipitation amount is in the ``<1mm'' category.
 
 
 The ranked probability score (RPS) is an order-sensitive quadratic score for categorical probability forecasts.
@@ -1113,6 +1096,12 @@ Auxiliary: \code{Detrend}, \code{GenerateToyData}
 
 
 \section{Conclusion}
+
+The package \pkg{SpecsVerification} for the \proglang{R} statistical programming environment implements a variety of new forecast verification functions.
+The focus of \pkg{SpecsVerification} is on comparative verification of ensemble forecasts, and uncertainty quantification by statistical testing and confidence intervals.
+Continuous, categorical and binary ensemble forecasts for univariate quantities can be evaluated and compared by a number of verification scores.
+Additional functions for data transformation and statistical post-processing simplify a number of common verification tasks.
+
 
 \section*{Acknowledgments}
 

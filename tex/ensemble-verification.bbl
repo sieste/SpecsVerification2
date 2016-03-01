@@ -1,4 +1,4 @@
-\begin{thebibliography}{24}
+\begin{thebibliography}{26}
 \newcommand{\enquote}[1]{``#1''}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
@@ -80,6 +80,15 @@ Fricker TE, Ferro CAT, Stephenson DB (2013).
 \newblock \emph{Meteorological Applications}, \textbf{20}(2), 246--255.
 \newblock \doi{10.1002/met.1409}.
 
+\bibitem[{Gneiting(2005)}]{gneiting2005atmospheric}
+Gneiting T (2005).
+\newblock \enquote{ATMOSPHERIC SCIENCE: Weather Forecasting with Ensemble
+  Methods.}
+\newblock \emph{Science}, \textbf{310}(5746), 248--249.
+\newblock ISSN 1095-9203.
+\newblock \doi{10.1126/science.1115255}.
+\newblock \urlprefix\url{http://dx.doi.org/10.1126/science.1115255}.
+
 \bibitem[{Gneiting and Raftery(2007)}]{gneiting2007strictly}
 Gneiting T, Raftery AE (2007).
 \newblock \enquote{Strictly Proper Scoring Rules, Prediction, and Estimation.}
@@ -130,6 +139,14 @@ Jolliffe IT, Stephenson DB (2012).
 \newblock \emph{Forecast verification: a practitioner's guide in atmospheric
   science}.
 \newblock John Wiley \& Sons.
+
+\bibitem[{Leutbecher and Palmer(2008)}]{leutbecher2008ensemble}
+Leutbecher M, Palmer T (2008).
+\newblock \enquote{Ensemble forecasting.}
+\newblock \emph{Journal of Computational Physics}, \textbf{227}(7), 3515--3539.
+\newblock ISSN 0021-9991.
+\newblock \doi{10.1016/j.jcp.2007.02.014}.
+\newblock \urlprefix\url{http://dx.doi.org/10.1016/j.jcp.2007.02.014}.
 
 \bibitem[{Mason and Graham(2002)}]{mason2002areas}
 Mason SJ, Graham NE (2002).

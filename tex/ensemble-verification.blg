@@ -3,45 +3,50 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: ensemble-verification.aux
 The style file: jss.bst
 Database file #1: ensemble-verification.bib
+Repeated entry---line 391 of file ensemble-verification.bib
+ : buizza1998impact
+ :                 ,
+I'm skipping whatever remains of this entry
 Reallocated wiz_functions (elt_size=8) to 6000 items from 3000.
-You've used 24 entries,
+You've used 26 entries,
             3140 wiz_defined-function locations,
-            847 strings with 10682 characters,
-and the built_in function-call counts, 21926 in all, are:
-= -- 1871
-> -- 559
-< -- 19
-+ -- 216
-- -- 186
-* -- 1854
-:= -- 2988
-add.period$ -- 142
-call.type$ -- 24
-change.case$ -- 159
-chr.to.int$ -- 24
-cite$ -- 24
-duplicate$ -- 1940
-empty$ -- 2010
-format.name$ -- 258
-if$ -- 4460
+            869 strings with 11131 characters,
+and the built_in function-call counts, 23530 in all, are:
+= -- 2014
+> -- 588
+< -- 21
++ -- 227
+- -- 195
+* -- 1983
+:= -- 3206
+add.period$ -- 156
+call.type$ -- 26
+change.case$ -- 170
+chr.to.int$ -- 26
+cite$ -- 26
+duplicate$ -- 2082
+empty$ -- 2160
+format.name$ -- 273
+if$ -- 4788
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 297
-newline$ -- 180
-num.names$ -- 96
-pop$ -- 532
+missing$ -- 320
+newline$ -- 196
+num.names$ -- 104
+pop$ -- 568
 preamble$ -- 1
-purify$ -- 158
+purify$ -- 169
 quote$ -- 0
-skip$ -- 394
+skip$ -- 426
 stack$ -- 0
-substring$ -- 1961
-swap$ -- 767
+substring$ -- 2099
+swap$ -- 831
 text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 210
+type$ -- 228
 warning$ -- 0
-while$ -- 174
+while$ -- 187
 width$ -- 0
-write$ -- 419
+write$ -- 457
+(There was 1 error message)
