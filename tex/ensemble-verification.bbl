@@ -1,4 +1,4 @@
-\begin{thebibliography}{26}
+\begin{thebibliography}{30}
 \newcommand{\enquote}[1]{``#1''}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
@@ -31,6 +31,15 @@ Bröcker J, Smith LA (2007).
 \newblock ISSN 1520-0434.
 \newblock \doi{10.1175/waf993.1}.
 \newblock \urlprefix\url{http://dx.doi.org/10.1175/WAF993.1}.
+
+\bibitem[{Bröcker and Smith(2008)}]{broecker2008from}
+Bröcker J, Smith LA (2008).
+\newblock \enquote{From ensemble forecasts to predictive distribution
+  functions.}
+\newblock \emph{Tellus A}, \textbf{60}(4), 663--678.
+\newblock ISSN 1600-0870.
+\newblock \doi{10.1111/j.1600-0870.2008.00333.x}.
+\newblock \urlprefix\url{http://dx.doi.org/10.1111/j.1600-0870.2008.00333.x}.
 
 \bibitem[{Buizza and Palmer(1998)}]{buizza1998impact}
 Buizza R, Palmer TN (1998).
@@ -106,6 +115,16 @@ Gneiting T, Raftery AE, Westveld AH, Goldman T (2005).
 \newblock \doi{10.1175/mwr2904.1}.
 \newblock \urlprefix\url{http://dx.doi.org/10.1175/MWR2904.1}.
 
+\bibitem[{Grimit \emph{et~al.}(2006)Grimit, Gneiting, Berrocal, and
+  Johnson}]{grimit2006the}
+Grimit EP, Gneiting T, Berrocal VJ, Johnson NA (2006).
+\newblock \enquote{The continuous ranked probability score for circular
+  variables and its application to mesoscale forecast ensemble verification.}
+\newblock \emph{Q.J.R. Meteorol. Soc.}, \textbf{132}(621C), 2925--2942.
+\newblock ISSN 1477-870X.
+\newblock \doi{10.1256/qj.05.235}.
+\newblock \urlprefix\url{http://dx.doi.org/10.1256/qj.05.235}.
+
 \bibitem[{Hamill(2001)}]{hamill2001interpretation}
 Hamill TM (2001).
 \newblock \enquote{Interpretation of Rank Histograms for Verifying Ensemble
@@ -174,6 +193,16 @@ Pearson K (1900).
 \newblock \doi{10.1080/14786440009463897}.
 \newblock \urlprefix\url{http://dx.doi.org/10.1080/14786440009463897}.
 
+\bibitem[{Roulston and Smith(2002)}]{roulston2002evaluating}
+Roulston MS, Smith LA (2002).
+\newblock \enquote{Evaluating Probabilistic Forecasts Using Information
+  Theory.}
+\newblock \emph{Monthly Weather Review}, \textbf{130}(6), 1653--1660.
+\newblock ISSN 1520-0493.
+\newblock \doi{10.1175/1520-0493(2002)130<1653:epfuit>2.0.co;2}.
+\newblock
+  \urlprefix\url{http://dx.doi.org/10.1175/1520-0493(2002)130<1653:EPFUIT>2.0.CO;2}.
+
 \bibitem[{Saha \emph{et~al.}(2010)Saha, Moorthi, Pan, Wu, Wang, Nadiga, Tripp,
   Kistler, Woollen, Behringer, and Coauthors}]{saha2010ncep}
 Saha S, Moorthi S, Pan HL, Wu X, Wang J, Nadiga S, Tripp P, Kistler R, Woollen
@@ -200,6 +229,16 @@ Saha S, Moorthi S, Wu X, Wang J, Nadiga S, Tripp P, Behringer D, Hou YT, Chuang
 \newblock \emph{ecomsUDG.Raccess: R interface to the ECOMS User Data Gateway}.
 \newblock R package version 4.2-0,
   \urlprefix\url{http://meteo.unican.es/trac/wiki/udg/ecoms}.
+
+\bibitem[{Siegert \emph{et~al.}(2016)Siegert, Stephenson, Sansom, Scaife, Eade,
+  and Arribas}]{siegert2016bayesian}
+Siegert S, Stephenson DB, Sansom PG, Scaife AA, Eade R, Arribas A (2016).
+\newblock \enquote{A Bayesian Framework for Verification and Recalibration of
+  Ensemble Forecasts: How Uncertain is NAO Predictability?}
+\newblock \emph{J. Climate}, \textbf{29}(3), 995--1012.
+\newblock ISSN 1520-0442.
+\newblock \doi{10.1175/jcli-d-15-0196.1}.
+\newblock \urlprefix\url{http://dx.doi.org/10.1175/JCLI-D-15-0196.1}.
 
 \bibitem[{Steiger(1980)}]{steiger1980tests}
 Steiger JH (1980).

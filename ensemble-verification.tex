@@ -1,0 +1,56 @@
+\documentclass[article]{jss}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{dsfont}
+\usepackage{tabularx}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% almost as usual
+\author{Stefan Siegert\\University of Exeter}
+\title{Verification of Ensemble Forecasts: Ensemble-adjusted Scores, Comparative Verification, and Uncertainty Quantification Implemented in the \proglang{R} Package \pkg{SpecsVerification}}
+\Shorttitle{\pkg{SpecsVerification}: R Functions for Ensemble Verification} %% a short title (if necessary)
+\Plainauthor{Stefan Siegert} %% comma-separated
+\Plaintitle{Forecast Verification Methods Implemented in the R package SpecsVerification: Ensemble Scores, Comparative Verification, and Uncertainty Quantification}
+
+%% an abstract and keywords
+\Abstract{
+
+Forecast verification, the comparison of retrospective forecasts to observations, is a common task at institutions that develop and issue forecasts, such as climate centers.
+To assess forecast uncertainty , ensembles of forecasts initialised from perturbed initial conditions are routinely issued.
+In recent years, advances have been made in statistical methodology for ensemble forecast verification, in particular to estimate the finite-ensemble effect on verification scores.
+This paper summarises statistical methodology to account for finite-ensemble effects in ensemble verification, to compare the quality of ensemble forecasts with different numbers of ensemble members, and to quantify uncertainty in forecast verification results.
+Implementations of the methods are freely available in the \proglang{R} package \pkg{SpecsVerification}.
+
+}
+\Keywords{ensemble forecasting, forecast verification, finite-ensemble effect, comparative verification, uncertainty quantification, \proglang{R}}
+\Plainkeywords{keywords, comma-separated, not capitalized, R} %% without formatting
+%% at least one keyword must be supplied
+
+%% publication information
+%% NOTE: Typically, this can be left commented and will be filled out by the technical editor
+%% \Volume{50}
+%% \Issue{9}
+%% \Month{June}
+%% \Year{2012}
+%% \Submitdate{2012-06-04}
+%% \Acceptdate{2012-06-04}
+
+%% The address of (at least) one author should be given
+%% in the following format:
+\Address{
+  Stefan Siegert\\
+  Exeter Climate Systems\\
+  College for Engineering, Mathematics, and Physical Sciences\\
+  University of Exeter\\
+  Exeter, EX4 4QF, United Kingdom\\
+  E-mail: \email{Stefan.Siegert@exeter.ac.uk}\\
+  URL: \url{http://emps.exeter.ac.uk/mathematics/staff/ss610}
+}
+
+
+%% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% initialise R session and knitr
