@@ -1,4 +1,4 @@
-\begin{thebibliography}{30}
+\begin{thebibliography}{31}
 \newcommand{\enquote}[1]{``#1''}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
@@ -247,6 +247,11 @@ Steiger JH (1980).
 \newblock ISSN 0033-2909.
 \newblock \doi{10.1037/0033-2909.87.2.245}.
 \newblock \urlprefix\url{http://dx.doi.org/10.1037/0033-2909.87.2.245}.
+
+\bibitem[{Von~Storch and Zwiers(2001)}]{vonstorch2001statistical}
+Von~Storch H, Zwiers FW (2001).
+\newblock \emph{Statistical analysis in climate research}.
+\newblock Cambridge university press.
 
 \bibitem[{Wilks(2011)}]{wilks2011statistical}
 Wilks DS (2011).
