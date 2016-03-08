@@ -8,45 +8,45 @@ Repeated entry---line 391 of file ensemble-verification.bib
  :                 ,
 I'm skipping whatever remains of this entry
 Reallocated wiz_functions (elt_size=8) to 6000 items from 3000.
-You've used 32 entries,
+You've used 35 entries,
             3140 wiz_defined-function locations,
-            915 strings with 12512 characters,
-and the built_in function-call counts, 29628 in all, are:
-= -- 2534
-> -- 758
-< -- 26
-+ -- 294
-- -- 252
-* -- 2513
-:= -- 4023
-add.period$ -- 191
-call.type$ -- 32
-change.case$ -- 215
-chr.to.int$ -- 32
-cite$ -- 32
-duplicate$ -- 2625
-empty$ -- 2713
-format.name$ -- 354
-if$ -- 6039
+            939 strings with 13041 characters,
+and the built_in function-call counts, 31936 in all, are:
+= -- 2738
+> -- 797
+< -- 29
++ -- 313
+- -- 264
+* -- 2693
+:= -- 4338
+add.period$ -- 212
+call.type$ -- 35
+change.case$ -- 231
+chr.to.int$ -- 35
+cite$ -- 35
+duplicate$ -- 2828
+empty$ -- 2930
+format.name$ -- 373
+if$ -- 6509
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 399
-newline$ -- 238
-num.names$ -- 128
-pop$ -- 726
+missing$ -- 433
+newline$ -- 262
+num.names$ -- 140
+pop$ -- 778
 preamble$ -- 1
-purify$ -- 212
+purify$ -- 228
 quote$ -- 0
-skip$ -- 532
+skip$ -- 580
 stack$ -- 0
-substring$ -- 2652
-swap$ -- 1031
+substring$ -- 2850
+swap$ -- 1125
 text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 279
+type$ -- 306
 warning$ -- 0
-while$ -- 233
+while$ -- 252
 width$ -- 0
-write$ -- 559
+write$ -- 616
 (There was 1 error message)

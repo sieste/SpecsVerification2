@@ -67,10 +67,10 @@
 
 %% almost as usual
 \author{Stefan Siegert\\University of Exeter}
-\title{Ensemble Forecast Verification Functions Implemented in the \proglang{R} Package \pkg{SpecsVerification}}
-\Shorttitle{\pkg{SpecsVerification}: R Functions for Ensemble Verification} %% a short title (if necessary)
+\title{Forecast Verification Functions Implemented in the \proglang{R} Package \pkg{SpecsVerification}: Ensemble-adjusted scores, comparative verification, and uncertainty quantification}
+\Shorttitle{\proglang{R}-package \pkg{SpecsVerification}} %% a short title (if necessary)
 \Plainauthor{Stefan Siegert} %% comma-separated
-\Plaintitle{Forecast Verification Methods Implemented in the R package SpecsVerification: Ensemble Scores, Comparative Verification, and Uncertainty Quantification}
+\Plaintitle{Forecast Verification Functions Implemented in the R Package SpecsVerification: Ensemble-adjusted scores, comparative verification, and uncertainty quantification}
 
 %% an abstract and keywords
 \Abstract{
@@ -161,6 +161,7 @@ The package \pkg{SpecsVerification} contains functions to calculate verification
 \code{AbsErr} & Absolute error Score$^*$ & \vtop{\hbox{\strut Deterministic forecasts of continuous}\hbox{\strut observations}}\\
 \code{Auc} & Area under the ROC curve & \vtop{\hbox{\strut Probability forecasts of binary}\hbox{\strut observations}}\\
 \code{AucDiff} & \vtop{\hbox{\strut Difference between two areas}\hbox{\strut under the ROC curve}} & \vtop{\hbox{\strut Two competing probability forecasts}\hbox{\strut for the same binary observations}}\\
+\code{BrierDecomp} & \vtop{\hbox{\strut Brier score decomposition into}\hbox{\strut Reliability, Resolution, Uncertainty}} & \vtop{\hbox{\strut Probability forecasts of binary}\hbox{\strut observations}}\\
 \code{Corr} & Correlation coefficient & \vtop{\hbox{\strut Deterministic forecasts of continuous}\hbox{\strut observations}}\\
 \code{CorrDiff} & \vtop{\hbox{\strut Difference between two}\hbox{\strut correlation coefficients}} & \vtop{\hbox{\strut Two competing deterministic forecasts}\hbox{\strut for the same continuous observations }}\\
 \code{DressCrps} & \vtop{\hbox{\strut Continuous ranked probability}\hbox{\strut score for dressed ensembles$^*$}} & \vtop{\hbox{\strut Ensemble forecasts of continuous}\hbox{\strut observations}}\\
@@ -274,6 +275,7 @@ The Brier score is given by the squared difference between forecast and observat
 %
 \begin{equation}
 s_{B}(p_t, y_t) = (p_t - y_t)^2
+\label{eq:brierscore}
 \end{equation}
 %
 The Brier score is negatively oriented: Lower scores indicate better forecasts.
@@ -911,7 +913,7 @@ The $\chi^2$-test using the linear contrast is sensitive to sloped rank histgram
 All p-values are considerably larger than zero.
 The rank histogram of the temperature ensemble forecast provides no evidence against the null-hypothesis of a reliable ensemble.
 
-\section{Reliability diagrams for probability forecasts}
+\section{Reliability diagram and Brier Score decomposition}
 
 The reliability diagram is a classical tool to compare probability forecasts of binary events to the verifying binary observations \citep{wilks2011statistical,jolliffe2012forecast}.
 The reliability diagram compares the issued forecast probabilities to the conditional average frequencies of the observation, given the forecast.
@@ -965,6 +967,48 @@ rd <- \hlfunctioncall{ReliabilityDiagram}(p.bin, obs.bin, plot=TRUE, bins=3, att
 \end{figure}
 
 
+The additive decomposition of the Brier Score into Reliability, Resolution, and Uncertainty is closely related to the Reliability diagram, and allows for a quantitative assessment of different forecast attributes.
+The empirical mean of the Brier Score of the probability forecasts $p_1, \cdots, p_N$ for the binary observations $y_1, \cdots, y_N$ (cf. Equation \ref{eq:brierscore}) can be decomposed additively into three terms, as follows
+%
+\begin{equation}
+\frac{1}{N}\sum_{t=1}^N (y_t - p_t)^2 = REL - RES + UNC.
+\end{equation}
+%
+Assume that the forecast probabilities were categorised into $D$ disjoint bins, and a reliability curve was calculated.
+The in-bin average of the forecast probabilities in the $d$th bin is denoted by $\bar{p}_d$, the total number of cases in the $d$th bin is denoted by $n_d$, the conditional event frequency in the $d$th bin is denoted by $\bar{y}_d$, and the overall average of the observations is denoted by $\bar{y}$.
+Then the three components of the Brier Score decomposition are given by \citet{murphy1973new}:
+%
+\begin{align}
+REL & = \frac{1}{N}\sum_{d=1}^D n_d (\bar{p}_d - \bar{o}_d)^2,\\
+RES & = \frac{1}{N}\sum_{d=1}^D n_d (\bar{o}_d - \bar{y})^2,\\
+UNC & = \bar{y}(1-\bar{y}).
+\end{align}
+%
+Note that all components can be calculated from the data returned by the \code{ReliabilityDiagram} function.
+The Reliability term $REL$ quantifies the weighted squared distance of the reliability curve from the diagonal.
+The Resolution term $RES$ quantifies the weighted squared distance of the reliability curve from the climatological mean forecast.
+The Uncertainty term equals the mean Brier Score of the climatological forecast.
+A bias-corrected Brier score decomposition was proposed by \citet{ferro2012bias}, and approximate variance estimators were derived by \citet{siegert2013variance}.
+The biased and bias-corrected decompositions and their variance estimators are implemented in \pkg{SpecsVerification} in the function \code{BrierDecomp}.
+For example, the bias-corrected Brier Score of the temperature exceedance forecasts has components and standard deviations equal to
+%
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{BrierDecomp}(p.bin, obs.bin, bins=3, bias.corrected=TRUE)
+\end{alltt}
+\begin{verbatim}
+##                    REL    RES     UNC
+## component    0.0004808 0.1125 0.25000
+## component.sd 0.0160577 0.0428 0.01818
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+%
+The Brier Score decomposition suggests that the forecasts are reliable ($REL\approx 0$), and have non-trivial forecast skill ($RES > 0$). 
+
+
 \section{Additional functions}
 
 The focus of \pkg{SpecsVerification}, and of the present paper, is on verification functions for ensemble and probability forecasts, uncertainty quantification, and graphical display of the results.
@@ -993,7 +1037,7 @@ Auxiliary functions were added to the package, namely the function \code{Detrend
 \section{Conclusion}
 
 The package \pkg{SpecsVerification} for the \proglang{R} statistical programming environment implements a variety of forecast verification functions that are not available in previous verification software packages.
-The focus of \pkg{SpecsVerification} is on comparative verification of ensemble forecasts, and uncertainty quantification by statistical testing and confidence intervals.
+The focus of \pkg{SpecsVerification} is on comparative verification of ensemble forecasts, and uncertainty quantification by variance estimation, statistical testing, and confidence intervals.
 Continuous, categorical and binary ensemble forecasts for univariate quantities can be evaluated and compared by a number of verification scores.
 Additional functions for data transformation and statistical post-processing simplify a number of common verification tasks.
 

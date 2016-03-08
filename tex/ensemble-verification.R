@@ -143,3 +143,7 @@ ReliabilityDiagram(p.bin, obs.bin, plot=FALSE, bins=3)
 rd <- ReliabilityDiagram(p.bin, obs.bin, plot=TRUE, bins=3, attributes=TRUE)
 
 
+## @knitr 
+BrierDecomp(p.bin, obs.bin, bins=3, bias.corrected=TRUE)
+
+

@@ -1,4 +1,4 @@
-\begin{thebibliography}{32}
+\begin{thebibliography}{35}
 \newcommand{\enquote}[1]{``#1''}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
@@ -73,6 +73,15 @@ Ferro CAT (2013).
 \newblock \emph{Quarterly Journal of the Royal Meteorological Society},
   \textbf{140}(683), 1917--1923.
 \newblock \doi{10.1002/qj.2270}.
+
+\bibitem[{Ferro and Fricker(2012)}]{ferro2012bias}
+Ferro CAT, Fricker TE (2012).
+\newblock \enquote{A bias-corrected decomposition of the Brier score.}
+\newblock \emph{Quarterly Journal of the Royal Meteorological Society},
+  \textbf{138}(668), 1954--1960.
+\newblock ISSN 0035-9009.
+\newblock \doi{10.1002/qj.1924}.
+\newblock \urlprefix\url{http://dx.doi.org/10.1002/qj.1924}.
 
 \bibitem[{Ferro \emph{et~al.}(2008)Ferro, Richardson, and
   Weigel}]{ferro2008effect}
@@ -183,6 +192,15 @@ Matheson JE, Winkler RL (1976).
 \newblock \emph{Management Science}, \textbf{22}(10), 1087--1096.
 \newblock \doi{10.1287/mnsc.22.10.1087}.
 
+\bibitem[{Murphy(1973)}]{murphy1973new}
+Murphy AH (1973).
+\newblock \enquote{A New Vector Partition of the Probability Score.}
+\newblock \emph{J. Appl. Meteor.}, \textbf{12}(4), 595--600.
+\newblock ISSN 0021-8952.
+\newblock \doi{10.1175/1520-0450(1973)012<0595:anvpot>2.0.co;2}.
+\newblock
+  \urlprefix\url{http://dx.doi.org/10.1175/1520-0450(1973)012<0595:ANVPOT>2.0.CO;2}.
+
 \bibitem[{Pearson(1900)}]{pearson1900criterion}
 Pearson K (1900).
 \newblock \enquote{X. On the criterion that a given system of deviations from
@@ -229,6 +247,15 @@ Saha S, Moorthi S, Wu X, Wang J, Nadiga S, Tripp P, Behringer D, Hou YT, Chuang
 \newblock \emph{ecomsUDG.Raccess: R interface to the ECOMS User Data Gateway}.
 \newblock R package version 4.2-0,
   \urlprefix\url{http://meteo.unican.es/trac/wiki/udg/ecoms}.
+
+\bibitem[{Siegert(2013)}]{siegert2013variance}
+Siegert S (2013).
+\newblock \enquote{Variance estimation for Brier Score decomposition.}
+\newblock \emph{Quarterly Journal of the Royal Meteorological Society},
+  \textbf{140}(682), 1771--1777.
+\newblock ISSN 0035-9009.
+\newblock \doi{10.1002/qj.2228}.
+\newblock \urlprefix\url{http://dx.doi.org/10.1002/qj.2228}.
 
 \bibitem[{Siegert \emph{et~al.}(2016)Siegert, Stephenson, Sansom, Scaife, Eade,
   and Arribas}]{siegert2016bayesian}
