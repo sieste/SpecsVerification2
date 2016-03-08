@@ -372,8 +372,8 @@ Using the ensemble-adjusted Brier score, we were able to extrapolate the Brier s
 \subsection{Categorical ensemble forecasts}
 
 Suppose a forecast target that always falls into exactly one out of $K$ disjoint categories.
-A probabilistic forecast for this target is the vector $\mathbf{p}_t = (p_{t,1}, \cdots, p_{t,K})$, whose $k$-th element equals the forecast probability that the observation will materialise in class $k$.
-The verifying observation is vector-valued $\mathbf{y}_t$, where the $k$-th element of $\mathbf{y}_t$ is $y_{t,k}=1$ if the $k$-th class is observed, and $y_{t,j}=0$ for all $j\neq k$. 
+A probabilistic forecast for this target is the vector $\mathbf{p}_t = (p_{t,1}, \cdots, p_{t,K})$, whose $k$th element equals the forecast probability that the observation will materialise in class $k$.
+The verifying observation is vector-valued $\mathbf{y}_t$, where the $k$th element of $\mathbf{y}_t$ is $y_{t,k}=1$ if the $k$th class is observed, and $y_{t,j}=0$ for all $j\neq k$. 
 The quadratic score (QS) of the probability forecast $\mathbf{p}_t$ with verifying observation $\mathbf{y}_t$ is given by
 %
 \begin{equation}
@@ -381,7 +381,7 @@ s_{Q}(\mathbf{p}_t, \mathbf{y}_t) = \sum_{k=1}^K \left(p_{t,k} - y_{t,k}\right)^
 \end{equation}
 
 
-Now assume an $R$-member categorical ensemble forecast $\mathbf{i}_t$ is issued at time $t$, indicating that $i_{t,k}$ out of $R$ ensemble members have predicted the $k$-th category, for $k=1,\cdots,K$.
+Now assume an $R$-member categorical ensemble forecast $\mathbf{i}_t$ is issued at time $t$, indicating that $i_{t,k}$ out of $R$ ensemble members have predicted the $k$th category, for $k=1,\cdots,K$.
 Using results obtained for the ensemble-adjusted Brier score, \citep[see also][]{ferro2008effect}, the ensemble-adjusted QS is seen to be
 %
 \begin{equation}
@@ -396,7 +396,7 @@ If the observation materialises in class $1$, say, the QS penalises a forecast t
 In forecast forecast problems where the categories convey a natural ordering of the forecast target, such as $\{1$=``no rain'', $2$=``light rain''; $3$=``heavy rain''$\}$, a forecast that predicts class 2 might seem preferable to a forecast that predicts class 3, if class 1 occurs. 
 
 The ranked probability score (RPS) is a version of the QS that is sensitive to distance.
-The ensemble forecast vector $\mathbf{i}_t$ is transformed to the cumulated forecast vector $\mathbf{j}_t$, with $k$-th element equal to $j_{t,k} = \sum_{l=1}^k i_{t,l}$, and the cumulated observation vector $\mathbf{z}_t$ has $z_{t,k} = \sum_{l=1}^k y_{t,l}$.
+The ensemble forecast vector $\mathbf{i}_t$ is transformed to the cumulated forecast vector $\mathbf{j}_t$, with $k$th element equal to $j_{t,k} = \sum_{l=1}^k i_{t,l}$, and the cumulated observation vector $\mathbf{z}_t$ has $z_{t,k} = \sum_{l=1}^k y_{t,l}$.
 The RPS is the QS of the forecast $\mathbf{j}_t$ evaluated on the observation $\mathbf{z}_t$.
 Accumulating the elements of $\mathbf{i}_t$ and $\mathbf{y}_t$ nests the $K$ forecast categories within each other. 
 Essentially, the forecast is transformed from ``$i_{t,k}$ out of $R$ ensemble members predict category $k$'' to the forecast ``$j_{t,k}$ out of $R$ ensemble members forecast category $k$ \emph{or less}''.
@@ -866,13 +866,13 @@ Flatness of the rank histgram can be assessed by a Pearson $\chi^2$-test \citep{
 Suppose rank $i$ was observed $r_i$ times for $i=1,\dots,R+1$, and define $e_i=N/(R+1)$ the expected number of counts if each verification rank were equally likely.
 Define further
 \begin{equation}
-x_i = \frac{r_i - e_i}{\sqrt{e_i}}.
+q_i = \frac{r_i - e_i}{\sqrt{e_i}}.
 \end{equation}
 %
 Under the null-hypothesis of equally likely verification ranks, the test statistic
 %
 \begin{equation}
-\chi^2 = \sum_{i=1}^{R+1} x_i^2
+\chi^2 = \sum_{i=1}^{R+1} q_i^2
 \end{equation}
 %
 has a $\chi^2$-distribution with $R$ degrees of freedom.
@@ -882,9 +882,9 @@ has a $\chi^2$-distribution with $R$ degrees of freedom.
 In particular, a systematic bias of the ensemble mean produces sloped rank histograms, and ensembles with insufficient (excessive) ensemble spread produce $\cup$-shaped ($\cap$-shaped) rank histogram.
 \citet{jolliffe2008evaluating} showed that the $\chi^2$-test statistic can be decomposed to test for sloped and convex rank histograms specifically, thus increasing the power of the $\chi^2$-test.
 The test requires the definition of suitable contrast vectors $\mathbf{c}$ of length $R+1$, that satisfy $\sum_i c_i = 0$, $\sum_i c_i^2 = 1$, and $\sum_i c_i c_i' = 0$ for every pair of contrasts $\mathbf{c}$ and $\mathbf{c}'$.
-Assuming a number of up to $R$ contrast vectors $\mathbf{c}^{(1)}$, $\mathbf{c}^{(2)}$, $\dots$, the test statistics $(\sum_i c^{(k)}_i x_i)^2$ are independently $\chi^2$-distributed with one d.o.f. 
+Assuming a number of up to $R$ contrast vectors $\mathbf{c}^{(1)}$, $\mathbf{c}^{(2)}$, $\dots$, the test statistics $(\sum_i c^{(k)}_i q_i)^2$ are independently $\chi^2$-distributed with one d.o.f. 
 The function \code{TestRankhist} applies this test, using a linear and a squared contrast. 
-Defining $J=R+1$, the $i$-th element of the contrast vectors $\mathbf{c}^{(lin)}$ and $\mathbf{c}^{(sq)}$, for $i=1,\cdots,J$ are given by
+Defining $J=R+1$, the $i$th element of the contrast vectors $\mathbf{c}^{(lin)}$ and $\mathbf{c}^{(sq)}$, for $i=1,\cdots,J$ are given by
 %
 \begin{align}
 c^{(lin)}_i & = -\sqrt{\frac{3(J+1)}{J (J-1)}} + i \sqrt{\frac{12}{J^3 - J}}\text{, and}\\
