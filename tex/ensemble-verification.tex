@@ -1,4 +1,4 @@
-\documentclass[article]{jss}\usepackage[]{graphicx}\usepackage[]{color}
+\documentclass[article]{jss}\usepackage{graphicx, color}
 %% maxwidth is the original width if it is less than linewidth
 %% otherwise use linewidth (to make sure the graphics do not exceed the margin)
 \makeatletter
@@ -12,15 +12,20 @@
 \makeatother
 
 \definecolor{fgcolor}{rgb}{0, 0, 0}
-\newcommand{\hlnum}[1]{\textcolor[rgb]{0.502,0,0.502}{\textbf{#1}}}%
-\newcommand{\hlstr}[1]{\textcolor[rgb]{0.651,0.522,0}{#1}}%
-\newcommand{\hlcom}[1]{\textcolor[rgb]{1,0.502,0}{#1}}%
-\newcommand{\hlopt}[1]{\textcolor[rgb]{1,0,0.502}{\textbf{#1}}}%
-\newcommand{\hlstd}[1]{\textcolor[rgb]{0,0,0}{#1}}%
-\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.733,0.475,0.467}{\textbf{#1}}}%
-\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.502,0.502,0.753}{\textbf{#1}}}%
-\newcommand{\hlkwc}[1]{\textcolor[rgb]{0,0.502,0.753}{#1}}%
-\newcommand{\hlkwd}[1]{\textcolor[rgb]{0,0.267,0.4}{#1}}%
+\newcommand{\hlnumber}[1]{\textcolor[rgb]{0.501960784313725,0,0.501960784313725}{#1}}%
+\newcommand{\hlfunctioncall}[1]{\textcolor[rgb]{0,0.501960784313725,0.752941176470588}{\textbf{#1}}}%
+\newcommand{\hlstring}[1]{\textcolor[rgb]{0.650980392156863,0.52156862745098,0}{#1}}%
+\newcommand{\hlkeyword}[1]{\textcolor[rgb]{0.733333333333333,0.474509803921569,0.466666666666667}{\textbf{#1}}}%
+\newcommand{\hlargument}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlcomment}[1]{\textcolor[rgb]{1,0.501960784313725,0}{#1}}%
+\newcommand{\hlroxygencomment}[1]{\textcolor[rgb]{1,0.501960784313725,0}{#1}}%
+\newcommand{\hlformalargs}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hleqformalargs}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlassignement}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlpackage}[1]{\textcolor[rgb]{0.501960784313725,0.501960784313725,0.752941176470588}{\textbf{#1}}}%
+\newcommand{\hlslot}[1]{\textcolor[rgb]{0,0,0}{\textit{#1}}}%
+\newcommand{\hlsymbol}[1]{\textcolor[rgb]{1,0,0.501960784313725}{#1}}%
+\newcommand{\hlprompt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
 
 \usepackage{framed}
 \makeatletter
@@ -62,7 +67,7 @@
 
 %% almost as usual
 \author{Stefan Siegert\\University of Exeter}
-\title{Verification Scores for Ensemble Forecasts Implemented in the \proglang{R} Package \pkg{SpecsVerification}}
+\title{Ensemble Forecast Verification Functions Implemented in the \proglang{R} Package \pkg{SpecsVerification}}
 \Shorttitle{\pkg{SpecsVerification}: R Functions for Ensemble Verification} %% a short title (if necessary)
 \Plainauthor{Stefan Siegert} %% comma-separated
 \Plaintitle{Forecast Verification Methods Implemented in the R package SpecsVerification: Ensemble Scores, Comparative Verification, and Uncertainty Quantification}
@@ -78,7 +83,7 @@ Implementations of the methods are freely available in the \proglang{R} package 
 
 }
 \Keywords{ensemble forecasting, forecast verification, finite-ensemble effect, comparative verification, uncertainty quantification, \proglang{R}}
-\Plainkeywords{keywords, comma-separated, not capitalized, R} %% without formatting
+\Plainkeywords{ensemble forecasting, forecast verification, finite-ensemble effect, comparative verification, uncertainty quantification, R} %% without formatting
 %% at least one keyword must be supplied
 
 %% publication information
@@ -94,8 +99,7 @@ Implementations of the methods are freely available in the \proglang{R} package 
 %% in the following format:
 \Address{
   Stefan Siegert\\
-  Exeter Climate Systems\\
-  College for Engineering, Mathematics, and Physical Sciences\\
+  Statistical Science Group\\
   University of Exeter\\
   Exeter, EX4 4QF, United Kingdom\\
   E-mail: \email{Stefan.Siegert@exeter.ac.uk}\\
@@ -109,17 +113,13 @@ Implementations of the methods are freely available in the \proglang{R} package 
 
 
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+
+
 \begin{document}
 
 %% Note that you should use the \pkg{}, \proglang{} and \code{} commands.
 % \section[About Java]{About \proglang{Java}}
 %% Note: If there is markup in \(sub)section, then it has to be escape as above.
-
-\section*{Note to editor and reviewers}
-
-A package called \pkg{SpecsVerification} is currently available on CRAN.
-The package documented in this paper is an updated, yet unpublished version of \pkg{SpecsVerification}, documenting new and rewritten functions that are not currently available.
-
 
 
 \section{Introduction}
@@ -193,13 +193,14 @@ Ensemble members and observation data are plotted as time series in Figure \ref{
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{data}\hlstd{(eurotempforecast)}
-\hlstd{R}   \hlkwb{<-} \hlkwd{ncol}\hlstd{(ens)}
-\hlstd{yrs} \hlkwb{<-} \hlkwd{as.numeric}\hlstd{(}\hlkwd{names}\hlstd{(obs))}
-\hlstd{N}   \hlkwb{<-} \hlkwd{length}\hlstd{(obs)}
+\hlfunctioncall{data}(eurotempforecast)
+R   <- \hlfunctioncall{ncol}(ens)
+yrs <- \hlfunctioncall{as.numeric}(\hlfunctioncall{names}(obs))
+N   <- \hlfunctioncall{length}(obs)
 \end{alltt}
 \end{kframe}
 \end{knitrout}
+
 
 
 
@@ -209,14 +210,15 @@ Ensemble members and observation data are plotted as time series in Figure \ref{
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{par}\hlstd{(}\hlkwc{las}\hlstd{=}\hlnum{1}\hlstd{,} \hlkwc{cex}\hlstd{=}\hlnum{0.7}\hlstd{,} \hlkwc{mgp}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{3}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{0}\hlstd{),} \hlkwc{mar}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{2}\hlstd{,}\hlnum{4}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{))}
-\hlkwd{matplot}\hlstd{(yrs, ens,} \hlkwc{ylab}\hlstd{=}\hlstr{"temp [C]"}\hlstd{,} \hlkwc{pch}\hlstd{=}\hlnum{1}\hlstd{,} \hlkwc{col}\hlstd{=}\hlkwd{gray}\hlstd{(}\hlnum{.5}\hlstd{))}
-\hlkwd{points}\hlstd{(yrs, obs,} \hlkwc{pch}\hlstd{=}\hlnum{15}\hlstd{,} \hlkwc{cex}\hlstd{=}\hlnum{1.5}\hlstd{)}
+\hlfunctioncall{par}(las=1, cex=0.7, mgp=\hlfunctioncall{c}(3, 1, 0), mar=\hlfunctioncall{c}(2,4,1,1))
+\hlfunctioncall{matplot}(yrs, ens, ylab=\hlstring{"temp [C]"}, pch=1, col=\hlfunctioncall{gray}(.5))
+\hlfunctioncall{points}(yrs, obs, pch=15, cex=1.5)
 \end{alltt}
 \end{kframe}
-\includegraphics[width=\maxwidth]{figure/gfs-plot-1} 
+\includegraphics[width=\maxwidth]{figure/gfs-plot} 
 
 \end{knitrout}
+
 %
 \end{center}
 \caption{Seasonal European temperature ensemble forecasts (circles) and verifying observations (squares).}
@@ -241,10 +243,10 @@ For example, continuous, binary and categorical observations and forecasts for t
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{rbind}\hlstd{(}
-\hlkwc{continuous} \hlstd{=} \hlkwd{c}\hlstd{(}\hlkwc{obs}\hlstd{=obs[}\hlstr{"2001"}\hlstd{], ens[}\hlstr{"2001"}\hlstd{,} \hlnum{1}\hlopt{:}\hlnum{5}\hlstd{]),}
-\hlkwc{binary}     \hlstd{=} \hlkwd{c}\hlstd{(}\hlkwc{obs}\hlstd{=obs.bin[}\hlstr{"2001"}\hlstd{], ens.bin[}\hlstr{"2001"}\hlstd{,} \hlnum{1}\hlopt{:}\hlnum{5}\hlstd{]),}
-\hlkwc{categorical} \hlstd{=} \hlkwd{c}\hlstd{(}\hlkwc{obs}\hlstd{=obs.cat[}\hlstr{"2001"}\hlstd{], ens.cat[}\hlstr{"2001"}\hlstd{,} \hlnum{1}\hlopt{:}\hlnum{5}\hlstd{]))}
+\hlfunctioncall{rbind}(
+continuous = \hlfunctioncall{c}(obs=obs[\hlstring{"2001"}], ens[\hlstring{"2001"}, 1:5]),
+binary     = \hlfunctioncall{c}(obs=obs.bin[\hlstring{"2001"}], ens.bin[\hlstring{"2001"}, 1:5]),
+categorical = \hlfunctioncall{c}(obs=obs.cat[\hlstring{"2001"}], ens.cat[\hlstring{"2001"}, 1:5]))
 \end{alltt}
 \begin{verbatim}
 ##             obs.2001 Member_1 Member_2 Member_3 Member_4 Member_5
@@ -254,6 +256,7 @@ For example, continuous, binary and categorical observations and forecasts for t
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+
 
 
 
@@ -331,10 +334,10 @@ To illustrate the finite ensemble effect, we randomly split the 24-member foreca
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{i.small} \hlkwb{<-} \hlkwd{sample}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{R,} \hlnum{5}\hlstd{)}
-\hlstd{i.large} \hlkwb{<-} \hlkwd{setdiff}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{R, i.small)}
-\hlkwd{c}\hlstd{(}\hlkwc{small.ens}\hlstd{=}\hlkwd{mean}\hlstd{(}\hlkwd{EnsBrier}\hlstd{(ens.bin[, i.small], obs.bin)),}
-  \hlkwc{large.ens}\hlstd{=}\hlkwd{mean}\hlstd{(}\hlkwd{EnsBrier}\hlstd{(ens.bin[, i.large], obs.bin)))}
+i.small <- \hlfunctioncall{sample}(1:R, 5)
+i.large <- \hlfunctioncall{setdiff}(1:R, i.small)
+\hlfunctioncall{c}(small.ens=\hlfunctioncall{mean}(\hlfunctioncall{EnsBrier}(ens.bin[, i.small], obs.bin)), 
+  large.ens=\hlfunctioncall{mean}(\hlfunctioncall{EnsBrier}(ens.bin[, i.large], obs.bin)))
 \end{alltt}
 \begin{verbatim}
 ## small.ens large.ens 
@@ -342,6 +345,7 @@ To illustrate the finite ensemble effect, we randomly split the 24-member foreca
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+
 %
 The large subensemble obtains a better average Brier score than the small subensemble, even though both ensembles were produced by the same ensemble forecasting system.
 We next adjust the Brier score for the finite ensemble size, by calculating $s_{B}^*$ using $R^*=19$ for both ensembles:
@@ -349,8 +353,8 @@ We next adjust the Brier score for the finite ensemble size, by calculating $s_{
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{c}\hlstd{(}\hlkwc{small.ens}\hlstd{=}\hlkwd{mean}\hlstd{(}\hlkwd{EnsBrier}\hlstd{(ens.bin[, i.small], obs.bin,} \hlkwc{R.new}\hlstd{=}\hlnum{19}\hlstd{)),}
-  \hlkwc{large.ens}\hlstd{=}\hlkwd{mean}\hlstd{(}\hlkwd{EnsBrier}\hlstd{(ens.bin[, i.large], obs.bin,} \hlkwc{R.new}\hlstd{=}\hlnum{19}\hlstd{)))}
+\hlfunctioncall{c}(small.ens=\hlfunctioncall{mean}(\hlfunctioncall{EnsBrier}(ens.bin[, i.small], obs.bin, R.new=19)), 
+  large.ens=\hlfunctioncall{mean}(\hlfunctioncall{EnsBrier}(ens.bin[, i.large], obs.bin, R.new=19)))
 \end{alltt}
 \begin{verbatim}
 ## small.ens large.ens 
@@ -358,6 +362,7 @@ We next adjust the Brier score for the finite ensemble size, by calculating $s_{
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+
 %
 After adjusting for the finite-ensemble bias, the scores are very similar. 
 Using the ensemble-adjusted Brier score, we were able to extrapolate the Brier score of a 5-member ensemble to the Brier score that a 19-member ensemble would achieve, produced by the same ensemble forecasting system. 
@@ -413,24 +418,24 @@ We evaluate the unadjusted QS of the full 24-member ensemble, the unadjusted sco
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{i.small} \hlkwb{<-} \hlkwd{sample}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{R,} \hlnum{5}\hlstd{)}
-\hlstd{i.large} \hlkwb{<-} \hlkwd{setdiff}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{R, i.small)}
-\hlkwd{cbind}\hlstd{(}
- \hlkwc{QS} \hlstd{=} \hlkwd{c}\hlstd{(}
-  \hlkwc{ens}           \hlstd{=} \hlkwd{mean}\hlstd{(}\hlkwd{EnsQs}\hlstd{(ens.cat,            obs.cat)),}
-  \hlkwc{small.ens}     \hlstd{=} \hlkwd{mean}\hlstd{(}\hlkwd{EnsQs}\hlstd{(ens.cat[, i.small], obs.cat)),}
-  \hlkwc{large.ens}     \hlstd{=} \hlkwd{mean}\hlstd{(}\hlkwd{EnsQs}\hlstd{(ens.cat[, i.large], obs.cat)),}
-  \hlkwc{small.ens.adj} \hlstd{=} \hlkwd{mean}\hlstd{(}\hlkwd{EnsQs}\hlstd{(ens.cat[, i.small], obs.cat,} \hlkwc{R.new}\hlstd{=}\hlnum{24}\hlstd{)),}
-  \hlkwc{large.ens.adj} \hlstd{=} \hlkwd{mean}\hlstd{(}\hlkwd{EnsQs}\hlstd{(ens.cat[, i.large], obs.cat,} \hlkwc{R.new}\hlstd{=}\hlnum{24}\hlstd{))}
- \hlstd{),}
- \hlkwc{RPS} \hlstd{=} \hlkwd{c}\hlstd{(}
-  \hlkwc{ens}           \hlstd{=} \hlkwd{mean}\hlstd{(}\hlkwd{EnsRps}\hlstd{(ens.cat,            obs.cat)),}
-  \hlkwc{small.ens}     \hlstd{=} \hlkwd{mean}\hlstd{(}\hlkwd{EnsRps}\hlstd{(ens.cat[, i.small], obs.cat)),}
-  \hlkwc{large.ens}     \hlstd{=} \hlkwd{mean}\hlstd{(}\hlkwd{EnsRps}\hlstd{(ens.cat[, i.large], obs.cat)),}
-  \hlkwc{small.ens.adj} \hlstd{=} \hlkwd{mean}\hlstd{(}\hlkwd{EnsRps}\hlstd{(ens.cat[, i.small], obs.cat,} \hlkwc{R.new}\hlstd{=}\hlnum{24}\hlstd{)),}
-  \hlkwc{large.ens.adj} \hlstd{=} \hlkwd{mean}\hlstd{(}\hlkwd{EnsRps}\hlstd{(ens.cat[, i.large], obs.cat,} \hlkwc{R.new}\hlstd{=}\hlnum{24}\hlstd{))}
- \hlstd{)}
-\hlstd{)}
+i.small <- \hlfunctioncall{sample}(1:R, 5)
+i.large <- \hlfunctioncall{setdiff}(1:R, i.small)
+\hlfunctioncall{cbind}(
+ QS = \hlfunctioncall{c}(
+  ens           = \hlfunctioncall{mean}(\hlfunctioncall{EnsQs}(ens.cat,            obs.cat)),
+  small.ens     = \hlfunctioncall{mean}(\hlfunctioncall{EnsQs}(ens.cat[, i.small], obs.cat)),
+  large.ens     = \hlfunctioncall{mean}(\hlfunctioncall{EnsQs}(ens.cat[, i.large], obs.cat)),
+  small.ens.adj = \hlfunctioncall{mean}(\hlfunctioncall{EnsQs}(ens.cat[, i.small], obs.cat, R.new=24)),
+  large.ens.adj = \hlfunctioncall{mean}(\hlfunctioncall{EnsQs}(ens.cat[, i.large], obs.cat, R.new=24))
+ ),
+ RPS = \hlfunctioncall{c}(
+  ens           = \hlfunctioncall{mean}(\hlfunctioncall{EnsRps}(ens.cat,            obs.cat)),
+  small.ens     = \hlfunctioncall{mean}(\hlfunctioncall{EnsRps}(ens.cat[, i.small], obs.cat)),
+  large.ens     = \hlfunctioncall{mean}(\hlfunctioncall{EnsRps}(ens.cat[, i.large], obs.cat)),
+  small.ens.adj = \hlfunctioncall{mean}(\hlfunctioncall{EnsRps}(ens.cat[, i.small], obs.cat, R.new=24)),
+  large.ens.adj = \hlfunctioncall{mean}(\hlfunctioncall{EnsRps}(ens.cat[, i.large], obs.cat, R.new=24))
+ )
+)
 \end{alltt}
 \begin{verbatim}
 ##                   QS    RPS
@@ -442,6 +447,7 @@ We evaluate the unadjusted QS of the full 24-member ensemble, the unadjusted sco
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+
 %
 The full-ensemble obtains a better score than either of the sub-ensembles and the large subensemble outperforms the small subensemble.
 When adjusting scores of the subensembles to $R^*=24$, the scores of the subensembles are more similar to each other, and closer to the score of the full ensemble.
@@ -488,12 +494,12 @@ We calculate the unadjusted CRPS ($R^*=24$) and the fair CRPS ($R^*=\infty$):
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{cbind}\hlstd{(}
- \hlkwc{CRPS}\hlstd{=}\hlkwd{c}\hlstd{(}
-  \hlkwc{unadjusted} \hlstd{=} \hlkwd{mean}\hlstd{(}\hlkwd{EnsCrps}\hlstd{(ens, obs)),}
-  \hlkwc{fair}       \hlstd{=} \hlkwd{mean}\hlstd{(}\hlkwd{EnsCrps}\hlstd{(ens, obs,} \hlkwc{R.new}\hlstd{=}\hlnum{Inf}\hlstd{))}
- \hlstd{)}
-\hlstd{)}
+\hlfunctioncall{cbind}(
+ CRPS=\hlfunctioncall{c}(
+  unadjusted = \hlfunctioncall{mean}(\hlfunctioncall{EnsCrps}(ens, obs)), 
+  fair       = \hlfunctioncall{mean}(\hlfunctioncall{EnsCrps}(ens, obs, R.new=Inf))
+ )
+)
 \end{alltt}
 \begin{verbatim}
 ##              CRPS
@@ -502,6 +508,7 @@ We calculate the unadjusted CRPS ($R^*=24$) and the fair CRPS ($R^*=\infty$):
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+
 
 
 
@@ -521,12 +528,13 @@ To benchmark ensemble forecasts in particular, the climatological reference fore
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{ens.ref}     \hlkwb{<-} \hlkwd{ClimEns}\hlstd{(obs,}     \hlkwc{leave.one.out}\hlstd{=}\hlnum{TRUE}\hlstd{)}
-\hlstd{ens.cat.ref} \hlkwb{<-} \hlkwd{ClimEns}\hlstd{(obs.cat,} \hlkwc{leave.one.out}\hlstd{=}\hlnum{TRUE}\hlstd{)}
-\hlstd{ens.bin.ref} \hlkwb{<-} \hlkwd{ClimEns}\hlstd{(obs.bin,} \hlkwc{leave.one.out}\hlstd{=}\hlnum{TRUE}\hlstd{)}
+ens.ref     <- \hlfunctioncall{ClimEns}(obs)
+ens.cat.ref <- \hlfunctioncall{ClimEns}(obs.cat)
+ens.bin.ref <- \hlfunctioncall{ClimEns}(obs.bin)
 \end{alltt}
 \end{kframe}
 \end{knitrout}
+
 %
 In addition to the climatological forecast, it is advisable to also consider statistical reference forecasts such as a linear trend or an auto-regressive model, which are often more suitable than the climatological forecast.
 
@@ -550,26 +558,27 @@ The function includes the option to account for temporal dependency of the loss-
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{rbind}\hlstd{(}
-  \hlkwc{Brier} \hlstd{=} \hlkwd{ScoreDiff}\hlstd{(}\hlkwd{EnsBrier}\hlstd{(ens.bin,     obs.bin),}
-                    \hlkwd{EnsBrier}\hlstd{(ens.bin.ref, obs.bin)),}
-  \hlkwc{QS}    \hlstd{=} \hlkwd{ScoreDiff}\hlstd{(}\hlkwd{EnsQs}\hlstd{(   ens.cat,     obs.cat),}
-                    \hlkwd{EnsQs}\hlstd{(   ens.cat.ref, obs.cat)),}
-  \hlkwc{RPS}   \hlstd{=} \hlkwd{ScoreDiff}\hlstd{(}\hlkwd{EnsRps}\hlstd{(  ens.cat,     obs.cat),}
-                    \hlkwd{EnsRps}\hlstd{(  ens.cat.ref, obs.cat)),}
-  \hlkwc{CRPS}  \hlstd{=} \hlkwd{ScoreDiff}\hlstd{(}\hlkwd{EnsCrps}\hlstd{( ens,         obs),}
-                    \hlkwd{EnsCrps}\hlstd{( ens.ref,     obs))}
-\hlstd{)}
+\hlfunctioncall{rbind}(
+  Brier = \hlfunctioncall{ScoreDiff}(\hlfunctioncall{EnsBrier}(ens.bin,     obs.bin), 
+                    \hlfunctioncall{EnsBrier}(ens.bin.ref, obs.bin)),
+  QS    = \hlfunctioncall{ScoreDiff}(\hlfunctioncall{EnsQs}(   ens.cat,     obs.cat),    
+                    \hlfunctioncall{EnsQs}(   ens.cat.ref, obs.cat)),
+  RPS   = \hlfunctioncall{ScoreDiff}(\hlfunctioncall{EnsRps}(  ens.cat,     obs.cat),   
+                    \hlfunctioncall{EnsRps}(  ens.cat.ref, obs.cat)),
+  CRPS  = \hlfunctioncall{ScoreDiff}(\hlfunctioncall{EnsCrps}( ens,         obs),          
+                    \hlfunctioncall{EnsCrps}( ens.ref,     obs))
+)
 \end{alltt}
 \begin{verbatim}
-##       score.diff score.diff.sd    p.value        L      U
-## Brier    0.12185       0.04217 0.00192772  0.03921 0.2045
-## QS       0.12004       0.08972 0.09046758 -0.05581 0.2959
-## RPS      0.09753       0.06438 0.06491317 -0.02866 0.2237
-## CRPS     0.09391       0.02400 0.00004543  0.04688 0.1409
+##       score.diff score.diff.sd   p.value        L      U
+## Brier    0.10292       0.04156 0.0066342  0.02147 0.1844
+## QS       0.06927       0.09024 0.2213483 -0.10760 0.2461
+## RPS      0.06612       0.06380 0.1500227 -0.05893 0.1912
+## CRPS     0.07705       0.02233 0.0002801  0.03328 0.1208
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+
 
 
 
@@ -597,26 +606,27 @@ Calculation of skill scores and their approximate standard deviation is implemen
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{rbind}\hlstd{(}
- \hlkwc{Brier} \hlstd{=} \hlkwd{SkillScore}\hlstd{(}\hlkwd{EnsBrier}\hlstd{(ens.bin, obs.bin),}
-                    \hlkwd{EnsBrier}\hlstd{(ens.bin.ref, obs.bin)),}
- \hlkwc{QS}    \hlstd{=} \hlkwd{SkillScore}\hlstd{(}\hlkwd{EnsQs}\hlstd{(ens.cat, obs.cat),}
-                    \hlkwd{EnsQs}\hlstd{(ens.cat.ref, obs.cat)),}
- \hlkwc{RPS}   \hlstd{=} \hlkwd{SkillScore}\hlstd{(}\hlkwd{EnsRps}\hlstd{(ens.cat, obs.cat),}
-                    \hlkwd{EnsRps}\hlstd{(ens.cat.ref, obs.cat)),}
- \hlkwc{CRPS}  \hlstd{=} \hlkwd{SkillScore}\hlstd{(}\hlkwd{EnsCrps}\hlstd{(ens, obs),}
-                    \hlkwd{EnsCrps}\hlstd{(ens.ref, obs))}
-\hlstd{)}
+\hlfunctioncall{rbind}(
+ Brier = \hlfunctioncall{SkillScore}(\hlfunctioncall{EnsBrier}(ens.bin, obs.bin), 
+                    \hlfunctioncall{EnsBrier}(ens.bin.ref, obs.bin)),
+ QS    = \hlfunctioncall{SkillScore}(\hlfunctioncall{EnsQs}(ens.cat, obs.cat),    
+                    \hlfunctioncall{EnsQs}(ens.cat.ref, obs.cat)),
+ RPS   = \hlfunctioncall{SkillScore}(\hlfunctioncall{EnsRps}(ens.cat, obs.cat),   
+                    \hlfunctioncall{EnsRps}(ens.cat.ref, obs.cat)),
+ CRPS  = \hlfunctioncall{SkillScore}(\hlfunctioncall{EnsCrps}(ens, obs),          
+                    \hlfunctioncall{EnsCrps}(ens.ref, obs))
+)
 \end{alltt}
 \begin{verbatim}
 ##       skillscore skillscore.sd
-## Brier     0.4680       0.14973
-## QS        0.1719       0.13042
-## RPS       0.2258       0.14624
-## CRPS      0.4048       0.07343
+## Brier     0.4263       0.16147
+## QS        0.1070       0.14064
+## RPS       0.1651       0.15771
+## CRPS      0.3582       0.07919
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+
 
 
 \subsection{Correlation and correlation difference}
@@ -641,8 +651,8 @@ where $z_{xy} = \atanh(r_{xy})$ is the Fisher transformation, and $Z_p$ is the $
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{ens.mean} \hlkwb{<-} \hlkwd{rowMeans}\hlstd{(ens)}
-\hlkwd{Corr}\hlstd{(ens.mean, obs,} \hlkwc{conf.level}\hlstd{=}\hlnum{0.95}\hlstd{)}
+ens.mean <- \hlfunctioncall{rowMeans}(ens)
+\hlfunctioncall{Corr}(ens.mean, obs, conf.level=0.95)
 \end{alltt}
 \begin{verbatim}
 ##        corr     p.value           L           U 
@@ -650,6 +660,7 @@ where $z_{xy} = \atanh(r_{xy})$ is the Fisher transformation, and $Z_p$ is the $
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+
 
 
 It is often of interest to compare the skill of two forecasts by calculating their correlation difference.
@@ -690,7 +701,7 @@ For illustration, we evaluate the difference in correlation between the ensemble
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{CorrDiff}\hlstd{(}\hlkwc{fcst}\hlstd{=ens.mean,} \hlkwc{fcst.ref}\hlstd{=obs.lag,} \hlkwc{obs}\hlstd{=obs,} \hlkwc{conf.level}\hlstd{=}\hlnum{0.95}\hlstd{)}
+\hlfunctioncall{CorrDiff}(fcst=ens.mean, fcst.ref=obs.lag, obs=obs, conf.level=0.95)
 \end{alltt}
 \begin{verbatim}
 ## corr.diff   p.value         L         U 
@@ -698,6 +709,7 @@ For illustration, we evaluate the difference in correlation between the ensemble
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+
 %
 The one-sided p-value is small and the value of zero correlation is close to the boundary of the 95\% confidence interval, which provides ample evidence that the seasonal forecast has higher correlation skill than the persistence forecast.
 
@@ -761,10 +773,10 @@ The following calculates AUCs for the ensemble mean of the binary ensemble, usin
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{rbind}\hlstd{(}
-  \hlkwc{large.ens} \hlstd{=} \hlkwd{Auc}\hlstd{(}\hlkwd{rowMeans}\hlstd{(ens.bin[, i.large]), obs.bin),}
-  \hlkwc{small.ens} \hlstd{=} \hlkwd{Auc}\hlstd{(}\hlkwd{rowMeans}\hlstd{(ens.bin[, i.small]), obs.bin)}
-\hlstd{)}
+\hlfunctioncall{rbind}(
+  large.ens = \hlfunctioncall{Auc}(\hlfunctioncall{rowMeans}(ens.bin[, i.large]), obs.bin),
+  small.ens = \hlfunctioncall{Auc}(\hlfunctioncall{rowMeans}(ens.bin[, i.small]), obs.bin)
+)
 \end{alltt}
 \begin{verbatim}
 ##              auc  auc.sd
@@ -773,6 +785,7 @@ The following calculates AUCs for the ensemble mean of the binary ensemble, usin
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+
 %
 The AUC of both ensembles is significantly larger than 0.5, which is a sign of forecast skill.
 The large subensemble has a slightly higher AUC than the small subensemble.
@@ -781,7 +794,7 @@ The following evaluates the AUC difference between the large and a small ensembl
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{AucDiff}\hlstd{(}\hlkwd{rowMeans}\hlstd{(ens.bin[, i.large]),} \hlkwd{rowMeans}\hlstd{(ens.bin[, i.small]), obs.bin)}
+\hlfunctioncall{AucDiff}(\hlfunctioncall{rowMeans}(ens.bin[, i.large]), \hlfunctioncall{rowMeans}(ens.bin[, i.small]), obs.bin)
 \end{alltt}
 \begin{verbatim}
 ##    auc.diff auc.diff.sd 
@@ -789,6 +802,7 @@ The following evaluates the AUC difference between the large and a small ensembl
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+
 %
 The AUC difference is within sampling variability, and we remain uncertain about whether the larger ensemble improves the AUC.
 In general, we expect ensemble size to effect AUC, but we are not aware of any published ensemble-adjustments for the AUC. 
@@ -797,17 +811,17 @@ In general, we expect ensemble size to effect AUC, but we are not aware of any p
 
 \section{Rank histogram analysis for ensemble forecasts}
 
-The verification rank histogram \citep{hamill2001interpretation} is a non-parametric graphical tool to assess the reliability of an ensemble forecasting system.
+The verification rank histogram \citep{talagrand1997evaluation,hamill2001interpretation} is a non-parametric graphical tool to assess the reliability of an ensemble forecasting system.
 For each pair of ensemble forecast and verifying observation, the rank of the observation among the ordered ensemble members is calculated.
 In a $R$-member ensemble, the rank is between $1$ and $R+1$.
-If the ensemble is a reliable representation of the uncertainty in the observation, the observation should statistically behave like ``just another ensemble member''. 
+If the ensemble is reliable, i.e., statistically exchangeable with the verifying observation, the observation should behave like ``just another ensemble member''. 
 Each verification rank should therefore be equally likely on average, and the histogram over verification ranks should be flat. 
-\pkg{SpecsVerification} contains the function \code{Rankhist} to calculate the verification rank counts for an archive of ensembles and observations.
-
+\pkg{SpecsVerification} contains the function \code{Rankhist} to calculate the verification-rank histogram counts for an archive of ensembles and observations:
+%
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{(rh} \hlkwb{<-} \hlkwd{Rankhist}\hlstd{(ens, obs))}
+(rh <- \hlfunctioncall{Rankhist}(ens, obs))
 \end{alltt}
 \begin{verbatim}
 ##  [1] 0 2 1 0 2 4 1 1 0 0 0 0 1 2 2 1 3 1 1 0 1 1 0 2 1
@@ -833,12 +847,13 @@ A rank histogram on probability paper is shown in Figure \ref{fig:rank-hist-pp}.
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{PlotRankhist}\hlstd{(rh,} \hlkwc{mode}\hlstd{=}\hlstr{"prob.paper"}\hlstd{)}
+\hlfunctioncall{PlotRankhist}(rh, mode=\hlstring{"prob.paper"})
 \end{alltt}
 \end{kframe}
-\includegraphics[width=\maxwidth]{figure/rank-hist-pp-1} 
+\includegraphics[width=\maxwidth]{figure/rank-hist-pp} 
 
 \end{knitrout}
+
 %
 \end{center}
 \caption{Rank histogram on probability paper}
@@ -882,7 +897,7 @@ The $\chi^2$-test using the linear contrast is sensitive to sloped rank histgram
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{TestRankhist}\hlstd{(rh)}
+\hlfunctioncall{TestRankhist}(rh)
 \end{alltt}
 \begin{verbatim}
 ##                pearson.chi2 jp.slope jp.convex
@@ -892,27 +907,28 @@ The $\chi^2$-test using the linear contrast is sensitive to sloped rank histgram
 \end{kframe}
 \end{knitrout}
 
+
 All p-values are considerably larger than zero.
 The rank histogram of the temperature ensemble forecast provides no evidence against the null-hypothesis of a reliable ensemble.
 
 \section{Reliability diagrams for probability forecasts}
 
-The reliability diagram is a classical tool to compare probability forecasts of binary events to the verifying binary observations \citep{jolliffe2012forecast}.
+The reliability diagram is a classical tool to compare probability forecasts of binary events to the verifying binary observations \citep{wilks2011statistical,jolliffe2012forecast}.
 The reliability diagram compares the issued forecast probabilities to the conditional average frequencies of the observation, given the forecast.
 A forecast is reliable if the forecast probabilities and their conditional event frequencies are equal.
 
 
 To estimate the conditional event frequencies the forecast probabilities are grouped into a finite number of non-overlapping bins.
 The reliability diagram is a plot of the conditional event frequency per bin over the in-bin average of the forecast probabilities.
-\pkg{SpecsVerification} provides the function \code{ReliabilityDiagram} that takes as inputs a collection of probability forecasts and binary verifying observations, and calculates the reliability diagram for a specified number of equidistant bins, or a user-defined non-equidistant binning.
-The consistency resampling method proposed by \citet{broecker2007increasing} is used to estimate the expected spread of the reliability diagrams around the diagonal if the forecast were reliable.
+\pkg{SpecsVerification} provides the function \code{ReliabilityDiagram} that takes as inputs a collection of probability forecasts and binary verifying observations, and calculates the reliability diagram for a specified number of user-defined bins,  that do not have to be equidistant.
+The consistency resampling method proposed by \citet{broecker2007increasing} is used to estimate the expected spread of the reliability diagrams around the diagonal to assess the null-hypothesis that the forecast is reliable.
 If the \code{plot} argument is set to \code{FALSE}, the \code{ReliabilityDiagram} function returns the quantities necessary to plot the reliability diagram.
 %
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{p.bin} \hlkwb{<-} \hlkwd{rowMeans}\hlstd{(ens.bin)}
-\hlkwd{ReliabilityDiagram}\hlstd{(p.bin, obs.bin,} \hlkwc{plot}\hlstd{=}\hlnum{FALSE}\hlstd{,} \hlkwc{bins}\hlstd{=}\hlnum{3}\hlstd{)}
+p.bin <- \hlfunctioncall{rowMeans}(ens.bin)
+\hlfunctioncall{ReliabilityDiagram}(p.bin, obs.bin, plot=FALSE, bins=3)
 \end{alltt}
 \begin{verbatim}
 ##   p.avgs cond.probs cbar.lo cbar.hi p.counts bin.lower bin.upper
@@ -922,6 +938,7 @@ If the \code{plot} argument is set to \code{FALSE}, the \code{ReliabilityDiagram
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
+
 %
 If the argument \code{plot=TRUE} the reliability diagram is plotted, as shown in Figure \ref{reldiag-plot}. 
 The logical argument \code{plot.refin} controls the refinement diagram, i.e. the histogram over the forecast probabilities.
@@ -934,12 +951,13 @@ Points that fall into the shaded area of the attributes diagram contribute posit
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{rd} \hlkwb{<-} \hlkwd{ReliabilityDiagram}\hlstd{(p.bin, obs.bin,} \hlkwc{plot}\hlstd{=}\hlnum{TRUE}\hlstd{,} \hlkwc{bins}\hlstd{=}\hlnum{3}\hlstd{,} \hlkwc{attributes}\hlstd{=}\hlnum{TRUE}\hlstd{)}
+rd <- \hlfunctioncall{ReliabilityDiagram}(p.bin, obs.bin, plot=TRUE, bins=3, attributes=TRUE)
 \end{alltt}
 \end{kframe}
-\includegraphics[width=\maxwidth]{figure/reldiag-1} 
+\includegraphics[width=\maxwidth]{figure/reldiag} 
 
 \end{knitrout}
+
 %
 \end{center}
 \caption{Reliability diagram of temperature exceedance forecasts \code{p.bin}, using 3 equidistant bins to estimate the conditional event frequencies.} 
@@ -974,7 +992,7 @@ Auxiliary functions were added to the package, namely the function \code{Detrend
 
 \section{Conclusion}
 
-The package \pkg{SpecsVerification} for the \proglang{R} statistical programming environment implements a variety of forecast verification functions, most of which are not available in previous verification software packages.
+The package \pkg{SpecsVerification} for the \proglang{R} statistical programming environment implements a variety of forecast verification functions that are not available in previous verification software packages.
 The focus of \pkg{SpecsVerification} is on comparative verification of ensemble forecasts, and uncertainty quantification by statistical testing and confidence intervals.
 Continuous, categorical and binary ensemble forecasts for univariate quantities can be evaluated and compared by a number of verification scores.
 Additional functions for data transformation and statistical post-processing simplify a number of common verification tasks.
@@ -982,9 +1000,9 @@ Additional functions for data transformation and statistical post-processing sim
 
 \section*{Acknowledgements}
 
-This paper benefitted from numerous discussions with the members of the statistical science group at the University of Exeter, in particular Christopher Ferro and David Stephenson.
+This paper has benefitted from numerous discussions with the members of the statistical science group at the University of Exeter, in particular Chris Ferro and David Stephenson.
 This work was supported by the European Union Programme FP7/2007-13 under grant agreement 3038378 (SPECS).
-The views expressed herein are those of the author and do not necessarily reflect the views of funding bodies or any of their subagencies.
+The views expressed herein are those of the author and do not necessarily reflect the views of funding bodies and their subagencies.
 
 
 \bibliography{ensemble-verification}

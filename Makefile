@@ -38,9 +38,10 @@ $(PDF_FILE): $(BIB_FILE) $(TEX_FILE)
 	cd $(ROOT_DIR)
 
 
-# create the tex source with sweave
+# create the tex source with knitr::knit and R script with knitr::purl
 $(TEX_FILE): $(RNW_FILE) $(R_PKG_tgz)
 	cd $(TEX_DIR);\
+	$(RSCRIPT_CMD) -e 'knitr::purl("$(RNW_FILE)")';\
 	$(RSCRIPT_CMD) -e 'knitr::knit("$(RNW_FILE)")';\
 	cd $(ROOT_DIR)
 

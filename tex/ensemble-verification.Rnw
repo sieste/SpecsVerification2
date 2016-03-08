@@ -13,7 +13,7 @@
 
 %% almost as usual
 \author{Stefan Siegert\\University of Exeter}
-\title{Verification Scores for Ensemble Forecasts Implemented in the \proglang{R} Package \pkg{SpecsVerification}}
+\title{Ensemble Forecast Verification Functions Implemented in the \proglang{R} Package \pkg{SpecsVerification}}
 \Shorttitle{\pkg{SpecsVerification}: R Functions for Ensemble Verification} %% a short title (if necessary)
 \Plainauthor{Stefan Siegert} %% comma-separated
 \Plaintitle{Forecast Verification Methods Implemented in the R package SpecsVerification: Ensemble Scores, Comparative Verification, and Uncertainty Quantification}
@@ -29,7 +29,7 @@ Implementations of the methods are freely available in the \proglang{R} package 
 
 }
 \Keywords{ensemble forecasting, forecast verification, finite-ensemble effect, comparative verification, uncertainty quantification, \proglang{R}}
-\Plainkeywords{keywords, comma-separated, not capitalized, R} %% without formatting
+\Plainkeywords{ensemble forecasting, forecast verification, finite-ensemble effect, comparative verification, uncertainty quantification, R} %% without formatting
 %% at least one keyword must be supplied
 
 %% publication information
@@ -45,8 +45,7 @@ Implementations of the methods are freely available in the \proglang{R} package 
 %% in the following format:
 \Address{
   Stefan Siegert\\
-  Exeter Climate Systems\\
-  College for Engineering, Mathematics, and Physical Sciences\\
+  Statistical Science Group\\
   University of Exeter\\
   Exeter, EX4 4QF, United Kingdom\\
   E-mail: \email{Stefan.Siegert@exeter.ac.uk}\\
@@ -58,7 +57,6 @@ Implementations of the methods are freely available in the \proglang{R} package 
 
 % initialise R session and knitr
 <<echo=FALSE>>=
-library("xtable")
 library("SpecsVerification2", lib.loc="~/folders/jss-paper-ensemble-verification/R/libtmp")
 set.seed(31415)
 options(digits=4, scipen=10)
@@ -73,12 +71,6 @@ knitr::opts_chunk$set(dev="pdf", tidy=FALSE)
 %% Note that you should use the \pkg{}, \proglang{} and \code{} commands.
 % \section[About Java]{About \proglang{Java}}
 %% Note: If there is markup in \(sub)section, then it has to be escape as above.
-
-\section*{Note to editor and reviewers}
-
-A package called \pkg{SpecsVerification} is currently available on CRAN.
-The package documented in this paper is an updated, yet unpublished version of \pkg{SpecsVerification}, documenting new and rewritten functions that are not currently available.
-
 
 
 \section{Introduction}
@@ -421,9 +413,9 @@ To benchmark ensemble forecasts in particular, the climatological reference fore
 \pkg{SpecsVerification} includes the function \code{ClimEns} which transforms a vector of observations into a matrix of climatological ensemble forecasts, including the possibility to leave out the $t$th observation on the $t$th forecast instance:
 %
 <<>>=
-ens.ref     <- ClimEns(obs,     leave.one.out=TRUE)
-ens.cat.ref <- ClimEns(obs.cat, leave.one.out=TRUE)
-ens.bin.ref <- ClimEns(obs.bin, leave.one.out=TRUE)
+ens.ref     <- ClimEns(obs)
+ens.cat.ref <- ClimEns(obs.cat)
+ens.bin.ref <- ClimEns(obs.bin)
 @
 %
 In addition to the climatological forecast, it is advisable to also consider statistical reference forecasts such as a linear trend or an auto-regressive model, which are often more suitable than the climatological forecast.
@@ -640,17 +632,16 @@ In general, we expect ensemble size to effect AUC, but we are not aware of any p
 
 \section{Rank histogram analysis for ensemble forecasts}
 
-The verification rank histogram \citep{hamill2001interpretation} is a non-parametric graphical tool to assess the reliability of an ensemble forecasting system.
+The verification rank histogram \citep{talagrand1997evaluation,hamill2001interpretation} is a non-parametric graphical tool to assess the reliability of an ensemble forecasting system.
 For each pair of ensemble forecast and verifying observation, the rank of the observation among the ordered ensemble members is calculated.
 In a $R$-member ensemble, the rank is between $1$ and $R+1$.
-If the ensemble is a reliable representation of the uncertainty in the observation, the observation should statistically behave like ``just another ensemble member''. 
+If the ensemble is reliable, i.e., statistically exchangeable with the verifying observation, the observation should behave like ``just another ensemble member''. 
 Each verification rank should therefore be equally likely on average, and the histogram over verification ranks should be flat. 
-\pkg{SpecsVerification} contains the function \code{Rankhist} to calculate the verification rank counts for an archive of ensembles and observations.
-
+\pkg{SpecsVerification} contains the function \code{Rankhist} to calculate the verification-rank histogram counts for an archive of ensembles and observations:
+%
 <<>>=
 (rh <- Rankhist(ens, obs))
 @
-
 
 
 The function \code{PlotRankhist} plots the rank histogram.
@@ -718,15 +709,15 @@ The rank histogram of the temperature ensemble forecast provides no evidence aga
 
 \section{Reliability diagrams for probability forecasts}
 
-The reliability diagram is a classical tool to compare probability forecasts of binary events to the verifying binary observations \citep{jolliffe2012forecast}.
+The reliability diagram is a classical tool to compare probability forecasts of binary events to the verifying binary observations \citep{wilks2011statistical,jolliffe2012forecast}.
 The reliability diagram compares the issued forecast probabilities to the conditional average frequencies of the observation, given the forecast.
 A forecast is reliable if the forecast probabilities and their conditional event frequencies are equal.
 
 
 To estimate the conditional event frequencies the forecast probabilities are grouped into a finite number of non-overlapping bins.
 The reliability diagram is a plot of the conditional event frequency per bin over the in-bin average of the forecast probabilities.
-\pkg{SpecsVerification} provides the function \code{ReliabilityDiagram} that takes as inputs a collection of probability forecasts and binary verifying observations, and calculates the reliability diagram for a specified number of equidistant bins, or a user-defined non-equidistant binning.
-The consistency resampling method proposed by \citet{broecker2007increasing} is used to estimate the expected spread of the reliability diagrams around the diagonal if the forecast were reliable.
+\pkg{SpecsVerification} provides the function \code{ReliabilityDiagram} that takes as inputs a collection of probability forecasts and binary verifying observations, and calculates the reliability diagram for a specified number of user-defined bins,  that do not have to be equidistant.
+The consistency resampling method proposed by \citet{broecker2007increasing} is used to estimate the expected spread of the reliability diagrams around the diagonal to assess the null-hypothesis that the forecast is reliable.
 If the \code{plot} argument is set to \code{FALSE}, the \code{ReliabilityDiagram} function returns the quantities necessary to plot the reliability diagram.
 %
 <<>>=
@@ -779,7 +770,7 @@ Auxiliary functions were added to the package, namely the function \code{Detrend
 
 \section{Conclusion}
 
-The package \pkg{SpecsVerification} for the \proglang{R} statistical programming environment implements a variety of forecast verification functions, most of which are not available in previous verification software packages.
+The package \pkg{SpecsVerification} for the \proglang{R} statistical programming environment implements a variety of forecast verification functions that are not available in previous verification software packages.
 The focus of \pkg{SpecsVerification} is on comparative verification of ensemble forecasts, and uncertainty quantification by statistical testing and confidence intervals.
 Continuous, categorical and binary ensemble forecasts for univariate quantities can be evaluated and compared by a number of verification scores.
 Additional functions for data transformation and statistical post-processing simplify a number of common verification tasks.
@@ -787,9 +778,9 @@ Additional functions for data transformation and statistical post-processing sim
 
 \section*{Acknowledgements}
 
-This paper benefitted from numerous discussions with the members of the statistical science group at the University of Exeter, in particular Christopher Ferro and David Stephenson.
+This paper has benefitted from numerous discussions with the members of the statistical science group at the University of Exeter, in particular Chris Ferro and David Stephenson.
 This work was supported by the European Union Programme FP7/2007-13 under grant agreement 3038378 (SPECS).
-The views expressed herein are those of the author and do not necessarily reflect the views of funding bodies or any of their subagencies.
+The views expressed herein are those of the author and do not necessarily reflect the views of funding bodies and their subagencies.
 
 
 \bibliography{ensemble-verification}
