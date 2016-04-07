@@ -6,6 +6,6 @@ Before updating SpecsVerification on CRAN, I am making the new version as well a
 
 To install SpecsVerification2 from github, use
 
-    devtools::install_github(repo='SpecsVerification2', user='sieste')
+    devtools::install_github('sieste/SpecsVerification2/R/SpecsVerification2')
 
 Please contact s(dot)siegert(at)exeter(dot)ac(dot)uk with any questions or feedback.
