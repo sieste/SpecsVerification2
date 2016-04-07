@@ -145,8 +145,24 @@ new model configurations are often verified on small ensemble sizes.
 Large ensembles are only generated in forecast mode.
 But if verification measures depend on the ensemble size, the skill calculated for the hindcast experiment is not representative of the skill that an operational forecast ensemble with more members would achieve.
 A number of verification scores have been proposed in the past to estimate the finite ensemble effect.
-The main contribution of this paper is to summarise ensemble verification scores, and document their implementation in the \proglang{R} statistical programming environment.
-The package \pkg{SpecsVerification} contains functions to calculate verification scores, compare verification scores, and quantify uncertainty.
+The main contribution of this paper is to summarise ensemble verification scores, and document their implementation in the \proglang{R} statistical programming environment \citep{R2015}.
+
+
+% Forecast verification 
+Forecast quality can hardly be defined in an absolute sense.
+Verification results are easier to interpret if verification measures are compared between competing forecasting systems.
+\pkg{SpecsVerification} contains a number of functions to enable comparative verification. 
+Moreover, the value of a verification metric is of little use without an estimate of its sampling uncertainty \citep{jolliffe2007uncertainty}.
+Uncertainty quantification is all the more important if the sample size of the hindcast data set is small.  
+All verification functions implemented in \pkg{SpecsVerification} provide uncertainty estimates by p-values, confidence intervals, and resampling methods.
+
+
+% package verification
+There are packages for forecast verification available for download from the Comprehensive \proglang{R} Archive Network (CRAN).
+The most notable package is \pkg{verification} \citep{cran_verification}. 
+While \pkg{verification} contains a limited number of functions for ensemble verification, comparative verification and uncertainty quantification, it does not have the same focus on these topics as does \pkg{SpecsVerification}.
+Since the two packages do not share the same functions, \pkg{SpecsVerification} should be regarded as complementary to \pkg{verification}.
+Further recently published \proglang{R} packages for forecast verification include \pkg{easyverification} \citep{cran_easyverification} and \pkg{s2dverification} \citep{cran_s2dverification}, both of which borrow functions from \pkg{SpecsVerification}.
 
 
 

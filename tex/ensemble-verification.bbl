@@ -1,4 +1,4 @@
-\begin{thebibliography}{35}
+\begin{thebibliography}{40}
 \newcommand{\enquote}[1]{``#1''}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
@@ -153,6 +153,13 @@ Hsu Wr, Murphy AH (1986).
 \newblock \doi{10.1016/0169-2070(86)90048-8}.
 \newblock \urlprefix\url{http://dx.doi.org/10.1016/0169-2070(86)90048-8}.
 
+\bibitem[{Jolliffe(2007)}]{jolliffe2007uncertainty}
+Jolliffe IT (2007).
+\newblock \enquote{Uncertainty and Inference for Verification Measures.}
+\newblock \emph{Weather and Forecasting}, \textbf{22}(3), 637--650.
+\newblock \doi{10.1175/waf989.1}.
+\newblock \urlprefix\url{http://dx.doi.org/10.1175/WAF989.1}.
+
 \bibitem[{Jolliffe and Primo(2008)}]{jolliffe2008evaluating}
 Jolliffe IT, Primo C (2008).
 \newblock \enquote{Evaluating Rank Histograms Using Decompositions of the
@@ -167,6 +174,13 @@ Jolliffe IT, Stephenson DB (2012).
 \newblock \emph{Forecast verification: a practitioner's guide in atmospheric
   science}.
 \newblock John Wiley \& Sons.
+
+\bibitem[{Jonas~Bhend(2016)}]{cran_easyverification}
+Jonas~Bhend Jacopo~Ripoldi CMIMRHCSMLAWJBJMDF (2016).
+\newblock \emph{{easyVerification: Ensemble Forecast Verification for Large
+  Data Sets}}.
+\newblock R package version 0.2.0,
+  \urlprefix\url{https://CRAN.R-project.org/package=easyverification}.
 
 \bibitem[{Leutbecher and Palmer(2008)}]{leutbecher2008ensemble}
 Leutbecher M, Palmer T (2008).
@@ -201,6 +215,12 @@ Murphy AH (1973).
 \newblock
   \urlprefix\url{http://dx.doi.org/10.1175/1520-0450(1973)012<0595:ANVPOT>2.0.CO;2}.
 
+\bibitem[{{NCAR - Research Applications Laboratory}(2015)}]{cran_verification}
+{NCAR - Research Applications Laboratory} (2015).
+\newblock \emph{verification: Forecast verification utilities.}
+\newblock R package version 1.42,
+  \urlprefix\url{https://CRAN.R-project.org/package=verification}.
+
 \bibitem[{Pearson(1900)}]{pearson1900criterion}
 Pearson K (1900).
 \newblock \enquote{X. On the criterion that a given system of deviations from
@@ -210,6 +230,12 @@ Pearson K (1900).
 \newblock ISSN 1941-5990.
 \newblock \doi{10.1080/14786440009463897}.
 \newblock \urlprefix\url{http://dx.doi.org/10.1080/14786440009463897}.
+
+\bibitem[{{R Core Team}(2015)}]{R2015}
+{R Core Team} (2015).
+\newblock \emph{R: A Language and Environment for Statistical Computing}.
+\newblock R Foundation for Statistical Computing, Vienna, Austria.
+\newblock \urlprefix\url{https://www.R-project.org/}.
 
 \bibitem[{Roulston and Smith(2002)}]{roulston2002evaluating}
 Roulston MS, Smith LA (2002).
@@ -280,6 +306,13 @@ Steiger JH (1980).
 Talagrand O, Vautard R, Strauss B (1997).
 \newblock \enquote{Evaluation of probabilistic prediction systems.}
 \newblock In \emph{Proc. ECMWF Workshop on Predictability}, volume~1, p.~25.
+
+\bibitem[{Virginie~Guemas(2016)}]{cran_s2dverification}
+Virginie~Guemas Nicolau~Manubens LPCVTCPMMJGSFLLAIAB (2016).
+\newblock \emph{{s2dverification: Set of Common Tools for Forecast
+  Verification}}.
+\newblock R package version 2.5.0,
+  \urlprefix\url{https://CRAN.R-project.org/package=s2dverification}.
 
 \bibitem[{Von~Storch and Zwiers(2001)}]{vonstorch2001statistical}
 Von~Storch H, Zwiers FW (2001).
