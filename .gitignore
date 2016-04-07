@@ -5,4 +5,5 @@ tex/*.aux
 tex/*.blg
 tex/*.log
 tex/*.out
+tex/*.bbl
 
