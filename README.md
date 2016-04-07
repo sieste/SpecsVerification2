@@ -8,4 +8,9 @@ To install SpecsVerification2 from github, use
 
     devtools::install_github('sieste/SpecsVerification2/R/SpecsVerification2')
 
+The paper was written in latex and knitr. The source file is `tex/ensemble-verification.Rnw`. To (re)compile the paper, change paths in the `Makefile` as necessary, and
+
+    make paper
+
 Please contact s(dot)siegert(at)exeter(dot)ac(dot)uk with any questions or feedback.
+
