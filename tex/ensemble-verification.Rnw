@@ -72,6 +72,14 @@ knitr::opts_chunk$set(dev="pdf", tidy=FALSE)
 % \section[About Java]{About \proglang{Java}}
 %% Note: If there is markup in \(sub)section, then it has to be escape as above.
 
+\section*{Note to editor and reviewers}
+
+\textit{This section is not part of the paper}
+
+A package called \pkg{SpecsVerification} is currently available on CRAN.
+The package documented in this paper is an updated, yet unpublished version of \pkg{SpecsVerification}, with new and rewritten functions that are not available in the current package version.
+The source code of the revised version of \pkg{SpecsVerification} documented in this paper is publicly available in the github repository \url{https://github.com/sieste/SpecsVerification2}.
+
 
 \section{Introduction}
 
