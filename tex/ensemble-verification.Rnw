@@ -13,10 +13,10 @@
 
 %% almost as usual
 \author{Stefan Siegert\\University of Exeter}
-\title{Forecast Verification Functions Implemented in the \proglang{R} Package \pkg{SpecsVerification}: Ensemble-adjusted scores, comparative verification, and uncertainty quantification}
+\title{Forecast Verification: Ensemble-adjusted scoring rules, graphical tools, comparative verification, and uncertainty quantification implemented in the \proglang{R} package \pkg{SpecsVerification}}
 \Shorttitle{\proglang{R}-package \pkg{SpecsVerification}} %% a short title (if necessary)
 \Plainauthor{Stefan Siegert} %% comma-separated
-\Plaintitle{Forecast Verification Functions Implemented in the R Package SpecsVerification: Ensemble-adjusted scores, comparative verification, and uncertainty quantification}
+\Plaintitle{Forecast Verification: Ensemble-adjusted scoring rules, graphical tools, comparative verification, and uncertainty quantification implemented in the R package SpecsVerification}
 
 %% an abstract and keywords
 \Abstract{
@@ -24,9 +24,12 @@
 Forecast verification, the comparison of retrospective forecasts to observations, is a common task at institutions that develop and issue forecasts, such as climate centers.
 To assess forecast uncertainty, ensembles of forecasts initialised from perturbed initial conditions are routinely issued.
 In recent years, advances have been made in statistical methodology for ensemble forecast verification, in particular to estimate the finite-ensemble effect on verification scores.
-This paper summarises statistical methodology to account for finite-ensemble effects in ensemble verification, to compare the quality of ensemble forecasts with different numbers of ensemble members, and to quantify uncertainty in forecast verification results.
-Implementations of the methods are freely available in the \proglang{R} package \pkg{SpecsVerification}.
-
+This paper summarises statistical methodology to account for finite-ensemble effects in ensemble verification. 
+Forecast verification analyses should be accompanied by an assessment of the sampling uncertainty in the results.
+This paper summarises methods to assess sampling uncertainty for a large number of forecast verification metrics and scores, including scoring rules, the correlation coefficient, the area under the ROC curve, the rank histogram, the reliability diagram, and the Reliability-Resolution-Uncertainty decomposition of the Brier score.
+Forecast verification is often more meaningful by comparing competing forecasting systems for the same observation.
+A number of methods for uncertainty assessment for comparative verification are summarised.
+All methods presented are implemented in the \proglang{R} package \pkg{SpecsVerification}.
 }
 \Keywords{ensemble forecasting, forecast verification, finite-ensemble effect, comparative verification, uncertainty quantification, \proglang{R}}
 \Plainkeywords{ensemble forecasting, forecast verification, finite-ensemble effect, comparative verification, uncertainty quantification, R} %% without formatting
@@ -72,9 +75,7 @@ knitr::opts_chunk$set(dev="pdf", tidy=FALSE)
 % \section[About Java]{About \proglang{Java}}
 %% Note: If there is markup in \(sub)section, then it has to be escape as above.
 
-\section*{Note to editor and reviewers}
-
-\textit{This section is not part of the paper}
+\textbf{Note to editor and reviewers}
 
 A package called \pkg{SpecsVerification} is currently available on CRAN.
 The package documented in this paper is an updated, yet unpublished version of \pkg{SpecsVerification}, with new and rewritten functions that are not available in the current package version.
