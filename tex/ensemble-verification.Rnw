@@ -13,26 +13,26 @@
 
 %% almost as usual
 \author{Stefan Siegert\\University of Exeter}
-\title{Forecast Verification: Ensemble-adjusted scoring rules, graphical tools, comparative verification, and uncertainty quantification implemented in the \proglang{R} package \pkg{SpecsVerification}}
+\title{Forecast Verification: Ensemble-adjusted scoring rules, graphical tools, comparative verification, and uncertainty assessment implemented in the \proglang{R} package \pkg{SpecsVerification}}
 \Shorttitle{\proglang{R}-package \pkg{SpecsVerification}} %% a short title (if necessary)
 \Plainauthor{Stefan Siegert} %% comma-separated
-\Plaintitle{Forecast Verification: Ensemble-adjusted scoring rules, graphical tools, comparative verification, and uncertainty quantification implemented in the R package SpecsVerification}
+\Plaintitle{Forecast Verification: Ensemble-adjusted scoring rules, graphical tools, comparative verification, and uncertainty assessment implemented in the R package SpecsVerification}
 
 %% an abstract and keywords
 \Abstract{
 
-Forecast verification, the comparison of retrospective forecasts to observations, is a common task at institutions that develop and issue forecasts, such as climate centers.
-To assess forecast uncertainty, ensembles of forecasts initialised from perturbed initial conditions are routinely issued.
-In recent years, advances have been made in statistical methodology for ensemble forecast verification, in particular to estimate the finite-ensemble effect on verification scores.
+Forecast verification, the retrospective comparison of forecasts to observations, is a common task at institutions that routinely issue forecasts to the public, such as climate centers.
+Ensemble forecasts, i.e., multiple forecasts initialised from perturbed initial conditions, are routinely issued to generate probabilistic forecasts.
+In recent years, advances have been made in statistical methodology to verify ensemble forecast, in particular to estimate the finite-ensemble effect on verification scores.
 This paper summarises statistical methodology to account for finite-ensemble effects in ensemble verification. 
 Forecast verification analyses should be accompanied by an assessment of the sampling uncertainty in the results.
-This paper summarises methods to assess sampling uncertainty for a large number of forecast verification metrics and scores, including scoring rules, the correlation coefficient, the area under the ROC curve, the rank histogram, the reliability diagram, and the Reliability-Resolution-Uncertainty decomposition of the Brier score.
+This paper summarises existing methods to assess sampling uncertainty for a large number of verification metrics, including scoring rules, correlation coefficients, the area under the ROC curve, the rank histogram, the reliability diagram, and the Reliability-Resolution-Uncertainty decomposition of the Brier score.
 Forecast verification is often more meaningful by comparing competing forecasting systems for the same observation.
-A number of methods for uncertainty assessment for comparative verification are summarised.
+A number of methods for uncertainty assessment for comparative verification are summarised in this paper as well.
 All methods presented are implemented in the \proglang{R} package \pkg{SpecsVerification}.
 }
-\Keywords{ensemble forecasting, forecast verification, finite-ensemble effect, comparative verification, uncertainty quantification, \proglang{R}}
-\Plainkeywords{ensemble forecasting, forecast verification, finite-ensemble effect, comparative verification, uncertainty quantification, R} %% without formatting
+\Keywords{ensemble forecasting, forecast verification, finite-ensemble effect, comparative verification, uncertainty, \proglang{R}}
+\Plainkeywords{ensemble forecasting, forecast verification, finite-ensemble effect, comparative verification, uncertainty, R} %% without formatting
 %% at least one keyword must be supplied
 
 %% publication information
@@ -51,7 +51,7 @@ All methods presented are implemented in the \proglang{R} package \pkg{SpecsVeri
   Statistical Science Group\\
   University of Exeter\\
   Exeter, EX4 4QF, United Kingdom\\
-  E-mail: \email{Stefan.Siegert@exeter.ac.uk}\\
+  E-mail: \email{s.siegert@exeter.ac.uk}\\
   URL: \url{http://emps.exeter.ac.uk/mathematics/staff/ss610}
 }
 
@@ -80,6 +80,7 @@ knitr::opts_chunk$set(dev="pdf", tidy=FALSE)
 A package called \pkg{SpecsVerification} is currently available on CRAN.
 The package documented in this paper is an updated, yet unpublished version of \pkg{SpecsVerification}, with new and rewritten functions that are not available in the current package version.
 The source code of the revised version of \pkg{SpecsVerification} documented in this paper is publicly available in the github repository \url{https://github.com/sieste/SpecsVerification2}.
+The package will be updated on CRAN after peer review.
 
 
 \section{Introduction}
@@ -98,29 +99,31 @@ A variety of verification measures exists to assess the quality of different for
 
 
 %{\bf Finite size effect in ensemble verification}
-The \proglang{R} package \pkg{SpecsVerification} documented in this paper focuses primarily on verification scores for ensemble forecasts.
-It is known that verification measures can depend systematically on the ensemble size; everything else being equal, large ensembles achieve better average scores than small ensembles \citep{buizza1998impact}.
-Since hindcast experiments with state-of-the-art climate models are computationally expensive, 
-new model configurations are often verified on small ensemble sizes.
-Large ensembles are only generated in forecast mode.
-But if verification measures depend on the ensemble size, the skill calculated for the hindcast experiment is not representative of the skill that an operational forecast ensemble with more members would achieve.
-A number of verification scores have been proposed in the past to estimate the finite ensemble effect.
-The main contribution of this paper is to summarise ensemble verification scores, and document their implementation in the \proglang{R} statistical programming environment \citep{R2015}.
+The \proglang{R} package \pkg{SpecsVerification} documented in this paper implements specialised verification scores for ensemble forecasts.
+\citet{buizza1998impact} and others have shown that verification metrics can depend systematically on the number of ensemble members. 
+Everything else being equal, ensembles with many members achieve better verification results than ensembles with fewer members.
+This finding is not surprising, because larger ensembles allow for a more comprehensive exploration of forecast uncertainty, and thus more robust probabilistic forecasts.
+However, hindcast experiments with state-of-the-art climate models are computationally expensive, and therefore new model configurations are often tested with small ensemble sizes first.
+Large ensembles are only generated in forecast mode, after developers have agreed on the best model configuration.
+But if measures of forecast skill depend on the ensemble size, the skill calculated for the hindcast ensemble with few members is not representative of the skill that an operational ensemble with more members will likely achieve.
+A number of verification scores have been proposed in the past to estimate, and correct, this finite ensemble effect.
+An important contribution of this paper is to summarise existing ensemble verification scores, and to document their implementation in the \proglang{R} statistical programming environment \citep{R2015}.
 
 
 % Forecast verification 
 Forecast quality can hardly be defined in an absolute sense.
-Verification results are easier to interpret if verification measures are compared between competing forecasting systems.
-\pkg{SpecsVerification} contains a number of functions to enable comparative verification. 
+Verification results are easier to interpret if verification measures are compared between competing forecasting systems for the same observation.
+\pkg{SpecsVerification} contains a number of functions to enable comparative verification between competing forecasts.
 Moreover, the value of a verification metric is of little use without an estimate of its sampling uncertainty \citep{jolliffe2007uncertainty}.
-Uncertainty quantification is all the more important if the sample size of the hindcast data set is small.  
-All verification functions implemented in \pkg{SpecsVerification} provide uncertainty estimates by p-values, confidence intervals, and resampling methods.
+Uncertainty assessment is all the more important if the sample size of the hindcast data set is small, as is often the case in climate science.
+All verification functions implemented in \pkg{SpecsVerification} come with built-in uncertainty assessments.
+Systematically reviewing and implementing these methods is another important contribution of this paper.
 
 
 % package verification
 There are packages for forecast verification available for download from the Comprehensive \proglang{R} Archive Network (CRAN).
 The most notable package is \pkg{verification} \citep{cran_verification}. 
-While \pkg{verification} contains a limited number of functions for ensemble verification, comparative verification and uncertainty quantification, it does not have the same focus on these topics as does \pkg{SpecsVerification}.
+While \pkg{verification} contains a limited number of functions for ensemble verification, comparative verification and uncertainty assessment, it does not have the same focus on these topics as does \pkg{SpecsVerification}.
 Since the two packages do not share the same functions, \pkg{SpecsVerification} should be regarded as complementary to \pkg{verification}.
 Further recently published \proglang{R} packages for forecast verification include \pkg{easyverification} \citep{cran_easyverification} and \pkg{s2dverification} \citep{cran_s2dverification}, both of which borrow functions from \pkg{SpecsVerification}.
 
@@ -157,9 +160,10 @@ Further recently published \proglang{R} packages for forecast verification inclu
 \end{tabular}
 \end{table}
 
-\section{Forecast and observation data}
 
 
+
+\section{Seasonal climate forecast and observation data}
  
 \pkg{SpecsVerification} includes the data set \code{eurotempforecast} of seasonal temperature ensemble forecasts and verifying observations.
 The forecasts 24-member ensembles of near-surface air temperatures produced by the NCEP climate forecast system version 2 \citep{saha2014ncep}, initialised between 11 April and 6 May each year from 1983--2009 ($N=27$), and averaged over the region limited by latitudes $30^\circ$N -- $75^\circ$N and longitudes $12.5^\circ$W -- $42.5^\circ$E, and over the months June-July-August, i.e., the lead time is about 1--3 months.
@@ -426,7 +430,7 @@ cbind(
 
 
 
-\section{Comparative verification and uncertainty quantification}
+\section{Comparative verification and uncertainty assessment}
 
 
 \subsection{Reference forecast}
@@ -517,7 +521,7 @@ rbind(
 \subsection{Correlation and correlation difference}
 
 The Pearson (product-moment) correlation coefficient is one of the most popular verification criteria, and can easily be calculated with the built-in \proglang{R} function \code{cor}.
-Since uncertainty quantification is often of interest in forecast verification, \pkg{SpecsVerification} provides the function \code{Corr}, which returns the sample correlation coefficient $r_{xy}$, a one-sided p-value, and a confidence interval based on standard methods presented in, e.g., \citet{vonstorch2001statistical}.
+Since uncertainty assessment is often of interest in forecast verification, \pkg{SpecsVerification} provides the function \code{Corr}, which returns the sample correlation coefficient $r_{xy}$, a one-sided p-value, and a confidence interval based on standard methods presented in, e.g., \citet{vonstorch2001statistical}.
 The p-value is calculated based on the test statistic
 %
 \begin{equation}
@@ -779,7 +783,7 @@ The empirical mean of the Brier Score of the probability forecasts $p_1, \cdots,
 %
 Assume that the forecast probabilities were categorised into $D$ disjoint bins, and a reliability curve was calculated.
 The in-bin average of the forecast probabilities in the $d$th bin is denoted by $\bar{p}_d$, the total number of cases in the $d$th bin is denoted by $n_d$, the conditional event frequency in the $d$th bin is denoted by $\bar{y}_d$, and the overall average of the observations is denoted by $\bar{y}$.
-Then the three components of the Brier Score decomposition are given by \citet{murphy1973new}:
+Then the three components of the Brier Score decomposition are given by \citep{murphy1973new}:
 %
 \begin{align}
 REL & = \frac{1}{N}\sum_{d=1}^D n_d (\bar{p}_d - \bar{o}_d)^2,\\
@@ -804,7 +808,7 @@ The Brier Score decomposition suggests that the forecasts are reliable ($REL\app
 
 \section{Additional functions}
 
-The focus of \pkg{SpecsVerification}, and of the present paper, is on verification functions for ensemble and probability forecasts, uncertainty quantification, and graphical display of the results.
+The focus of \pkg{SpecsVerification}, and of the present paper, is on verification functions for ensemble and probability forecasts, uncertainty assessment, and graphical display of the results.
 \pkg{SpecsVerification} includes a number of functions for post-processing and forecast verification that were included following user requests.
 
 
@@ -830,7 +834,7 @@ Auxiliary functions were added to the package, namely the function \code{Detrend
 \section{Conclusion}
 
 The package \pkg{SpecsVerification} for the \proglang{R} statistical programming environment implements a variety of forecast verification functions that are not available in previous verification software packages.
-The focus of \pkg{SpecsVerification} is on comparative verification of ensemble forecasts, and uncertainty quantification by variance estimation, statistical testing, and confidence intervals.
+The focus of \pkg{SpecsVerification} is on comparative verification of ensemble forecasts, and uncertainty assessment by variance estimation, statistical testing, and confidence intervals.
 Continuous, categorical and binary ensemble forecasts for univariate quantities can be evaluated and compared by a number of verification scores.
 Additional functions for data transformation and statistical post-processing simplify a number of common verification tasks.
 
