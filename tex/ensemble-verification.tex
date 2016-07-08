@@ -68,9 +68,9 @@
 %% almost as usual
 \author{Stefan Siegert\\University of Exeter}
 \title{Forecast Verification: Ensemble-adjusted scoring rules, graphical tools, comparative verification, and uncertainty assessment implemented in the \proglang{R} package \pkg{SpecsVerification}}
+\Plaintitle{Forecast Verification: Ensemble-adjusted scoring rules, graphical tools, comparative verification, and uncertainty assessment implemented in the R package SpecsVerification}
 \Shorttitle{\proglang{R}-package \pkg{SpecsVerification}} %% a short title (if necessary)
 \Plainauthor{Stefan Siegert} %% comma-separated
-\Plaintitle{Forecast Verification: Ensemble-adjusted scoring rules, graphical tools, comparative verification, and uncertainty assessment implemented in the R package SpecsVerification}
 
 %% an abstract and keywords
 \Abstract{
@@ -710,15 +710,15 @@ The test statistic
 T_{\text{cordiff}}  = (r_{by} - r_{ay}) \sqrt{\frac{(N-1)(1+r_{ab})}{2\left(\frac{N-1}{N-3}\right) R+\frac{1}{4}(r_{ay}+r_{by})^2 (1-r_{ab})^3}}\label{eq:T2}
 \end{equation}
 %
-has a Student's $t$-distribution with $N-3$ degrees of freedom under the null-hypothesis that A and B have equal correlations.
+has a Student's $t$-distribution with $N-3$ degrees of freedom under the null-hypothesis that A and B have equal correlations with Y.
 Furthermore, a confidence interval for the correlation difference $r_{by}-r_{ay}$ is calculated, based on \citet{zou2007toward}.
-First estimate the correlation between the correlation coefficients $r_{ay}$ and $r_{by}$ by
+We first estimate the correlation between the correlation coefficients $r_{ay}$ and $r_{by}$ by
 %
 \begin{equation}
-c_{ab} = \frac{\left(r_{ab} - \frac{1}{2}  r_{ay}  r_{by}\right)  \left(1 - r_{ay}^2 - r_{by}^2 - r_{ab}^2\right) + r_{ab}^3}{(1-r_{ay}^2)(1-r_{by}^2)},
+c_{ab} = \frac{\left(r_{ab} - \frac{1}{2}  r_{ay}  r_{by}\right)  \left(1 - r_{ay}^2 - r_{by}^2 - r_{ab}^2\right) + r_{ab}^3}{(1-r_{ay}^2)(1-r_{by}^2)}.
 \end{equation}
 %
-Then calculate $(1-\alpha)\times 100\%$ confidence intervals $(l_a, u_a)$ for $r_{ay}$ and $(l_b, u_b)$ for $r_{by}$, using the Fisher transformation as in Equation~\ref{eq:fisherCi}.
+We then calculate $(1-\alpha)\times 100\%$ confidence intervals $(l_a, u_a)$ for $r_{ay}$ and $(l_b, u_b)$ for $r_{by}$, using the Fisher transformation as in Equation~\ref{eq:fisherCi}.
 An approximate $(1-\alpha)\times 100\%$ confidence interval $(L,U)$ for the correlation difference $r_{by} - r_{ay}$ is then given by
 %
 \begin{align}
@@ -742,7 +742,7 @@ For illustration, we evaluate the difference in correlation between the ensemble
 \end{knitrout}
 
 %
-The one-sided p-value is small and the value of zero correlation is close to the boundary of the 95\% confidence interval, which provides ample evidence that the seasonal forecast has higher correlation skill than the persistence forecast.
+The one-sided p-value is small and the value of zero correlation is close to the boundary of the 95\% confidence interval, which provides ample evidence that the ensemble mean seasonal temperature forecast has higher correlation skill than the persistence forecast.
 
 
 \subsection{Area under the curve (AUC) and AUC differences}
@@ -750,7 +750,7 @@ The one-sided p-value is small and the value of zero correlation is close to the
 Relative operating characteristics \citep[ROC, ][]{mason2002areas} analysis is a method from signal detection theory to evaluate the quality of forecasts for binary events.
 Consider the two competing forecasts $x^{(1)}_t$ and $x^{(2)}_t$ for the same binary observations $y_t \in \{0, 1\}$ for $t=1,\dots,N$.
 (The forecasts are allowed to take values on the real line, and need not be probabilitities.)
-For ROC analysis, the forecasts are grouped into two sets: $C^{(r)}_0$ contains all forecasts $x^{(r)}$ for which an event did not happen ($y_t=0$), and $C^{(r)}_1$ contains all forecasts for which an event did happen ($y_t = 1$).
+For ROC analysis, the forecasts are grouped into two sets: $C^{(r)}_0$ is the set of all forecasts $x^{(r)}$ for which an event did not happen ($y_t=0$), and $C^{(r)}_1$ is the set of all forecasts for which an event did happen ($y_t = 1$).
 The area under the ROC curve (AUC) for the $r$th forecast ($r=1,2$) is equal to the probability that a randomly drawn forecast from $C^{(r)}_1$ is larger than a randomly drawn forecast from $C^{(r)}_0$.
 The AUC is thus a measure of the ability of the forecast system to distinguish events from non-events.
 
@@ -835,8 +835,8 @@ The following evaluates the AUC difference between the large and a small ensembl
 \end{knitrout}
 
 %
-The AUC difference is within sampling variability, and we remain uncertain about whether the larger ensemble improves the AUC.
-In general, we expect ensemble size to effect AUC, but we are not aware of any published ensemble-adjustments for the AUC. 
+The AUC difference between the large and small ensemble is well within sampling variability, so we remain uncertain about whether using a larger ensemble improves the AUC.
+In general, we expect ensemble size to effect AUC, but we are not aware of any ensemble-adjustments for the AUC. 
 
 
 
@@ -864,7 +864,7 @@ Each verification rank should therefore be equally likely on average, and the hi
 
 The function \code{PlotRankhist} plots the rank histogram.
 Two plotting modes are available:
-The option \code{mode="raw"} plots the rank histogram counts as a bar plot, and \code{mode="prob.paper"} plots the rank counts on probability paper following \citet{broecker2008reliability}. 
+The option \code{mode="raw"} plots the rank histogram counts as a simple bar plot, and \code{mode="prob.paper"} plots the rank counts on probability paper following \citet{broecker2008reliability}, as follows.
 Assuming a reliable ensemble, each rank count should be approximately Binomially distributed with success probability $1/(R+1)$ and sample size $N$.
 To assess the plausibility of individual rank counts, each observed rank count $c_i$ is transformed to the cumulative probability $\nu_i$ under the Binomial distribution.
 To test the null-hypothesis of a flat rank histogram, $90$-, $95$-, and $99$-percent prediction intervals are included, corrected for multiple testing.
@@ -892,7 +892,7 @@ A rank histogram on probability paper is shown in Figure \ref{fig:rank-hist-pp}.
 \end{figure}
 
 
-The function \code{TestRankhist} implements different statistical tests of the null-hypothesis of flat rank histogram.
+The function \code{TestRankhist} implements different statistical tests of the null-hypothesis of a flat rank histogram.
 Flatness of the rank histgram can be assessed by a Pearson $\chi^2$-test \citep{pearson1900criterion}.
 Suppose rank $i$ was observed $r_i$ times for $i=1,\dots,R+1$, and define $e_i=N/(R+1)$ the expected number of counts if each verification rank were equally likely.
 Define further
@@ -910,7 +910,7 @@ has a $\chi^2$-distribution with $R$ degrees of freedom.
 
 
 \citet{hamill2001interpretation} showed that certain types of violation of ensemble reliability are visible as different patterns in the rank histogram.
-In particular, a systematic bias of the ensemble mean produces sloped rank histograms, and ensembles with insufficient (excessive) ensemble spread produce $\cup$-shaped ($\cap$-shaped) rank histogram.
+In particular, a systematic bias of the ensemble mean produces sloped rank histograms, and ensembles with insufficient (excessive) ensemble spread produce $\cup$-shaped ($\cap$-shaped) rank histograms.
 \citet{jolliffe2008evaluating} showed that the $\chi^2$-test statistic can be decomposed to test for sloped and convex rank histograms specifically, thus increasing the power of the $\chi^2$-test.
 The test requires the definition of suitable contrast vectors $\mathbf{c}$ of length $R+1$, that satisfy $\sum_i c_i = 0$, $\sum_i c_i^2 = 1$, and $\sum_i c_i c_i' = 0$ for every pair of contrasts $\mathbf{c}$ and $\mathbf{c}'$.
 Assuming a number of up to $R$ contrast vectors $\mathbf{c}^{(1)}$, $\mathbf{c}^{(2)}$, $\dots$, the test statistics $(\sum_i c^{(k)}_i q_i)^2$ are independently $\chi^2$-distributed with one d.o.f. 
@@ -931,9 +931,9 @@ The $\chi^2$-test using the linear contrast is sensitive to sloped rank histgram
 \hlfunctioncall{TestRankhist}(rh)
 \end{alltt}
 \begin{verbatim}
-##                pearson.chi2 jp.slope jp.convex
-## test.statistic      23.9259   0.0114  0.005574
-## p.value              0.4658   0.9150  0.940485
+##                pearson.chi2 jp.lin    jp.sq
+## test.statistic      23.9259 0.0114 0.005574
+## p.value              0.4658 0.9150 0.940485
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -941,15 +941,16 @@ The $\chi^2$-test using the linear contrast is sensitive to sloped rank histgram
 
 All p-values are considerably larger than zero.
 The rank histogram of the temperature ensemble forecast provides no evidence against the null-hypothesis of a reliable ensemble.
+However, due to the small sample size, all tests are expected to have low power.
 
 \section{Reliability diagram and Brier Score decomposition}
 
 The reliability diagram is a classical tool to compare probability forecasts of binary events to the verifying binary observations \citep{wilks2011statistical,jolliffe2012forecast}.
 The reliability diagram compares the issued forecast probabilities to the conditional average frequencies of the observation, given the forecast.
-A forecast is reliable if the forecast probabilities and their conditional event frequencies are equal.
+A probability forecast is called reliable if the issued forecast probabilities and their conditional event frequencies are equal.
 
 
-To estimate the conditional event frequencies the forecast probabilities are grouped into a finite number of non-overlapping bins.
+To estimate the conditional event frequencies, the forecast probabilities are grouped into a finite number of non-overlapping bins.
 The reliability diagram is a plot of the conditional event frequency per bin over the in-bin average of the forecast probabilities.
 \pkg{SpecsVerification} provides the function \code{ReliabilityDiagram} that takes as inputs a collection of probability forecasts and binary verifying observations, and calculates the reliability diagram for a specified number of user-defined bins,  that do not have to be equidistant.
 The consistency resampling method proposed by \citet{broecker2007increasing} is used to estimate the expected spread of the reliability diagrams around the diagonal to assess the null-hypothesis that the forecast is reliable.
@@ -1047,7 +1048,7 @@ The focus of \pkg{SpecsVerification}, and of the present paper, is on verificati
 For verification of deterministic forecasts $x_t$ , e.g. the ensemble mean forecast, the squared error score $(x_t - y_t)^2$ (function \code{SqErr}), and the Absolute Error score $|x_t - y_t|$ (function \code{AbsErr}) have been implemented.
 The function \code{GaussCrps} calculates the CRPS (eq.~\ref{eq:crps}) where the forecast cdf $F_t(x)$ is a Normal distribution with mean $\mu_t$ and standard deviation $\sigma^2_t$.
 The CRPS integral can then be solved analytically \citep{gneiting2005calibrated} thus eliminating the need for expensive numerical integration.
-These score functions be analysed by the functions \code{ScoreDiff} and \code{SkillScore}.
+The output from these score functions can further be analysed by the functions \code{ScoreDiff} and \code{SkillScore}.
 
 
 Ensemble forecasts produced by numerical climate models often contain systematic errors due to numerical approximations, missing physical mechanisms in the model, or coding errors.
@@ -1055,7 +1056,7 @@ These biases include a constant bias of the mean, or ensemble dispersion errors.
 Ensemble dressing is a statistical post-processing method based on kernel density estimation to transform a raw forecast ensemble into a smoothed probability distribution function.
 In particular, affine kernel dressing \citep[AKD; ][]{broecker2008from} is a method that corrects systematic model errors by an affine transformation of the ensemble, and produces a smooth forecast distribution by dressing the transformed ensemble members with Gaussian kernels.
 AKD is implemented in the function \code{DressEnsemble}, and the AKD parameters can be fitted with the function \code{FitAkdParameters}. 
-The dressed ensemble can be evaluated by the CRPS using the function \code{DressCrps} which uses results by \citet{grimit2006the}, and by the Ignorance Score \citep{roulston2002evaluating}, also known as the Logarithmic score, using the function \code{DressIgn}.
+The forecast quality of the dressed ensemble can be evaluated by the CRPS using the function \code{DressCrps} which uses the analytical expression of \citet{grimit2006the}, and by the Ignorance Score \citep{roulston2002evaluating} (also known as the Logarithmic score), using the function \code{DressIgn}.
 The dressed ensemble can be further analysed by the functions \code{GetDensity} and \code{PlotDressedEns}.
 
 Auxiliary functions were added to the package, namely the function \code{Detrend} to remove a common linear trend from an ensemble of forecasts, and the function \code{GenerateToyData} that simulates artificial ensemble and observation data using a statistical signal-plus-noise model \citep{siegert2016bayesian}.
