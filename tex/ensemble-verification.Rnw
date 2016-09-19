@@ -1,25 +1,46 @@
-\documentclass[article]{jss}
+\documentclass[10pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{dsfont}
 \usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{natbib}
+\bibliographystyle{plainnat}
 \frenchspacing
+\usepackage[left=1in, right=1in, top=1in, bottom=2in]{geometry}
 
 \newcommand{\atanh}{\text{atanh}}
+
+\newcommand{\proglang}[1]{\texttt{#1}}
+\newcommand{\pkg}[1]{\texttt{#1}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\email}[1]{\texttt{#1}}
+\newcommand{\url}[1]{\texttt{#1}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% almost as usual
-\author{Stefan Siegert\\University of Exeter}
+\author{Stefan Siegert}
+% \footnote{
+%   Stefan Siegert\\
+%   Statistical Science Group\\
+%   University of Exeter\\
+%   Exeter, EX4 4QF, United Kingdom\\
+%   E-mail: \email{s.siegert@exeter.ac.uk}\\
+%   URL: \url{http://emps.exeter.ac.uk/mathematics/staff/ss610}
+% }
+
 \title{Forecast Verification: Ensemble-adjusted scoring rules, graphical tools, comparative verification, and uncertainty assessment implemented in the \proglang{R} package \pkg{SpecsVerification}}
-\Plaintitle{Forecast Verification: Ensemble-adjusted scoring rules, graphical tools, comparative verification, and uncertainty assessment implemented in the R package SpecsVerification}
-\Shorttitle{\proglang{R}-package \pkg{SpecsVerification}} %% a short title (if necessary)
-\Plainauthor{Stefan Siegert} %% comma-separated
+\date{\today}
+
+
+\begin{document}
+\maketitle
 
 %% an abstract and keywords
-\Abstract{
+\section*{Abstract}
 
 Forecast verification, the retrospective comparison of forecasts to observations, is a common task at institutions that routinely issue forecasts to the public, such as climate centers.
 Ensemble forecasts, i.e., multiple forecasts initialised from perturbed initial conditions, are routinely issued to generate probabilistic forecasts.
@@ -30,30 +51,7 @@ This paper summarises existing methods to assess sampling uncertainty for a larg
 Forecast verification is often more meaningful by comparing competing forecasting systems for the same observation.
 A number of methods for uncertainty assessment for comparative verification are summarised in this paper as well.
 All methods presented are implemented in the \proglang{R} package \pkg{SpecsVerification}.
-}
-\Keywords{ensemble forecasting, forecast verification, finite-ensemble effect, comparative verification, uncertainty, \proglang{R}}
-\Plainkeywords{ensemble forecasting, forecast verification, finite-ensemble effect, comparative verification, uncertainty, R} %% without formatting
-%% at least one keyword must be supplied
 
-%% publication information
-%% NOTE: Typically, this can be left commented and will be filled out by the technical editor
-%% \Volume{50}
-%% \Issue{9}
-%% \Month{June}
-%% \Year{2012}
-%% \Submitdate{2012-06-04}
-%% \Acceptdate{2012-06-04}
-
-%% The address of (at least) one author should be given
-%% in the following format:
-\Address{
-  Stefan Siegert\\
-  Statistical Science Group\\
-  University of Exeter\\
-  Exeter, EX4 4QF, United Kingdom\\
-  E-mail: \email{s.siegert@exeter.ac.uk}\\
-  URL: \url{http://emps.exeter.ac.uk/mathematics/staff/ss610}
-}
 
 
 %% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -69,18 +67,6 @@ knitr::opts_chunk$set(dev="pdf", tidy=FALSE)
 @
 
 
-\begin{document}
-
-%% Note that you should use the \pkg{}, \proglang{} and \code{} commands.
-% \section[About Java]{About \proglang{Java}}
-%% Note: If there is markup in \(sub)section, then it has to be escape as above.
-
-\textbf{Note to editor and reviewers}
-
-A package called \pkg{SpecsVerification} is currently available on CRAN.
-The package documented in this paper is an updated, yet unpublished version of \pkg{SpecsVerification}, with new and rewritten functions that are not available in the current package version.
-The source code of the revised version of \pkg{SpecsVerification} documented in this paper is publicly available in the github repository \url{https://github.com/sieste/SpecsVerification2}.
-The package will be updated on CRAN after peer review.
 
 
 \section{Introduction}
