@@ -1,59 +1,57 @@
-\documentclass[article]{jss}
+\documentclass[10pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{dsfont}
 \usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{natbib}
+\bibliographystyle{plainnat}
 \frenchspacing
+\usepackage[left=1in, right=1in, top=1in, bottom=2in]{geometry}
 
 \newcommand{\atanh}{\text{atanh}}
+
+\newcommand{\proglang}[1]{\texttt{#1}}
+\newcommand{\pkg}[1]{\texttt{#1}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\email}[1]{\texttt{#1}}
+\newcommand{\url}[1]{\texttt{#1}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% almost as usual
-\author{Stefan Siegert\\University of Exeter}
-\title{Forecast Verification: Ensemble-adjusted scoring rules, graphical tools, comparative verification, and uncertainty quantification implemented in the \proglang{R} package \pkg{SpecsVerification}}
-\Shorttitle{\proglang{R}-package \pkg{SpecsVerification}} %% a short title (if necessary)
-\Plainauthor{Stefan Siegert} %% comma-separated
-\Plaintitle{Forecast Verification: Ensemble-adjusted scoring rules, graphical tools, comparative verification, and uncertainty quantification implemented in the R package SpecsVerification}
+\author{Stefan Siegert}
+% \footnote{
+%   Stefan Siegert\\
+%   Statistical Science Group\\
+%   University of Exeter\\
+%   Exeter, EX4 4QF, United Kingdom\\
+%   E-mail: \email{s.siegert@exeter.ac.uk}\\
+%   URL: \url{http://emps.exeter.ac.uk/mathematics/staff/ss610}
+% }
+
+\title{Forecast Verification: Ensemble-adjusted scoring rules, graphical tools, comparative verification, and uncertainty assessment implemented in the \proglang{R} package \pkg{SpecsVerification}}
+\date{\today}
+
+
+\begin{document}
+\maketitle
 
 %% an abstract and keywords
-\Abstract{
+\section*{Abstract}
 
-Forecast verification, the comparison of retrospective forecasts to observations, is a common task at institutions that develop and issue forecasts, such as climate centers.
-To assess forecast uncertainty, ensembles of forecasts initialised from perturbed initial conditions are routinely issued.
-In recent years, advances have been made in statistical methodology for ensemble forecast verification, in particular to estimate the finite-ensemble effect on verification scores.
+Forecast verification, the retrospective comparison of forecasts to observations, is a common task at institutions that routinely issue forecasts to the public, such as climate centers.
+Ensemble forecasts, i.e., multiple forecasts initialised from perturbed initial conditions, are routinely issued to generate probabilistic forecasts.
+In recent years, advances have been made in statistical methodology to verify ensemble forecast, in particular to estimate the finite-ensemble effect on verification scores.
 This paper summarises statistical methodology to account for finite-ensemble effects in ensemble verification. 
 Forecast verification analyses should be accompanied by an assessment of the sampling uncertainty in the results.
-This paper summarises methods to assess sampling uncertainty for a large number of forecast verification metrics and scores, including scoring rules, the correlation coefficient, the area under the ROC curve, the rank histogram, the reliability diagram, and the Reliability-Resolution-Uncertainty decomposition of the Brier score.
+This paper summarises existing methods to assess sampling uncertainty for a large number of verification metrics, including scoring rules, correlation coefficients, the area under the ROC curve, the rank histogram, the reliability diagram, and the Reliability-Resolution-Uncertainty decomposition of the Brier score.
 Forecast verification is often more meaningful by comparing competing forecasting systems for the same observation.
-A number of methods for uncertainty assessment for comparative verification are summarised.
+A number of methods for uncertainty assessment for comparative verification are summarised in this paper as well.
 All methods presented are implemented in the \proglang{R} package \pkg{SpecsVerification}.
-}
-\Keywords{ensemble forecasting, forecast verification, finite-ensemble effect, comparative verification, uncertainty quantification, \proglang{R}}
-\Plainkeywords{ensemble forecasting, forecast verification, finite-ensemble effect, comparative verification, uncertainty quantification, R} %% without formatting
-%% at least one keyword must be supplied
 
-%% publication information
-%% NOTE: Typically, this can be left commented and will be filled out by the technical editor
-%% \Volume{50}
-%% \Issue{9}
-%% \Month{June}
-%% \Year{2012}
-%% \Submitdate{2012-06-04}
-%% \Acceptdate{2012-06-04}
-
-%% The address of (at least) one author should be given
-%% in the following format:
-\Address{
-  Stefan Siegert\\
-  Statistical Science Group\\
-  University of Exeter\\
-  Exeter, EX4 4QF, United Kingdom\\
-  E-mail: \email{Stefan.Siegert@exeter.ac.uk}\\
-  URL: \url{http://emps.exeter.ac.uk/mathematics/staff/ss610}
-}
 
 
 %% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -69,17 +67,6 @@ knitr::opts_chunk$set(dev="pdf", tidy=FALSE)
 @
 
 
-\begin{document}
-
-%% Note that you should use the \pkg{}, \proglang{} and \code{} commands.
-% \section[About Java]{About \proglang{Java}}
-%% Note: If there is markup in \(sub)section, then it has to be escape as above.
-
-\textbf{Note to editor and reviewers}
-
-A package called \pkg{SpecsVerification} is currently available on CRAN.
-The package documented in this paper is an updated, yet unpublished version of \pkg{SpecsVerification}, with new and rewritten functions that are not available in the current package version.
-The source code of the revised version of \pkg{SpecsVerification} documented in this paper is publicly available in the github repository \url{https://github.com/sieste/SpecsVerification2}.
 
 
 \section{Introduction}
@@ -98,29 +85,31 @@ A variety of verification measures exists to assess the quality of different for
 
 
 %{\bf Finite size effect in ensemble verification}
-The \proglang{R} package \pkg{SpecsVerification} documented in this paper focuses primarily on verification scores for ensemble forecasts.
-It is known that verification measures can depend systematically on the ensemble size; everything else being equal, large ensembles achieve better average scores than small ensembles \citep{buizza1998impact}.
-Since hindcast experiments with state-of-the-art climate models are computationally expensive, 
-new model configurations are often verified on small ensemble sizes.
-Large ensembles are only generated in forecast mode.
-But if verification measures depend on the ensemble size, the skill calculated for the hindcast experiment is not representative of the skill that an operational forecast ensemble with more members would achieve.
-A number of verification scores have been proposed in the past to estimate the finite ensemble effect.
-The main contribution of this paper is to summarise ensemble verification scores, and document their implementation in the \proglang{R} statistical programming environment \citep{R2015}.
+The \proglang{R} package \pkg{SpecsVerification} documented in this paper implements specialised verification scores for ensemble forecasts.
+\citet{buizza1998impact} and others have shown that verification metrics can depend systematically on the number of ensemble members. 
+Everything else being equal, ensembles with many members achieve better verification results than ensembles with fewer members.
+This finding is not surprising, because larger ensembles allow for a more comprehensive exploration of forecast uncertainty, and thus more robust probabilistic forecasts.
+However, hindcast experiments with state-of-the-art climate models are computationally expensive, and therefore new model configurations are often tested with small ensemble sizes first.
+Large ensembles are only generated in forecast mode, after developers have agreed on the best model configuration.
+But if measures of forecast skill depend on the ensemble size, the skill calculated for the hindcast ensemble with few members is not representative of the skill that an operational ensemble with more members will likely achieve.
+A number of verification scores have been proposed in the past to estimate, and correct, this finite ensemble effect.
+An important contribution of this paper is to summarise existing ensemble verification scores, and to document their implementation in the \proglang{R} statistical programming environment \citep{R2015}.
 
 
 % Forecast verification 
 Forecast quality can hardly be defined in an absolute sense.
-Verification results are easier to interpret if verification measures are compared between competing forecasting systems.
-\pkg{SpecsVerification} contains a number of functions to enable comparative verification. 
+Verification results are easier to interpret if verification measures are compared between competing forecasting systems for the same observation.
+\pkg{SpecsVerification} contains a number of functions to enable comparative verification between competing forecasts.
 Moreover, the value of a verification metric is of little use without an estimate of its sampling uncertainty \citep{jolliffe2007uncertainty}.
-Uncertainty quantification is all the more important if the sample size of the hindcast data set is small.  
-All verification functions implemented in \pkg{SpecsVerification} provide uncertainty estimates by p-values, confidence intervals, and resampling methods.
+Uncertainty assessment is all the more important if the sample size of the hindcast data set is small, as is often the case in climate science.
+All verification functions implemented in \pkg{SpecsVerification} come with built-in uncertainty assessments.
+Systematically reviewing and implementing these methods is another important contribution of this paper.
 
 
 % package verification
 There are packages for forecast verification available for download from the Comprehensive \proglang{R} Archive Network (CRAN).
 The most notable package is \pkg{verification} \citep{cran_verification}. 
-While \pkg{verification} contains a limited number of functions for ensemble verification, comparative verification and uncertainty quantification, it does not have the same focus on these topics as does \pkg{SpecsVerification}.
+While \pkg{verification} contains a limited number of functions for ensemble verification, comparative verification and uncertainty assessment, it does not have the same focus on these topics as does \pkg{SpecsVerification}.
 Since the two packages do not share the same functions, \pkg{SpecsVerification} should be regarded as complementary to \pkg{verification}.
 Further recently published \proglang{R} packages for forecast verification include \pkg{easyverification} \citep{cran_easyverification} and \pkg{s2dverification} \citep{cran_s2dverification}, both of which borrow functions from \pkg{SpecsVerification}.
 
@@ -157,9 +146,10 @@ Further recently published \proglang{R} packages for forecast verification inclu
 \end{tabular}
 \end{table}
 
-\section{Forecast and observation data}
 
 
+
+\section{Seasonal climate forecast and observation data}
  
 \pkg{SpecsVerification} includes the data set \code{eurotempforecast} of seasonal temperature ensemble forecasts and verifying observations.
 The forecasts 24-member ensembles of near-surface air temperatures produced by the NCEP climate forecast system version 2 \citep{saha2014ncep}, initialised between 11 April and 6 May each year from 1983--2009 ($N=27$), and averaged over the region limited by latitudes $30^\circ$N -- $75^\circ$N and longitudes $12.5^\circ$W -- $42.5^\circ$E, and over the months June-July-August, i.e., the lead time is about 1--3 months.
@@ -426,7 +416,7 @@ cbind(
 
 
 
-\section{Comparative verification and uncertainty quantification}
+\section{Comparative verification and uncertainty assessment}
 
 
 \subsection{Reference forecast}
@@ -517,7 +507,7 @@ rbind(
 \subsection{Correlation and correlation difference}
 
 The Pearson (product-moment) correlation coefficient is one of the most popular verification criteria, and can easily be calculated with the built-in \proglang{R} function \code{cor}.
-Since uncertainty quantification is often of interest in forecast verification, \pkg{SpecsVerification} provides the function \code{Corr}, which returns the sample correlation coefficient $r_{xy}$, a one-sided p-value, and a confidence interval based on standard methods presented in, e.g., \citet{vonstorch2001statistical}.
+Since uncertainty assessment is often of interest in forecast verification, \pkg{SpecsVerification} provides the function \code{Corr}, which returns the sample correlation coefficient $r_{xy}$, a one-sided p-value, and a confidence interval based on standard methods presented in, e.g., \citet{vonstorch2001statistical}.
 The p-value is calculated based on the test statistic
 %
 \begin{equation}
@@ -555,15 +545,15 @@ The test statistic
 T_{\text{cordiff}}  = (r_{by} - r_{ay}) \sqrt{\frac{(N-1)(1+r_{ab})}{2\left(\frac{N-1}{N-3}\right) R+\frac{1}{4}(r_{ay}+r_{by})^2 (1-r_{ab})^3}}\label{eq:T2}
 \end{equation}
 %
-has a Student's $t$-distribution with $N-3$ degrees of freedom under the null-hypothesis that A and B have equal correlations.
+has a Student's $t$-distribution with $N-3$ degrees of freedom under the null-hypothesis that A and B have equal correlations with Y.
 Furthermore, a confidence interval for the correlation difference $r_{by}-r_{ay}$ is calculated, based on \citet{zou2007toward}.
-First estimate the correlation between the correlation coefficients $r_{ay}$ and $r_{by}$ by
+We first estimate the correlation between the correlation coefficients $r_{ay}$ and $r_{by}$ by
 %
 \begin{equation}
-c_{ab} = \frac{\left(r_{ab} - \frac{1}{2}  r_{ay}  r_{by}\right)  \left(1 - r_{ay}^2 - r_{by}^2 - r_{ab}^2\right) + r_{ab}^3}{(1-r_{ay}^2)(1-r_{by}^2)},
+c_{ab} = \frac{\left(r_{ab} - \frac{1}{2}  r_{ay}  r_{by}\right)  \left(1 - r_{ay}^2 - r_{by}^2 - r_{ab}^2\right) + r_{ab}^3}{(1-r_{ay}^2)(1-r_{by}^2)}.
 \end{equation}
 %
-Then calculate $(1-\alpha)\times 100\%$ confidence intervals $(l_a, u_a)$ for $r_{ay}$ and $(l_b, u_b)$ for $r_{by}$, using the Fisher transformation as in Equation~\ref{eq:fisherCi}.
+We then calculate $(1-\alpha)\times 100\%$ confidence intervals $(l_a, u_a)$ for $r_{ay}$ and $(l_b, u_b)$ for $r_{by}$, using the Fisher transformation as in Equation~\ref{eq:fisherCi}.
 An approximate $(1-\alpha)\times 100\%$ confidence interval $(L,U)$ for the correlation difference $r_{by} - r_{ay}$ is then given by
 %
 \begin{align}
@@ -578,7 +568,7 @@ For illustration, we evaluate the difference in correlation between the ensemble
 CorrDiff(fcst=ens.mean, fcst.ref=obs.lag, obs=obs, conf.level=0.95)
 @
 %
-The one-sided p-value is small and the value of zero correlation is close to the boundary of the 95\% confidence interval, which provides ample evidence that the seasonal forecast has higher correlation skill than the persistence forecast.
+The one-sided p-value is small and the value of zero correlation is close to the boundary of the 95\% confidence interval, which provides ample evidence that the ensemble mean seasonal temperature forecast has higher correlation skill than the persistence forecast.
 
 
 \subsection{Area under the curve (AUC) and AUC differences}
@@ -586,7 +576,7 @@ The one-sided p-value is small and the value of zero correlation is close to the
 Relative operating characteristics \citep[ROC, ][]{mason2002areas} analysis is a method from signal detection theory to evaluate the quality of forecasts for binary events.
 Consider the two competing forecasts $x^{(1)}_t$ and $x^{(2)}_t$ for the same binary observations $y_t \in \{0, 1\}$ for $t=1,\dots,N$.
 (The forecasts are allowed to take values on the real line, and need not be probabilitities.)
-For ROC analysis, the forecasts are grouped into two sets: $C^{(r)}_0$ contains all forecasts $x^{(r)}$ for which an event did not happen ($y_t=0$), and $C^{(r)}_1$ contains all forecasts for which an event did happen ($y_t = 1$).
+For ROC analysis, the forecasts are grouped into two sets: $C^{(r)}_0$ is the set of all forecasts $x^{(r)}$ for which an event did not happen ($y_t=0$), and $C^{(r)}_1$ is the set of all forecasts for which an event did happen ($y_t = 1$).
 The area under the ROC curve (AUC) for the $r$th forecast ($r=1,2$) is equal to the probability that a randomly drawn forecast from $C^{(r)}_1$ is larger than a randomly drawn forecast from $C^{(r)}_0$.
 The AUC is thus a measure of the ability of the forecast system to distinguish events from non-events.
 
@@ -652,8 +642,8 @@ The following evaluates the AUC difference between the large and a small ensembl
 AucDiff(rowMeans(ens.bin[, i.large]), rowMeans(ens.bin[, i.small]), obs.bin)
 @
 %
-The AUC difference is within sampling variability, and we remain uncertain about whether the larger ensemble improves the AUC.
-In general, we expect ensemble size to effect AUC, but we are not aware of any published ensemble-adjustments for the AUC. 
+The AUC difference between the large and small ensemble is well within sampling variability, so we remain uncertain about whether using a larger ensemble improves the AUC.
+In general, we expect ensemble size to effect AUC, but we are not aware of any ensemble-adjustments for the AUC. 
 
 
 
@@ -673,7 +663,7 @@ Each verification rank should therefore be equally likely on average, and the hi
 
 The function \code{PlotRankhist} plots the rank histogram.
 Two plotting modes are available:
-The option \code{mode="raw"} plots the rank histogram counts as a bar plot, and \code{mode="prob.paper"} plots the rank counts on probability paper following \citet{broecker2008reliability}. 
+The option \code{mode="raw"} plots the rank histogram counts as a simple bar plot, and \code{mode="prob.paper"} plots the rank counts on probability paper following \citet{broecker2008reliability}, as follows.
 Assuming a reliable ensemble, each rank count should be approximately Binomially distributed with success probability $1/(R+1)$ and sample size $N$.
 To assess the plausibility of individual rank counts, each observed rank count $c_i$ is transformed to the cumulative probability $\nu_i$ under the Binomial distribution.
 To test the null-hypothesis of a flat rank histogram, $90$-, $95$-, and $99$-percent prediction intervals are included, corrected for multiple testing.
@@ -694,7 +684,7 @@ PlotRankhist(rh, mode="prob.paper")
 \end{figure}
 
 
-The function \code{TestRankhist} implements different statistical tests of the null-hypothesis of flat rank histogram.
+The function \code{TestRankhist} implements different statistical tests of the null-hypothesis of a flat rank histogram.
 Flatness of the rank histgram can be assessed by a Pearson $\chi^2$-test \citep{pearson1900criterion}.
 Suppose rank $i$ was observed $r_i$ times for $i=1,\dots,R+1$, and define $e_i=N/(R+1)$ the expected number of counts if each verification rank were equally likely.
 Define further
@@ -712,7 +702,7 @@ has a $\chi^2$-distribution with $R$ degrees of freedom.
 
 
 \citet{hamill2001interpretation} showed that certain types of violation of ensemble reliability are visible as different patterns in the rank histogram.
-In particular, a systematic bias of the ensemble mean produces sloped rank histograms, and ensembles with insufficient (excessive) ensemble spread produce $\cup$-shaped ($\cap$-shaped) rank histogram.
+In particular, a systematic bias of the ensemble mean produces sloped rank histograms, and ensembles with insufficient (excessive) ensemble spread produce $\cup$-shaped ($\cap$-shaped) rank histograms.
 \citet{jolliffe2008evaluating} showed that the $\chi^2$-test statistic can be decomposed to test for sloped and convex rank histograms specifically, thus increasing the power of the $\chi^2$-test.
 The test requires the definition of suitable contrast vectors $\mathbf{c}$ of length $R+1$, that satisfy $\sum_i c_i = 0$, $\sum_i c_i^2 = 1$, and $\sum_i c_i c_i' = 0$ for every pair of contrasts $\mathbf{c}$ and $\mathbf{c}'$.
 Assuming a number of up to $R$ contrast vectors $\mathbf{c}^{(1)}$, $\mathbf{c}^{(2)}$, $\dots$, the test statistics $(\sum_i c^{(k)}_i q_i)^2$ are independently $\chi^2$-distributed with one d.o.f. 
@@ -733,15 +723,16 @@ TestRankhist(rh)
 
 All p-values are considerably larger than zero.
 The rank histogram of the temperature ensemble forecast provides no evidence against the null-hypothesis of a reliable ensemble.
+However, due to the small sample size, all tests are expected to have low power.
 
 \section{Reliability diagram and Brier Score decomposition}
 
 The reliability diagram is a classical tool to compare probability forecasts of binary events to the verifying binary observations \citep{wilks2011statistical,jolliffe2012forecast}.
 The reliability diagram compares the issued forecast probabilities to the conditional average frequencies of the observation, given the forecast.
-A forecast is reliable if the forecast probabilities and their conditional event frequencies are equal.
+A probability forecast is called reliable if the issued forecast probabilities and their conditional event frequencies are equal.
 
 
-To estimate the conditional event frequencies the forecast probabilities are grouped into a finite number of non-overlapping bins.
+To estimate the conditional event frequencies, the forecast probabilities are grouped into a finite number of non-overlapping bins.
 The reliability diagram is a plot of the conditional event frequency per bin over the in-bin average of the forecast probabilities.
 \pkg{SpecsVerification} provides the function \code{ReliabilityDiagram} that takes as inputs a collection of probability forecasts and binary verifying observations, and calculates the reliability diagram for a specified number of user-defined bins,  that do not have to be equidistant.
 The consistency resampling method proposed by \citet{broecker2007increasing} is used to estimate the expected spread of the reliability diagrams around the diagonal to assess the null-hypothesis that the forecast is reliable.
@@ -779,7 +770,7 @@ The empirical mean of the Brier Score of the probability forecasts $p_1, \cdots,
 %
 Assume that the forecast probabilities were categorised into $D$ disjoint bins, and a reliability curve was calculated.
 The in-bin average of the forecast probabilities in the $d$th bin is denoted by $\bar{p}_d$, the total number of cases in the $d$th bin is denoted by $n_d$, the conditional event frequency in the $d$th bin is denoted by $\bar{y}_d$, and the overall average of the observations is denoted by $\bar{y}$.
-Then the three components of the Brier Score decomposition are given by \citet{murphy1973new}:
+Then the three components of the Brier Score decomposition are given by \citep{murphy1973new}:
 %
 \begin{align}
 REL & = \frac{1}{N}\sum_{d=1}^D n_d (\bar{p}_d - \bar{o}_d)^2,\\
@@ -804,14 +795,14 @@ The Brier Score decomposition suggests that the forecasts are reliable ($REL\app
 
 \section{Additional functions}
 
-The focus of \pkg{SpecsVerification}, and of the present paper, is on verification functions for ensemble and probability forecasts, uncertainty quantification, and graphical display of the results.
+The focus of \pkg{SpecsVerification}, and of the present paper, is on verification functions for ensemble and probability forecasts, uncertainty assessment, and graphical display of the results.
 \pkg{SpecsVerification} includes a number of functions for post-processing and forecast verification that were included following user requests.
 
 
 For verification of deterministic forecasts $x_t$ , e.g. the ensemble mean forecast, the squared error score $(x_t - y_t)^2$ (function \code{SqErr}), and the Absolute Error score $|x_t - y_t|$ (function \code{AbsErr}) have been implemented.
 The function \code{GaussCrps} calculates the CRPS (eq.~\ref{eq:crps}) where the forecast cdf $F_t(x)$ is a Normal distribution with mean $\mu_t$ and standard deviation $\sigma^2_t$.
 The CRPS integral can then be solved analytically \citep{gneiting2005calibrated} thus eliminating the need for expensive numerical integration.
-These score functions be analysed by the functions \code{ScoreDiff} and \code{SkillScore}.
+The output from these score functions can further be analysed by the functions \code{ScoreDiff} and \code{SkillScore}.
 
 
 Ensemble forecasts produced by numerical climate models often contain systematic errors due to numerical approximations, missing physical mechanisms in the model, or coding errors.
@@ -819,7 +810,7 @@ These biases include a constant bias of the mean, or ensemble dispersion errors.
 Ensemble dressing is a statistical post-processing method based on kernel density estimation to transform a raw forecast ensemble into a smoothed probability distribution function.
 In particular, affine kernel dressing \citep[AKD; ][]{broecker2008from} is a method that corrects systematic model errors by an affine transformation of the ensemble, and produces a smooth forecast distribution by dressing the transformed ensemble members with Gaussian kernels.
 AKD is implemented in the function \code{DressEnsemble}, and the AKD parameters can be fitted with the function \code{FitAkdParameters}. 
-The dressed ensemble can be evaluated by the CRPS using the function \code{DressCrps} which uses results by \citet{grimit2006the}, and by the Ignorance Score \citep{roulston2002evaluating}, also known as the Logarithmic score, using the function \code{DressIgn}.
+The forecast quality of the dressed ensemble can be evaluated by the CRPS using the function \code{DressCrps} which uses the analytical expression of \citet{grimit2006the}, and by the Ignorance Score \citep{roulston2002evaluating} (also known as the Logarithmic score), using the function \code{DressIgn}.
 The dressed ensemble can be further analysed by the functions \code{GetDensity} and \code{PlotDressedEns}.
 
 Auxiliary functions were added to the package, namely the function \code{Detrend} to remove a common linear trend from an ensemble of forecasts, and the function \code{GenerateToyData} that simulates artificial ensemble and observation data using a statistical signal-plus-noise model \citep{siegert2016bayesian}.
@@ -830,7 +821,7 @@ Auxiliary functions were added to the package, namely the function \code{Detrend
 \section{Conclusion}
 
 The package \pkg{SpecsVerification} for the \proglang{R} statistical programming environment implements a variety of forecast verification functions that are not available in previous verification software packages.
-The focus of \pkg{SpecsVerification} is on comparative verification of ensemble forecasts, and uncertainty quantification by variance estimation, statistical testing, and confidence intervals.
+The focus of \pkg{SpecsVerification} is on comparative verification of ensemble forecasts, and uncertainty assessment by variance estimation, statistical testing, and confidence intervals.
 Continuous, categorical and binary ensemble forecasts for univariate quantities can be evaluated and compared by a number of verification scores.
 Additional functions for data transformation and statistical post-processing simplify a number of common verification tasks.
 
